@@ -1,0 +1,11 @@
+{
+  "name": "task-manager",
+  "version": "1.0.0",
+  "description": "project for godle",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "vlad_nikulshin <nikulshin_vlad01@mail.ru>",
+  "license": "ISC"
+}
