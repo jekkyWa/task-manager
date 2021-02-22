@@ -1,0 +1,72 @@
+.authentication {
+  text-align: center;
+}
+
+.authentication > h1 {
+  font-size: 3em;
+  margin-top: 20px;
+  color: black;
+  font-weight: 900;
+  margin-bottom: 20px;
+}
+
+.authentcation-form {
+  display: flex;
+  flex-direction: column;
+  margin: 0px auto 24px;
+  width: 400px;
+  padding: 32px 40px;
+  background: rgb(255, 255, 255);
+  border-radius: 3px;
+  box-shadow: 0px 0px 10px black;
+  box-sizing: border-box;
+  color: rgb(94, 108, 132);
+}
+
+.authentcation-form > h2 {
+  padding: 10px;
+  color: rgb(61, 61, 61);
+  font-size: 1.2em;
+}
+
+.mail,
+.name,
+.password {
+  padding: 15px;
+}
+
+.mail > input,
+.name > input,
+.password > input {
+  padding: 5px;
+  border: 3px solid rgb(180, 180, 180);
+  border-radius: 2px;
+  width: 100%;
+}
+
+.authentcation-form > hr {
+    border: 0;
+    clear:both;
+    display:block;
+    width: 290px;               
+    background-color:black;
+    height: 1px;
+}
+
+.btn-register {
+  padding: 15px;
+}
+
+.btn-register > button {
+  width: 100%;
+  margin-top: 20px;
+  padding: 5px;
+  border-radius: 2px;
+  border: 1px solid white;
+  background-color: rgb(51, 51, 214);
+  color: white;
+}
+
+.sign-in{
+    color: rgb(51, 51, 214);
+}
