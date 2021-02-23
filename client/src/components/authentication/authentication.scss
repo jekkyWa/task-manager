@@ -1,3 +1,5 @@
+$type: river;
+
 .authentication {
   text-align: center;
   font-family: "Segoe UI";
@@ -79,11 +81,11 @@
   position: absolute;
 }
 
-.eye-icon-vis{
+.eye-icon-vis {
   margin-top: 2px;
 }
 
-.a {
+.reliability-block-one {
   background: rgb(223, 225, 230);
   height: 2px;
   margin-top: 5px;
@@ -99,9 +101,26 @@
     transition: all 0.2s ease-out 0s;
     width: 0%;
   }
+  
 }
 
-.b {
+.one{
+  &::before {
+    background: rgb(255, 171, 0);
+    transition: all 0.2s ease-out 0s;
+    width: 20%;
+  }
+}
+
+.two{
+  &::before {
+    background: rgb(104, 224, 104);
+    transition: all 0.2s ease-out 0s;
+    width: 40%;
+  }
+}
+
+.reliability-block-two {
   border-left: 5px solid rgb(255, 255, 255);
   border-right: 5px solid rgb(255, 255, 255);
   inset: 0px 19%;
@@ -115,7 +134,7 @@
   }
 }
 
-.c {
+.message-text {
   color: rgb(137, 147, 164);
   font-size: 12px;
   height: 16px;

@@ -8,6 +8,8 @@ const Authentication = () => {
   const [form, setForm] = useState({ email: "", password: "", name: "" });
   const [warningMessage, setWarningMessage] = useState("");
 
+  const [test, setTest] = useState(" ");
+
   const changeHandler = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
@@ -18,16 +20,41 @@ const Authentication = () => {
   };
 
   const reliabilityCheck = () => {
+    // Функция, чтобы постоянно не менять state
     const memo = () => {
-      if (_err !== warningMessage) setWarningMessage(_err);
+      if (mess !== warningMessage) setWarningMessage(mess);
     };
-    let _err = "";
-    if (form.password.length < 9 && form.password.length !== 0) {
-      _err = "Пароль должен быть не менее 8 символов";
+    const regExp = (reg) => {
+      return new RegExp(reg).test(form.password);
+    };
+    let mess = "";
+    let arr = [
+      "Ненадежный",
+      "Средний",
+      "Надежный",
+      "Надежный",
+      "Очень надежный",
+    ];
+    let lengthPassword = form.password.length;
+    let degreeReliability = 0;
+    if (form.password.length <= 8 && lengthPassword !== 0) {
+      mess = "Пароль учитывает регистры и должен быть не менее 8 символов";
       memo();
+    } else if (lengthPassword !== 0) {
+      // Проверка, являются ли все символы одинаковыми
+      if (regExp(/^([A-Za-z0-9])\1+$/)) {
+        mess = arr[0];
+        memo();
+      } else {
+        if (regExp(/[0-9]+/)) degreeReliability++; // Проверка на наличие чисел
+        if (regExp(/[a-z]+/) || regExp(/[а-я]+/)) degreeReliability++; // Проверка на наличие букв
+        if (lengthPassword > 14) degreeReliability++; // Проверка длины
+        if (regExp(/[A-Z]+/) || regExp(/[А-Я]+/)) degreeReliability++; // Учтены регистры
+        mess = arr[degreeReliability];
+        memo();
+      }
     } else {
-      _err = "Низкий";
-      memo();
+      setWarningMessage(" ");
     }
   };
 
@@ -66,15 +93,22 @@ const Authentication = () => {
             />
           </div>
         </div>
-        <div className="d">
-          <div className="a">
-            <span className="b"></span>
+        <div className="reliability-block">
+          <div className={`reliability-block-one ${test}`}>
+            <span className="reliability-block-two "></span>
           </div>
-          <p className="c"></p>
+          <p className="message-text"> {warningMessage}</p>
         </div>
-        <p>{warningMessage}</p>
+
         <div className="btn-register">
-          <button>Register</button>
+          <button
+            onClick={() => {
+              let value = test == "one" ? "two" : "one";
+              setTest(value);
+            }}
+          >
+            Register
+          </button>
         </div>
         <hr />
         <p>Already have an account, sign in?</p>
