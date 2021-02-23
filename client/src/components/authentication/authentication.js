@@ -1,7 +1,6 @@
 import React from "react";
 import "./authentication.scss";
 
-
 const Authentication = () => {
   return (
     <div className="authentication">
@@ -17,11 +16,12 @@ const Authentication = () => {
         <div className="password">
           <input placeholder="Please create a password" />
         </div>
+       
         <div className="btn-register">
-        <button>Register</button>
+          <button>Register</button>
         </div>
-        <hr/>
-        <p>Already have an account, <span className="sign-in">sign in </span>?</p>
+        <hr />
+        <p>Already have an account, sign in?</p>
       </div>
     </div>
   );
