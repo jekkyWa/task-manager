@@ -33,8 +33,9 @@
 
 .mail,
 .name,
-.password {
-  padding: 15px;
+.password,
+.btn-register {
+  padding: 15px 0px 15px 0px;
 }
 
 .mail > input,
@@ -54,27 +55,96 @@
   }
 }
 
+.password {
+  position: relative;
+}
+
+.password > input {
+  padding-right: 30px;
+}
+
+.eye-icon-block {
+  position: absolute;
+  right: 7px;
+  top: 19px;
+}
+
+.eye-icon {
+  color: rgb(43, 43, 43);
+  cursor: pointer;
+}
+
+.eye-icon-hidden {
+  visibility: hidden;
+  position: absolute;
+}
+
+.eye-icon-vis{
+  margin-top: 2px;
+}
+
+.a {
+  background: rgb(223, 225, 230);
+  height: 2px;
+  margin-top: 5px;
+  position: relative;
+
+  &:before {
+    background: rgb(223, 225, 230);
+    bottom: 0px;
+    content: "";
+    left: 0px;
+    position: absolute;
+    top: 0px;
+    transition: all 0.2s ease-out 0s;
+    width: 0%;
+  }
+}
+
+.b {
+  border-left: 5px solid rgb(255, 255, 255);
+  border-right: 5px solid rgb(255, 255, 255);
+  inset: 0px 19%;
+  position: absolute;
+  &:after {
+    border-left: 5px solid rgb(255, 255, 255);
+    border-right: 5px solid rgb(255, 255, 255);
+    inset: 0px 30%;
+    content: "";
+    position: absolute;
+  }
+}
+
+.c {
+  color: rgb(137, 147, 164);
+  font-size: 12px;
+  height: 16px;
+  line-height: 16px;
+  margin-top: 4px;
+  position: relative;
+  text-align: center;
+}
+
 .authentcation-form > hr {
   border: 0;
   clear: both;
   display: block;
-  width: 290px;
+  width: 100%;
   background-color: black;
   height: 1px;
 }
 
-.btn-register {
-  padding: 15px;
-}
-
 .btn-register > button {
   width: 100%;
-  margin-top: 20px;
+  margin-top: 0px;
   padding: 5px;
   border-radius: 2px;
   border: 1px solid white;
   background-color: rgb(0, 82, 204);
   color: white;
+  &:hover {
+    background-color: rgb(0, 97, 241);
+  }
 }
 
 .authentcation-form > p {
