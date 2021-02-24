@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
-import "./authentication.scss";
+import "./register.scss";
 import VisibilityIcon from "@material-ui/icons/Visibility";
 import VisibilityOutlinedIcon from "@material-ui/icons/VisibilityOutlined";
 
-const Authentication = () => {
+const Register = () => {
   const [statePassword, setStatePassword] = useState(true);
   const [form, setForm] = useState({ email: "", password: "", name: "" });
   const [warningMessage, setWarningMessage] = useState("");
@@ -11,7 +11,7 @@ const Authentication = () => {
   const [styleDifficult, setStyleDifficult] = useState("");
 
   const changeHandler = (e) => {
-    setForm({ ...form, [e.target.name]: e.target.value });
+    setForm({ ...form, [e.target.name]: e.target.value.replace(/[ ]*/g, "") });
   };
 
   const displayPassword = () => {
@@ -20,12 +20,11 @@ const Authentication = () => {
   };
 
   // Проверка надежности пароля методом Password Strength Meter:
-
   const reliabilityCheck = () => {
     let len = form.password.length;
     let str = form.password;
 
-    // Функция, чтобы постоянно не менять state
+    // state меняется только если значение изменилось
     const memo = () => {
       if (cachMess !== warningMessage) setWarningMessage(cachMess);
       if (cachStyle !== styleDifficult) setStyleDifficult(cachStyle);
@@ -46,28 +45,21 @@ const Authentication = () => {
     let cachMess = "";
     let cachStyle = "";
 
-    let arr = [
-      "Ненадежный",
-      "Средний",
-      "Надежный",
-      "Надежный",
-      "Очень надежный",
-    ];
+    let arr = ["Unreliable", "Middle", "Reliable", "Reliable", "Very reliable"];
     let style = ["one", "two", "three", "four", "five"];
 
     let rate = 0; // Вес пароля устанавливается равным нулю.
 
     if (len <= 6 && len !== 0) {
-      cachMess = "Пароль учитывает регистры и должен быть не менее 6 символов";
+      cachMess =
+        "Password is case sensitive, character sensitive and must be at least 6 characters long";
       cachStyle = "";
       memo();
     } else if (len !== 0) {
-
       // Проверка, если все символы одинаковы надежность всегда 0;
       if (new RegExp(/^([A-Za-z0-9])\1+$/).test(str)) {
         changeDiff(0);
       } else {
-
         //Вес пароля увеличиваем на величину 4 * len, где len – длина пароля
         rate += 4 * len;
 
@@ -139,20 +131,27 @@ const Authentication = () => {
   return (
     <div className="authentication">
       <h1>nieTask</h1>
-      <div className="authentcation-form">
+      <form className="authentcation-form">
         <h2>Register an account</h2>
         <div className="mail">
-          <input placeholder="Please enter your email" />
+          <input
+            type="email"
+            name="email"
+            placeholder="Please enter your email"
+            required
+          />
         </div>
         <div className="name">
-          <input placeholder="Please enter full name" />
+          <input name="name" placeholder="Please enter full name" required />
         </div>
         <div className="password">
           <input
             type={statePassword ? "password" : "text"}
             placeholder="Please create a password"
             name="password"
+            value={form.password}
             onChange={changeHandler}
+            required
           />
           <div className="eye-icon-block">
             <VisibilityIcon
@@ -175,13 +174,13 @@ const Authentication = () => {
         </div>
 
         <div className="btn-register">
-          <button>Register</button>
+          <button type="submit">Register</button>
         </div>
         <hr />
         <p>Already have an account, sign in?</p>
-      </div>
+      </form>
     </div>
   );
 };
 
-export default Authentication;
+export default Register;

@@ -1,8 +1,9 @@
-import Authentication from "../authentication";
+import Login from "../login";
+import Register from "../register";
 import "./app.css";
 
 const App = () => {
-  return <Authentication />;
+  return <Login/>;
 };
 
 export default App;
