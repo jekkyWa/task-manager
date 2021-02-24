@@ -1,7 +1,11 @@
 import React, { useEffect, useState } from "react";
-import "./register.scss";
+import "../authentication.scss";
 import VisibilityIcon from "@material-ui/icons/Visibility";
 import VisibilityOutlinedIcon from "@material-ui/icons/VisibilityOutlined";
+import { Link } from "react-router-dom";
+import { Tooltip } from "@material-ui/core";
+import { withStyles } from "@material-ui/core/styles";
+import WarningIcon from "@material-ui/icons/Warning";
 
 const Register = () => {
   const [statePassword, setStatePassword] = useState(true);
@@ -14,6 +18,7 @@ const Register = () => {
     setForm({ ...form, [e.target.name]: e.target.value.replace(/[ ]*/g, "") });
   };
 
+  // Видимость пароля
   const displayPassword = () => {
     let value = statePassword ? false : true;
     setStatePassword(value);
@@ -128,6 +133,17 @@ const Register = () => {
     reliabilityCheck();
   }, [form.password]);
 
+  // Изменения стилей tooltip библиотеки material
+  const HtmlTooltip = withStyles((theme) => ({
+    tooltip: {
+      backgroundColor: "#f5f5f9",
+      color: "rgba(0, 0, 0, 0.87)",
+      maxWidth: 400,
+      fontSize: theme.typography.pxToRem(16),
+      border: "1px solid #dadde9",
+    },
+  }))(Tooltip);
+
   return (
     <div className="authentication">
       <h1>nieTask</h1>
@@ -173,11 +189,13 @@ const Register = () => {
           <p className="message-text"> {warningMessage}</p>
         </div>
 
-        <div className="btn-register">
+        <div className="btn-authentication">
           <button type="submit">Register</button>
         </div>
         <hr />
-        <p>Already have an account, sign in?</p>
+        <HtmlTooltip title="Email введен не корректно">
+          <Link to="/login">Already have an account, sign in?</Link>
+        </HtmlTooltip>
       </form>
     </div>
   );
