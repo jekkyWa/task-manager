@@ -101,23 +101,6 @@ $type: river;
     transition: all 0.2s ease-out 0s;
     width: 0%;
   }
-  
-}
-
-.one{
-  &::before {
-    background: rgb(255, 171, 0);
-    transition: all 0.2s ease-out 0s;
-    width: 20%;
-  }
-}
-
-.two{
-  &::before {
-    background: rgb(104, 224, 104);
-    transition: all 0.2s ease-out 0s;
-    width: 40%;
-  }
 }
 
 .reliability-block-two {
@@ -171,5 +154,47 @@ $type: river;
   &:hover {
     cursor: pointer;
     text-decoration: underline;
+  }
+}
+
+// стили надежности пароля
+
+.one {
+  &::before {
+    background: rgb(120, 30, 0);
+    transition: all 0.2s ease-out 0s;
+    width: 20%;
+  }
+}
+
+.two {
+  &::before {
+    background: rgb(200, 50, 0);
+    transition: all 0.2s ease-out 0s;
+    width: 40%;
+  }
+}
+
+.three {  
+  &::before {
+    background: rgb(255, 184, 31);
+    transition: all 0.2s ease-out 0s;
+    width: 60%;
+  }
+}
+
+.four {
+  &::before {
+    background: rgb(0, 253, 0);
+    transition: all 0.2s ease-out 0s;
+    width: 80%;
+  }
+}
+
+.five {
+  &::before {
+    background: rgb(0, 139, 0);
+    transition: all 0.2s ease-out 0s;
+    width: 100%;
   }
 }

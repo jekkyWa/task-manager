@@ -19,15 +19,32 @@ const Authentication = () => {
     setStatePassword(value);
   };
 
+  // Проверка надежности пароля методом Password Strength Meter:
+
   const reliabilityCheck = () => {
+    let len = form.password.length;
+    let str = form.password;
+
     // Функция, чтобы постоянно не менять state
     const memo = () => {
-      if (mess !== warningMessage) setWarningMessage(mess);
+      if (cachMess !== warningMessage) setWarningMessage(cachMess);
+      if (cachStyle !== test) setTest(cachStyle);
     };
-    const regExp = (reg) => {
-      return new RegExp(reg).test(form.password);
+
+    const regExpSearch = (reg) => {
+      return str.search(reg);
     };
-    let mess = "";
+    
+    // Измениние стиля и сообщения при определенном весе пароля
+    const changeDiff = (value) => {
+      cachMess = arr[value];
+      cachStyle = style[value];
+      memo();
+    };
+
+    let cachMess = "";
+    let cachStyle = "";
+
     let arr = [
       "Ненадежный",
       "Средний",
@@ -35,26 +52,75 @@ const Authentication = () => {
       "Надежный",
       "Очень надежный",
     ];
-    let lengthPassword = form.password.length;
-    let degreeReliability = 0;
-    if (form.password.length <= 8 && lengthPassword !== 0) {
-      mess = "Пароль учитывает регистры и должен быть не менее 8 символов";
+    let style = ["one", "two", "three", "four", "five"];
+
+    let rate = 0; // Вес пароля устанавливается равным нулю.
+
+    if (len <= 6 && len !== 0) {
+      cachMess = "Пароль учитывает регистры и должен быть не менее 6 символов";
+      cachStyle = "";
       memo();
-    } else if (lengthPassword !== 0) {
-      // Проверка, являются ли все символы одинаковыми
-      if (regExp(/^([A-Za-z0-9])\1+$/)) {
-        mess = arr[0];
+    } else if (len !== 0) {
+      // Проверка, если все символы одинаковы надежность всегда 0;
+      if (new RegExp(/^([A-Za-z0-9])\1+$/).test(str)) {
+        cachMess = arr[0];
+        cachStyle = "";
         memo();
       } else {
-        if (regExp(/[0-9]+/)) degreeReliability++; // Проверка на наличие чисел
-        if (regExp(/[a-z]+/) || regExp(/[а-я]+/)) degreeReliability++; // Проверка на наличие букв
-        if (lengthPassword > 14) degreeReliability++; // Проверка длины
-        if (regExp(/[A-Z]+/) || regExp(/[А-Я]+/)) degreeReliability++; // Учтены регистры
-        mess = arr[degreeReliability];
-        memo();
+        //Вес пароля увеличиваем на величину 4 * len, где len – длина пароля
+        rate += 4 * len;
+
+        //Попытка сжатия пароля
+        let lenCompress = str.replace(/(.)\1{1,}/g, "$1").length;
+        rate -= len - lenCompress;
+
+        // Если пароль содержит не меньше 3 цифр, увелечиваем вес пароля на 5
+        let countNum = str.length - str.replace(/\d+/g, "").length;
+        if (countNum >= 3) rate += 5;
+
+        // Если пароль содержит не меньше 2 знаков, увелечиваем вес пароля на 5
+        let countSymb = str.length - str.replace(/[^0-9a-zA-Z]+/g, "").length;
+        if (countSymb >= 2) rate += 5;
+
+        // Если пароль содержит буквы в верхнем и нижнем регистре увеличиваем вес пароля на 10
+        if (regExpSearch(/[A-Z]/) !== -1 && regExpSearch(/[a-z]/)) rate += 10;
+
+        // Если пароль содержит буквы и цифры увеличиваем вес пароля на 15
+        if (
+          (regExpSearch(/[A-Z]/) !== -1 || regExpSearch(/[a-z]/)) !== -1 &&
+          regExpSearch(/[0-9]/) !== -1
+        )
+          rate += 15;
+
+        // Если пароль содержит знаки и цифры увеличиваем вес пароля на 15
+        if (
+          regExpSearch(/[^0-9a-zA-Z]+/g) !== -1 &&
+          regExpSearch(/[0-9]/) !== -1
+        )
+          rate += 15;
+
+        // Если пароль содержит буквы и знаки увеличиваем вес пароля на 15
+        if (
+          (regExpSearch(/[A-Z]/) !== -1 || regExpSearch(/[a-z]/)) !== -1 &&
+          regExpSearch(/[^0-9a-zA-Z]+/g) !== -1
+        )
+          rate += 15;
+
+        // Отталкиваясь от рейтинга выдаем надежность пароля
+        if (rate <= 20) {
+          changeDiff(0);
+        } else if (rate <= 40) {
+          changeDiff(1);
+        } else if (rate <= 60) {
+          changeDiff(2);
+        } else if (rate <= 80) {
+          changeDiff(3);
+        } else if (rate <= 100) {
+          changeDiff(4);
+        }
       }
     } else {
-      setWarningMessage(" ");
+      setWarningMessage("");
     }
   };
 
@@ -101,14 +167,7 @@ const Authentication = () => {
         </div>
 
         <div className="btn-register">
-          <button
-            onClick={() => {
-              let value = test == "one" ? "two" : "one";
-              setTest(value);
-            }}
-          >
-            Register
-          </button>
+          <button>Register</button>
         </div>
         <hr />
         <p>Already have an account, sign in?</p>
