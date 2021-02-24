@@ -8,7 +8,7 @@ const Authentication = () => {
   const [form, setForm] = useState({ email: "", password: "", name: "" });
   const [warningMessage, setWarningMessage] = useState("");
 
-  const [test, setTest] = useState(" ");
+  const [styleDifficult, setStyleDifficult] = useState("");
 
   const changeHandler = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
@@ -28,13 +28,14 @@ const Authentication = () => {
     // Функция, чтобы постоянно не менять state
     const memo = () => {
       if (cachMess !== warningMessage) setWarningMessage(cachMess);
-      if (cachStyle !== test) setTest(cachStyle);
+      if (cachStyle !== styleDifficult) setStyleDifficult(cachStyle);
     };
 
+    // Функция определения наличия соответсвий в пароле
     const regExpSearch = (reg) => {
       return str.search(reg);
     };
-    
+
     // Измениние стиля и сообщения при определенном весе пароля
     const changeDiff = (value) => {
       cachMess = arr[value];
@@ -61,12 +62,12 @@ const Authentication = () => {
       cachStyle = "";
       memo();
     } else if (len !== 0) {
+
       // Проверка, если все символы одинаковы надежность всегда 0;
       if (new RegExp(/^([A-Za-z0-9])\1+$/).test(str)) {
-        cachMess = arr[0];
-        cachStyle = "";
-        memo();
+        changeDiff(0);
       } else {
+
         //Вес пароля увеличиваем на величину 4 * len, где len – длина пароля
         rate += 4 * len;
 
@@ -105,6 +106,11 @@ const Authentication = () => {
           regExpSearch(/[^0-9a-zA-Z]+/g) !== -1
         )
           rate += 15;
+        // Если пароль состоит только из цифр уменьшаем вес пароля на 10
+        if (new RegExp(/^\d+$/).test(str)) rate -= 10;
+
+        // Если пароль состоит только из букв уменьшаем вес пароля на 10
+        if (new RegExp(/^[a-z]+$/).test(str)) rate -= 10;
 
         // Отталкиваясь от рейтинга выдаем надежность пароля
         if (rate <= 20) {
@@ -120,7 +126,9 @@ const Authentication = () => {
         }
       }
     } else {
-      setWarningMessage("");
+      cachMess = "";
+      cachStyle = "";
+      memo();
     }
   };
 
@@ -160,7 +168,7 @@ const Authentication = () => {
           </div>
         </div>
         <div className="reliability-block">
-          <div className={`reliability-block-one ${test}`}>
+          <div className={`reliability-block-one ${styleDifficult}`}>
             <span className="reliability-block-two "></span>
           </div>
           <p className="message-text"> {warningMessage}</p>
