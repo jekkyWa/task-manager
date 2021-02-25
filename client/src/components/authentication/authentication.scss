@@ -168,6 +168,14 @@
   }
 }
 
+.warning-icon-block {
+  visibility: hidden !important;
+}
+
+.warning-icon-active {
+  visibility: visible !important;
+}
+
 // стили надежности пароля
 
 .one {

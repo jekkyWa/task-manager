@@ -11,14 +11,26 @@ const Register = () => {
   const [statePassword, setStatePassword] = useState(true);
   const [form, setForm] = useState({ email: "", password: "", name: "" });
   const [warningMessage, setWarningMessage] = useState("");
-  const [validMessage, setValidMessage] = useState({
-    emailMessage: "",
-    nameMessage: "",
-  });
-
+  const [validEmailMessage, setValidEmailMessage] = useState("");
+  const [validNameMessage, setValidNameMessage] = useState("");
   const [styleDifficult, setStyleDifficult] = useState("");
 
+  // Изменение validMessage
   const changeHandler = (e) => {
+    if (
+      e.target.name == "email" &&
+      e.target.value.length > 0 &&
+      validEmailMessage.length !== 0
+    ) {
+      setValidEmailMessage("");
+    }
+    if (
+      e.target.name == "name" &&
+      e.target.value.length > 0 &&
+      validNameMessage.length !== 0
+    ) {
+      setValidNameMessage("");
+    }
     setForm({ ...form, [e.target.name]: e.target.value.replace(/[ ]*/g, "") });
   };
 
@@ -146,27 +158,21 @@ const Register = () => {
 
   // Валидация email и full name
   const checkValidForms = () => {
-    const validEmail = (value) =>{
-      setValidMessage((prevState) => {
-        return { ...prevState, emailMessage: value };
-      });
-    }
-  
     if (form.email.length == 0) {
-      validEmail("Enter email")
-    }else{
-      validEmail('')
+      setValidEmailMessage("Enter email");
+    } else if (
+      !new RegExp(/^[A-Z0-9._%+-]+@[A-Z0-9-]+.+.[A-Z]{2,4}$/i).test(form.email)
+    ) {
+      setValidEmailMessage("Please enter a valid email");
+    } else {
+      setValidEmailMessage("");
     }
     if (form.name.length == 0) {
-      setValidMessage((prevState) => {
-        return { ...prevState, nameMessage: "Enter full name" };
-      });
+      setValidNameMessage("Enter full name");
+      console.log("name_test");
+    } else {
+      setValidNameMessage("");
     }
-    // if (
-    //   new RegExp(/^[A-Z0-9._%+-]+@[A-Z0-9-]+.+.[A-Z]{2,4}$/i).test(form.email)
-    // ) {
-    //   validEmail()
-    // }
   };
 
   useEffect(() => {
@@ -185,7 +191,13 @@ const Register = () => {
             placeholder="Please enter your email"
             onChange={changeHandler}
           />
-          <WarningTooltip title={validMessage.emailMessage} placement="right">
+          <WarningTooltip
+            title={validEmailMessage}
+            placement="right"
+            className={
+              !!validEmailMessage ? "warning-icon-active" : "warning-icon-block"
+            }
+          >
             <WarningIcon
               className="warning-icon-email "
               fontSize="small"
@@ -199,8 +211,19 @@ const Register = () => {
             placeholder="Please enter full name"
             onChange={changeHandler}
           />
-          <WarningTooltip title={validMessage.nameMessage} placement="right">
-            <WarningIcon className="warning-icon-name" fontSize="small" />
+
+          <WarningTooltip
+            title={validNameMessage}
+            placement="right"
+            className={
+              !!validNameMessage ? "warning-icon-active" : "warning-icon-block"
+            }
+          >
+            <WarningIcon
+              className="warning-icon-name"
+              fontSize="small"
+              placement="right"
+            />
           </WarningTooltip>
         </div>
         <div className="password">
@@ -233,7 +256,6 @@ const Register = () => {
 
         <div className="btn-authentication">
           <button onClick={checkValidForms}>Register</button>
-          <button onClick={() => console.log(validMessage)}>123</button>
         </div>
         <hr />
         <Link to="/login">Already have an account, sign in?</Link>
