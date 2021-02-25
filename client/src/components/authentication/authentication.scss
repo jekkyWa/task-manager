@@ -55,6 +55,19 @@
   }
 }
 
+.mail,
+.name {
+  position: relative;
+}
+
+.warning-icon-email,
+.warning-icon-name {
+  position: absolute;
+  right: 9px;
+  top: 23px;
+  color: rgb(204, 133, 0);
+}
+
 .password {
   position: relative;
 }

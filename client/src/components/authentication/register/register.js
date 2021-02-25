@@ -11,6 +11,10 @@ const Register = () => {
   const [statePassword, setStatePassword] = useState(true);
   const [form, setForm] = useState({ email: "", password: "", name: "" });
   const [warningMessage, setWarningMessage] = useState("");
+  const [validMessage, setValidMessage] = useState({
+    emailMessage: "",
+    nameMessage: "",
+  });
 
   const [styleDifficult, setStyleDifficult] = useState("");
 
@@ -118,7 +122,7 @@ const Register = () => {
           changeDiff(2);
         } else if (rate <= 80) {
           changeDiff(3);
-        } else if (rate <= 100) {
+        } else if (rate >= 81) {
           changeDiff(4);
         }
       }
@@ -129,36 +133,75 @@ const Register = () => {
     }
   };
 
-  useEffect(() => {
-    reliabilityCheck();
-  }, [form.password]);
-
   // Изменения стилей tooltip библиотеки material
-  const HtmlTooltip = withStyles((theme) => ({
+  const WarningTooltip = withStyles((theme) => ({
     tooltip: {
       backgroundColor: "#f5f5f9",
       color: "rgba(0, 0, 0, 0.87)",
-      maxWidth: 400,
-      fontSize: theme.typography.pxToRem(16),
+      maxWidth: 300,
+      fontSize: theme.typography.pxToRem(14),
       border: "1px solid #dadde9",
     },
   }))(Tooltip);
 
+  // Валидация email и full name
+  const checkValidForms = () => {
+    const validEmail = (value) =>{
+      setValidMessage((prevState) => {
+        return { ...prevState, emailMessage: value };
+      });
+    }
+  
+    if (form.email.length == 0) {
+      validEmail("Enter email")
+    }else{
+      validEmail('')
+    }
+    if (form.name.length == 0) {
+      setValidMessage((prevState) => {
+        return { ...prevState, nameMessage: "Enter full name" };
+      });
+    }
+    // if (
+    //   new RegExp(/^[A-Z0-9._%+-]+@[A-Z0-9-]+.+.[A-Z]{2,4}$/i).test(form.email)
+    // ) {
+    //   validEmail()
+    // }
+  };
+
+  useEffect(() => {
+    reliabilityCheck();
+  }, [form.password]);
+
   return (
     <div className="authentication">
       <h1>nieTask</h1>
-      <form className="authentcation-form">
+      <div className="authentcation-form">
         <h2>Register an account</h2>
         <div className="mail">
           <input
             type="email"
             name="email"
             placeholder="Please enter your email"
-            required
+            onChange={changeHandler}
           />
+          <WarningTooltip title={validMessage.emailMessage} placement="right">
+            <WarningIcon
+              className="warning-icon-email "
+              fontSize="small"
+              placement="right"
+            />
+          </WarningTooltip>
         </div>
         <div className="name">
-          <input name="name" placeholder="Please enter full name" required />
+          <input
+            name="name"
+            placeholder="Please enter full name"
+            onChange={changeHandler}
+          />
+          <WarningTooltip title={validMessage.nameMessage} placement="right">
+            <WarningIcon className="warning-icon-name" fontSize="small" />
+          </WarningTooltip>
         </div>
         <div className="password">
           <input
@@ -167,7 +210,6 @@ const Register = () => {
             name="password"
             value={form.password}
             onChange={changeHandler}
-            required
           />
           <div className="eye-icon-block">
             <VisibilityIcon
@@ -190,13 +232,12 @@ const Register = () => {
         </div>
 
         <div className="btn-authentication">
-          <button type="submit">Register</button>
+          <button onClick={checkValidForms}>Register</button>
+          <button onClick={() => console.log(validMessage)}>123</button>
         </div>
         <hr />
-        <HtmlTooltip title="Email введен не корректно">
-          <Link to="/login">Already have an account, sign in?</Link>
-        </HtmlTooltip>
-      </form>
+        <Link to="/login">Already have an account, sign in?</Link>
+      </div>
     </div>
   );
 };
