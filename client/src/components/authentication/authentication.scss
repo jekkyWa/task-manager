@@ -1,14 +1,23 @@
+@import "mixins.scss";
+
+.name-error,
+.mail-error,
+.password-error {
+  input {
+    border: 3px solid rgba(202, 45, 45, 0.9) !important;
+  }
+}
+
 .authentication {
   text-align: center;
   font-family: "Segoe UI";
-}
-
-.authentication > h1 {
-  font-size: 3em;
-  margin-top: 20px;
-  color: black;
-  font-weight: 900;
-  margin-bottom: 20px;
+  > h1 {
+    font-size: 3em;
+    margin-top: 20px;
+    color: black;
+    font-weight: 900;
+    margin-bottom: 20px;
+  }
 }
 
 .authentcation-form {
@@ -22,13 +31,27 @@
   box-shadow: 0px 0px 10px black;
   box-sizing: border-box;
   color: rgb(94, 108, 132);
-}
-
-.authentcation-form > h2 {
-  padding: 10px;
-  color: rgb(61, 61, 61);
-  font-size: 1.2em;
-  font-weight: 600;
+  > h2 {
+    padding: 10px;
+    color: rgb(61, 61, 61);
+    font-size: 1.2em;
+    font-weight: 600;
+  }
+  > p {
+    color: rgb(51, 51, 214);
+    &:hover {
+      cursor: pointer;
+      text-decoration: underline;
+    }
+  }
+  > hr {
+    border: 0;
+    clear: both;
+    display: block;
+    width: 100%;
+    background-color: black;
+    height: 1px;
+  }
 }
 
 .mail,
@@ -38,20 +61,22 @@
   padding: 15px 0px 15px 0px;
 }
 
-.mail > input,
-.name > input,
-.password > input {
-  padding: 5px;
-  border: 3px solid rgba(230, 230, 230, 0.9);
-  border-radius: 2px;
-  width: 100%;
-  font-size: 15px;
-  &:hover {
-    background-color: rgba(230, 230, 230, 0.9);
-    transition: 0.4s;
-  }
-  &:focus {
-    border: 3px solid rgb(0, 82, 204);
+.mail,
+.name,
+.password {
+  input {
+    padding: 5px;
+    border: 3px solid rgba(230, 230, 230, 0.9);
+    border-radius: 2px;
+    width: 100%;
+    font-size: 15px;
+    &:hover {
+      background-color: rgba(230, 230, 230, 0.9);
+      transition: 0.4s;
+    }
+    &:focus {
+      border: 3px solid rgb(0, 82, 204);
+    }
   }
 }
 
@@ -70,10 +95,9 @@
 
 .password {
   position: relative;
-}
-
-.password > input {
-  padding-right: 30px;
+  > input {
+    padding-right: 30px;
+  }
 }
 
 .eye-icon-block {
@@ -101,7 +125,6 @@
   height: 2px;
   margin-top: 5px;
   position: relative;
-
   &:before {
     background: rgb(223, 225, 230);
     bottom: 0px;
@@ -115,13 +138,13 @@
 }
 
 .reliability-block-two {
-  border-left: 5px solid rgb(255, 255, 255);
-  border-right: 5px solid rgb(255, 255, 255);
+  border-left: 5px solid white;
+  border-right: 5px solid white;
   inset: 0px 19%;
   position: absolute;
   &:after {
-    border-left: 5px solid rgb(255, 255, 255);
-    border-right: 5px solid rgb(255, 255, 255);
+    border-left: 5px solid white;
+    border-right: 5px solid white;
     inset: 0px 30%;
     content: "";
     position: absolute;
@@ -138,38 +161,24 @@
   text-align: center;
 }
 
-.authentcation-form > hr {
-  border: 0;
-  clear: both;
-  display: block;
-  width: 100%;
-  background-color: black;
-  height: 1px;
-}
-
-.btn-authentication > button {
-  width: 100%;
-  margin-top: 10px;
-  padding: 5px;
-  border-radius: 2px;
-  border: 1px solid white;
-  background-color: rgb(0, 82, 204);
-  color: white;
-  &:hover {
-    background-color: rgb(0, 97, 241);
-  }
-}
-
-.authentcation-form > p {
-  color: rgb(51, 51, 214);
-  &:hover {
-    cursor: pointer;
-    text-decoration: underline;
+.btn-authentication {
+  > button {
+    width: 100%;
+    margin-top: 10px;
+    padding: 5px;
+    border-radius: 2px;
+    border: 1px solid white;
+    background-color: rgb(0, 82, 204);
+    color: white;
+    &:hover {
+      background-color: rgb(0, 97, 241);
+    }
   }
 }
 
 .warning-icon-block {
   visibility: hidden !important;
+  position: absolute;
 }
 
 .warning-icon-active {
@@ -180,40 +189,30 @@
 
 .one {
   &::before {
-    background: rgb(120, 30, 0);
-    transition: all 0.2s ease-out 0s;
-    width: 20%;
+    @include animRelib(rgb(120, 30, 0), 20%);
   }
 }
 
 .two {
   &::before {
-    background: rgb(200, 50, 0);
-    transition: all 0.2s ease-out 0s;
-    width: 40%;
+    @include animRelib(rgb(200, 50, 0), 40%);
   }
 }
 
 .three {
   &::before {
-    background: rgb(255, 184, 31);
-    transition: all 0.2s ease-out 0s;
-    width: 60%;
+    @include animRelib(rgb(255, 184, 31), 60%);
   }
 }
 
 .four {
   &::before {
-    background: rgb(0, 253, 0);
-    transition: all 0.2s ease-out 0s;
-    width: 80%;
+    @include animRelib(rgb(0, 253, 0), 80%);
   }
 }
 
 .five {
   &::before {
-    background: rgb(0, 139, 0);
-    transition: all 0.2s ease-out 0s;
-    width: 100%;
+    @include animRelib(rgb(0, 139, 0), 100%);
   }
 }

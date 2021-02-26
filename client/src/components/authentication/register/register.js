@@ -11,26 +11,44 @@ const Register = () => {
   const [statePassword, setStatePassword] = useState(true);
   const [form, setForm] = useState({ email: "", password: "", name: "" });
   const [warningMessage, setWarningMessage] = useState("");
-  const [validEmailMessage, setValidEmailMessage] = useState("");
-  const [validNameMessage, setValidNameMessage] = useState("");
+  const [validMessage, setValidMessage] = useState({
+    emailMessage: "",
+    passwordMessage: "",
+    nameMessage: "",
+  });
   const [styleDifficult, setStyleDifficult] = useState("");
+
+  const stateValid = (value, type) => {
+    setValidMessage((prevState) => {
+      return { ...prevState, [type]: value };
+    });
+  };
 
   // Изменение validMessage
   const changeHandler = (e) => {
+    // При вводе символа, иконка ошибки пропадает
     if (
       e.target.name == "email" &&
       e.target.value.length > 0 &&
-      validEmailMessage.length !== 0
+      validMessage.emailMessage.length !== 0
     ) {
-      setValidEmailMessage("");
+      stateValid("", "emailMessage");
     }
     if (
       e.target.name == "name" &&
       e.target.value.length > 0 &&
-      validNameMessage.length !== 0
+      validMessage.nameMessage.length !== 0
     ) {
-      setValidNameMessage("");
+      stateValid("", "nameMessage");
     }
+    if (
+      e.target.name == "password" &&
+      e.target.value.length > 0 &&
+      validMessage.passwordMessage.length !== 0
+    ) {
+      stateValid("", "passwordMessage");
+    }
+
     setForm({ ...form, [e.target.name]: e.target.value.replace(/[ ]*/g, "") });
   };
 
@@ -159,19 +177,23 @@ const Register = () => {
   // Валидация email и full name
   const checkValidForms = () => {
     if (form.email.length == 0) {
-      setValidEmailMessage("Enter email");
+      stateValid("Enter email", "emailMessage");
     } else if (
       !new RegExp(/^[A-Z0-9._%+-]+@[A-Z0-9-]+.+.[A-Z]{2,4}$/i).test(form.email)
     ) {
-      setValidEmailMessage("Please enter a valid email");
+      stateValid("Please enter a valid email", "emailMessage");
     } else {
-      setValidEmailMessage("");
+      stateValid("", "emailMessage");
     }
     if (form.name.length == 0) {
-      setValidNameMessage("Enter full name");
-      console.log("name_test");
+      stateValid("Enter full name", "nameMessage");
     } else {
-      setValidNameMessage("");
+      stateValid("", "nameMessage");
+    }
+    if (form.password.length == 0) {
+      stateValid("Enter password", "passwordMessage");
+    } else {
+      stateValid("", "passwordMessage");
     }
   };
 
@@ -179,12 +201,14 @@ const Register = () => {
     reliabilityCheck();
   }, [form.password]);
 
+  const { emailMessage, nameMessage, passwordMessage } = validMessage;
+
   return (
     <div className="authentication">
       <h1>nieTask</h1>
       <div className="authentcation-form">
         <h2>Register an account</h2>
-        <div className="mail">
+        <div className={`mail ${!!emailMessage ? "mail-error" : ""}`}>
           <input
             type="email"
             name="email"
@@ -192,10 +216,10 @@ const Register = () => {
             onChange={changeHandler}
           />
           <WarningTooltip
-            title={validEmailMessage}
+            title={emailMessage}
             placement="right"
             className={
-              !!validEmailMessage ? "warning-icon-active" : "warning-icon-block"
+              !!emailMessage ? "warning-icon-active" : "warning-icon-block"
             }
           >
             <WarningIcon
@@ -205,7 +229,7 @@ const Register = () => {
             />
           </WarningTooltip>
         </div>
-        <div className="name">
+        <div className={`name ${!!nameMessage ? "name-error" : ""}`}>
           <input
             name="name"
             placeholder="Please enter full name"
@@ -213,10 +237,10 @@ const Register = () => {
           />
 
           <WarningTooltip
-            title={validNameMessage}
+            title={nameMessage}
             placement="right"
             className={
-              !!validNameMessage ? "warning-icon-active" : "warning-icon-block"
+              !!nameMessage ? "warning-icon-active" : "warning-icon-block"
             }
           >
             <WarningIcon
@@ -226,7 +250,9 @@ const Register = () => {
             />
           </WarningTooltip>
         </div>
-        <div className="password">
+        <div
+          className={`password ${!!passwordMessage ? "password-error" : ""}`}
+        >
           <input
             type={statePassword ? "password" : "text"}
             placeholder="Please create a password"
@@ -234,7 +260,26 @@ const Register = () => {
             value={form.password}
             onChange={changeHandler}
           />
-          <div className="eye-icon-block">
+          <div>
+            <WarningTooltip
+              title={passwordMessage}
+              placement="right"
+              className={
+                !!passwordMessage ? "warning-icon-active" : "warning-icon-block"
+              }
+            >
+              <WarningIcon
+                className="warning-icon-name"
+                fontSize="small"
+                placement="right"
+              />
+            </WarningTooltip>
+          </div>
+          <div
+            className={
+              !!passwordMessage ? "warning-icon-block" : "eye-icon-block"
+            }
+          >
             <VisibilityIcon
               onClick={displayPassword}
               className={statePassword ? "eye-icon-hidden" : "eye-icon"}
@@ -253,7 +298,6 @@ const Register = () => {
           </div>
           <p className="message-text"> {warningMessage}</p>
         </div>
-
         <div className="btn-authentication">
           <button onClick={checkValidForms}>Register</button>
         </div>

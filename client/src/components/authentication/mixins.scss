@@ -1,0 +1,5 @@
+@mixin animRelib($color, $width) {
+    background: $color;
+    transition: all 0.2s ease-out 0s;
+    width: $width;
+  }
