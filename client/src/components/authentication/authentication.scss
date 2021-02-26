@@ -185,6 +185,26 @@
   visibility: visible !important;
 }
 
+// Стили логина
+
+.btn-login {
+  button {
+    background-color: rgb(90,172,68) !important;
+  }
+}
+
+.log-error-hidden {
+  display: none;
+}
+
+.log-error {
+  color: white;
+  font-size: 15px;
+  background-color: rgb(235, 90, 70);
+  padding: 10px;
+  border-radius: 10px;
+}
+
 // стили надежности пароля
 
 .one {

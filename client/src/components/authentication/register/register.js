@@ -3,53 +3,56 @@ import "../authentication.scss";
 import VisibilityIcon from "@material-ui/icons/Visibility";
 import VisibilityOutlinedIcon from "@material-ui/icons/VisibilityOutlined";
 import { Link } from "react-router-dom";
+import WarningIcon from "@material-ui/icons/Warning";
 import { Tooltip } from "@material-ui/core";
 import { withStyles } from "@material-ui/core/styles";
-import WarningIcon from "@material-ui/icons/Warning";
 
 const Register = () => {
   const [statePassword, setStatePassword] = useState(true);
-  const [form, setForm] = useState({ email: "", password: "", name: "" });
-  const [warningMessage, setWarningMessage] = useState("");
-  const [validMessage, setValidMessage] = useState({
+  const [formReg, setFormReg] = useState({ email: "", password: "", name: "" });
+  const [warningMessageReg, setWarningMessageReg] = useState("");
+  const [validMessageReg, setValidMessageReg] = useState({
     emailMessage: "",
     passwordMessage: "",
     nameMessage: "",
   });
   const [styleDifficult, setStyleDifficult] = useState("");
 
-  const stateValid = (value, type) => {
-    setValidMessage((prevState) => {
+  const stateValidReg = (value, type) => {
+    setValidMessageReg((prevState) => {
       return { ...prevState, [type]: value };
     });
   };
 
-  // Изменение validMessage
-  const changeHandler = (e) => {
+  // Изменение validMessageReg
+  const changeHandlerReg = (e) => {
     // При вводе символа, иконка ошибки пропадает
     if (
       e.target.name == "email" &&
       e.target.value.length > 0 &&
-      validMessage.emailMessage.length !== 0
+      validMessageReg.emailMessage.length !== 0
     ) {
-      stateValid("", "emailMessage");
+      stateValidReg("", "emailMessage");
     }
     if (
       e.target.name == "name" &&
       e.target.value.length > 0 &&
-      validMessage.nameMessage.length !== 0
+      validMessageReg.nameMessage.length !== 0
     ) {
-      stateValid("", "nameMessage");
+      stateValidReg("", "nameMessage");
     }
     if (
       e.target.name == "password" &&
       e.target.value.length > 0 &&
-      validMessage.passwordMessage.length !== 0
+      validMessageReg.passwordMessage.length !== 0
     ) {
-      stateValid("", "passwordMessage");
+      stateValidReg("", "passwordMessage");
     }
 
-    setForm({ ...form, [e.target.name]: e.target.value.replace(/[ ]*/g, "") });
+    setFormReg({
+      ...formReg,
+      [e.target.name]: e.target.value.replace(/[ ]*/g, ""),
+    });
   };
 
   // Видимость пароля
@@ -60,12 +63,12 @@ const Register = () => {
 
   // Проверка надежности пароля методом Password Strength Meter:
   const reliabilityCheck = () => {
-    let len = form.password.length;
-    let str = form.password;
+    let len = formReg.password.length;
+    let str = formReg.password;
 
     // state меняется только если значение изменилось
     const memo = () => {
-      if (cachMess !== warningMessage) setWarningMessage(cachMess);
+      if (cachMess !== warningMessageReg) setWarningMessageReg(cachMess);
       if (cachStyle !== styleDifficult) setStyleDifficult(cachStyle);
     };
 
@@ -163,45 +166,53 @@ const Register = () => {
     }
   };
 
-  // Изменения стилей tooltip библиотеки material
+  // Валидация email, full name, password
+  const checkValidFormsReg = () => {
+    if (formReg.email.length == 0) {
+      stateValidReg("Enter email", "emailMessage");
+    } else if (
+      !new RegExp(/^[A-Z0-9._%+-]+@[A-Z0-9-]+.+.[A-Z]{2,4}$/i).test(
+        formReg.email
+      )
+    ) {
+      stateValidReg("Please enter a valid email", "emailMessage");
+    } else {
+      stateValidReg("", "emailMessage");
+    }
+    if (formReg.name.length == 0) {
+      stateValidReg("Enter full name", "nameMessage");
+    } else {
+      stateValidReg("", "nameMessage");
+    }
+    if (formReg.password.length == 0) {
+      stateValidReg("Enter password", "passwordMessage");
+    } else if (formReg.password.length < 6) {
+      stateValidReg(
+        "Minimum password length less than 6 characters",
+        "passwordMessage"
+      );
+    } else {
+      stateValidReg("", "passwordMessage");
+    }
+  };
+
+  // стили для Tooltip
   const WarningTooltip = withStyles((theme) => ({
     tooltip: {
       backgroundColor: "#f5f5f9",
       color: "rgba(0, 0, 0, 0.87)",
       maxWidth: 300,
+      fontWeight: 700,
       fontSize: theme.typography.pxToRem(14),
       border: "1px solid #dadde9",
     },
   }))(Tooltip);
 
-  // Валидация email и full name
-  const checkValidForms = () => {
-    if (form.email.length == 0) {
-      stateValid("Enter email", "emailMessage");
-    } else if (
-      !new RegExp(/^[A-Z0-9._%+-]+@[A-Z0-9-]+.+.[A-Z]{2,4}$/i).test(form.email)
-    ) {
-      stateValid("Please enter a valid email", "emailMessage");
-    } else {
-      stateValid("", "emailMessage");
-    }
-    if (form.name.length == 0) {
-      stateValid("Enter full name", "nameMessage");
-    } else {
-      stateValid("", "nameMessage");
-    }
-    if (form.password.length == 0) {
-      stateValid("Enter password", "passwordMessage");
-    } else {
-      stateValid("", "passwordMessage");
-    }
-  };
-
   useEffect(() => {
     reliabilityCheck();
-  }, [form.password]);
+  }, [formReg.password]);
 
-  const { emailMessage, nameMessage, passwordMessage } = validMessage;
+  const { emailMessage, nameMessage, passwordMessage } = validMessageReg;
 
   return (
     <div className="authentication">
@@ -213,7 +224,7 @@ const Register = () => {
             type="email"
             name="email"
             placeholder="Please enter your email"
-            onChange={changeHandler}
+            onChange={changeHandlerReg}
           />
           <WarningTooltip
             title={emailMessage}
@@ -233,7 +244,7 @@ const Register = () => {
           <input
             name="name"
             placeholder="Please enter full name"
-            onChange={changeHandler}
+            onChange={changeHandlerReg}
           />
 
           <WarningTooltip
@@ -257,8 +268,8 @@ const Register = () => {
             type={statePassword ? "password" : "text"}
             placeholder="Please create a password"
             name="password"
-            value={form.password}
-            onChange={changeHandler}
+            value={formReg.password}
+            onChange={changeHandlerReg}
           />
           <div>
             <WarningTooltip
@@ -296,10 +307,10 @@ const Register = () => {
           <div className={`reliability-block-one ${styleDifficult}`}>
             <span className="reliability-block-two "></span>
           </div>
-          <p className="message-text"> {warningMessage}</p>
+          <p className="message-text"> {warningMessageReg}</p>
         </div>
         <div className="btn-authentication">
-          <button onClick={checkValidForms}>Register</button>
+          <button onClick={checkValidFormsReg}>Register</button>
         </div>
         <hr />
         <Link to="/login">Already have an account, sign in?</Link>
