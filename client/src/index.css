@@ -1,8 +1,7 @@
-body{
-  background-image:url(./images/body-background.png);
+body {
+    background-image: url(./images/body-background.png);
 }
 
 @font-face {
-  font-family: Raleway;
-  src: url(../src/fonts//raleway.otf);
+    font-family: Raleway;
 }

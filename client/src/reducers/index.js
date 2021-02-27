@@ -1,5 +1,9 @@
+import loginReducer from "./reducer-login";
+
 const reducer = (state, action) => {
-  return {};
+    return {
+        loginReducer: loginReducer(state,action)
+    };
 };
 
 export default reducer;
