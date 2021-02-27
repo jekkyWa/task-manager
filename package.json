@@ -2,10 +2,30 @@
   "name": "task-manager",
   "version": "1.0.0",
   "description": "project for godle",
-  "main": "index.js",
+  "main": "app.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node app.js",
+    "server": "nodemon app.js",
+    "client": "npm run start --prefix client",
+    "dev": "concurrently \"npm run server\" \"npm run client\""
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jekkyWa/tasl-manager.git"
   },
   "author": "vlad_nikulshin <nikulshin_vlad01@mail.ru>",
-  "license": "ISC"
+  "license": "ISC",
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "config": "^3.3.4",
+    "express": "^4.17.1",
+    "jsonwebtoken": "^8.5.1",
+    "mongoose": "^5.11.18"
+  },
+  "devDependencies": {
+    "concurrently": "^6.0.0",
+    "cors": "^2.8.5",
+    "express-validator": "^6.10.0",
+    "nodemon": "^2.0.7"
+  }
 }
