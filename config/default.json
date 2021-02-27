@@ -1,0 +1,5 @@
+{
+  "port": 5000,
+  "mongoUri": "mongodb+srv://taskManager:36366@cluster0.cvoep.mongodb.net/task-manager?retryWrites=true&w=majority",
+  "jwtSecret": "jwt secret Task "
+}
