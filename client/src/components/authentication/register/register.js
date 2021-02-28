@@ -37,21 +37,21 @@ const Register = () => {
   const changeHandlerReg = (e) => {
     // При вводе символа, иконка ошибки пропадает
     if (
-      e.target.name == "email" &&
+      e.target.name === "email" &&
       e.target.value.length > 0 &&
       validMessageReg.emailMessage.length !== 0
     ) {
       stateValidReg("", "emailMessage");
     }
     if (
-      e.target.name == "name" &&
+      e.target.name === "name" &&
       e.target.value.length > 0 &&
       validMessageReg.nameMessage.length !== 0
     ) {
       stateValidReg("", "nameMessage");
     }
     if (
-      e.target.name == "password" &&
+      e.target.name === "password" &&
       e.target.value.length > 0 &&
       validMessageReg.passwordMessage.length !== 0
     ) {
@@ -68,7 +68,7 @@ const Register = () => {
 
   // Видимость пароля
   const displayPassword = () => {
-    let value = statePassword ? false : true;
+    let value = !statePassword;
     setStatePassword(value);
   };
 
@@ -180,7 +180,7 @@ const Register = () => {
   // Валидация email, full name, password
   const checkValidFormsReg = () => {
     let valid = 0;
-    if (formReg.email.length == 0) {
+    if (formReg.email.length === 0) {
       stateValidReg("Enter email", "emailMessage");
       valid++;
     } else if (
@@ -193,13 +193,13 @@ const Register = () => {
     } else {
       stateValidReg("", "emailMessage");
     }
-    if (formReg.name.length == 0) {
+    if (formReg.name.length === 0) {
       stateValidReg("Enter full name", "nameMessage");
       valid++;
     } else {
       stateValidReg("", "nameMessage");
     }
-    if (formReg.password.length == 0) {
+    if (formReg.password.length === 0) {
       stateValidReg("Enter password", "passwordMessage");
       valid++;
     } else if (formReg.password.length < 6) {
@@ -211,7 +211,7 @@ const Register = () => {
     } else {
       stateValidReg("", "passwordMessage");
     }
-    if (valid == 0) {
+    if (valid === 0) {
       registerHandler();
     }
   };
@@ -328,7 +328,7 @@ const Register = () => {
         </div>
         <div className="reliability-block">
           <div className={`reliability-block-one ${styleDifficult}`}>
-            <span className="reliability-block-two "></span>
+            <span className="reliability-block-two "/>
           </div>
           <p className="message-text"> {warningMessageReg}</p>
         </div>

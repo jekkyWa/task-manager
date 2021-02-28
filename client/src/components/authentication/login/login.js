@@ -1,12 +1,12 @@
-import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import React, {useState} from "react";
+import {Link} from "react-router-dom";
 import "../authentication.scss";
-import { useHttp } from "../../hooks/http.hook";
-import { connect } from "react-redux";
+import {useHttp} from "../../hooks/http.hook";
+import {connect} from "react-redux";
 
-const Login = ({ login }) => {
-  const { request } = useHttp();
-  const [formLog, setFormLog] = useState({ email: "", password: "" });
+const Login = ({login}) => {
+  const {error, request, clearError} = useHttp();
+  const [formLog, setFormLog] = useState({email: "", password: ""});
   const [validMessageLog, setValidMessageLog] = useState({
     loginMessage: "",
     passwordMessage: "",
@@ -17,7 +17,7 @@ const Login = ({ login }) => {
     try {
       const data = await request("/api/auth/login", "POST", { ...formLog });
       login(data.token, data.userId);
-    } catch (e) {}
+    } catch (e) {throw new Error(e)}
   };
 
   const stateValidLog = (value, type) => {
@@ -29,16 +29,19 @@ const Login = ({ login }) => {
   // Изменение validMessageLog
   const changeHandlerLog = (e) => {
     // При вводе символа, иконка ошибки пропадает
+    if (error) {
+      clearError()
+    }
     if (
-      e.target.name === "login" &&
-      e.target.value.length > 0 &&
-      validMessageLog.loginMessage.length !== 0
+        e.target.name === "mail" &&
+        e.target.value.length > 0 &&
+        validMessageLog.loginMessage.length !== 0
     ) {
       stateValidLog("", "loginMessage");
       stateValidLog("", "passwordMessage");
     }
     if (
-      e.target.name === "password" &&
+        e.target.name === "password" &&
       e.target.value.length > 0 &&
       validMessageLog.passwordMessage.length !== 0
     ) {
@@ -79,10 +82,10 @@ const Login = ({ login }) => {
       <div className="authentication-form">
         <h3
           className={`${
-            loginMessage || passwordMessage ? "log-error" : "log-error-hidden"
+              error || loginMessage || passwordMessage ? "log-error" : "log-error-hidden"
           }`}
         >
-          {loginMessage ? loginMessage : passwordMessage}
+          {error ? error : loginMessage ? loginMessage : passwordMessage}
         </h3>
         <h2>Login an account</h2>
         <div className="mail">
