@@ -1,13 +1,23 @@
 import React from "react";
-import { useAuth } from "../hooks/auth.hook";
+import {useHistory} from "react-router-dom"
+import {connect} from "react-redux";
 
-const Page = () => {
-  const { login, logout, token, userId } = useAuth();
-  return (
-    <div>
-      You are in the system <button onClick={logout}>Exit</button>
-    </div>
-  );
+const Page = ({logout}) => {
+    const history = useHistory()
+    const logoutHandler = event => {
+        event.preventDefault();
+        logout();
+        history.push("/login")
+    }
+    return (
+        <div>
+            You are in the system <a href={"/login"} onClick={logoutHandler}>Exit</a>
+        </div>
+    );
 };
 
-export default Page;
+const mapStateToProps = ({loginReducer: {logout}}) => {
+    return {logout};
+};
+
+export default connect(mapStateToProps, null)(Page);

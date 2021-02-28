@@ -5,7 +5,7 @@ import { useHttp } from "../../hooks/http.hook";
 import { connect } from "react-redux";
 
 const Login = ({ login }) => {
-  const { error, request } = useHttp();
+  const { request } = useHttp();
   const [formLog, setFormLog] = useState({ email: "", password: "" });
   const [validMessageLog, setValidMessageLog] = useState({
     loginMessage: "",
