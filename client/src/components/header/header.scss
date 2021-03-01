@@ -1,0 +1,25 @@
+.header {
+  background-color: white;
+}
+
+%padd {
+  padding: 4px;
+  margin-top: 4px;
+}
+
+.inf-bar {
+  > p {
+    float: right !important;
+    margin-right: 10px;
+    @extend %padd;
+    font-size: 20px;
+  }
+}
+
+.back-button-block {
+  @extend %padd;
+}
+
+.back-button{
+    cursor: pointer;
+}
