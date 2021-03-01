@@ -1,12 +1,15 @@
 const { Router } = require("express");
 const router = Router();
+const auth = require("../middleware/auth.middleware");
 const User = require("../models/User");
+const ObjectId = require("mongodb").ObjectId;
 
-router.get("/emailAndPassword", (req, res) => {
+router.get("/test", auth, async (req, res) => {
   try {
-    User.find().then((value) => res.status(201).json(value));
+    const links = await User.find({ _id: ObjectId(req.user.userId) });
+    res.json(links);
   } catch (e) {
-    throw new Error(e);
+    res.status(500).json({ message: "Что-то пошло не так, попробуйте снова" });
   }
 });
 
