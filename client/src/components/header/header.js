@@ -4,25 +4,36 @@ import ArrowBackIcon from "@material-ui/icons/ArrowBack";
 import { useHistory } from "react-router-dom";
 import { connect } from "react-redux";
 import { useHttp } from "../hooks/http.hook";
+import { saveDataIdentification } from "../../action/action-login";
 
-const Header = ({ logout }) => {
+const Header = ({ saveDataIdentification, email, name, logout, token }) => {
   const history = useHistory();
+
   const logoutHandler = (event) => {
     event.preventDefault();
     logout();
     history.push("/login");
   };
 
-  const { request } = useHttp();
+  const { request, loading } = useHttp();
 
   const getData = async () => {
     try {
-      const data = await request("/api/getData/emailAndPassword");
+      const data = await request("/api/getData/test", "GET", null, {
+        Authorization: `Bearer ${token}`,
+      });
       console.log(data)
+      saveDataIdentification("data.email", "data.name");
     } catch (e) {}
   };
 
-  useEffect(() => {getData()}, []);
+  useEffect(() => {
+    getData();
+  }, []);
+
+  if (loading) {
+    return <div>load</div>;
+  }
 
   return (
     <div className="container-fluid header">
@@ -35,16 +46,27 @@ const Header = ({ logout }) => {
           />
         </div>
         <div className="col-6 inf-bar">
-          <p>email</p>
-          <p>name</p>
+          <p>{email}</p>
+          <p>{name}</p>
         </div>
       </div>
     </div>
   );
 };
 
-const mapStateToProps = ({ loginReducer: { logout } }) => {
-  return { logout };
+const mapStateToProps = ({
+  getDataReducer: { email, name },
+  loginReducer: { logout, userId, token },
+}) => {
+  return { email, name, logout, userId, token };
 };
 
-export default connect(mapStateToProps, null)(Header);
+const mapDispatchToProps = (dispatch) => {
+  return {
+    saveDataIdentification: (email, name) => {
+      dispatch(saveDataIdentification(email, name));
+    },
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(Header);
