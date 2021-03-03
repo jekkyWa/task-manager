@@ -1,4 +1,81 @@
-.title-modal{
-    font-size: 20px;
+@import "../../variables.scss";
+@import "../../templates.scss";
+
+%margin {
+  margin: 20px 0 20px 0;
+}
+
+.title-modal {
+  font-size: 20px;
+  font-weight: 700;
+}
+
+.body-modal {
+  h2 {
+    font-size: 15px;
     font-weight: 700;
+    @extend %margin;
+  }
+  input {
+    width: 100%;
+    padding: 2px;
+  }
+}
+
+.body-modal-add-user {
+  > button {
+    width: 100%;
+    padding: 5px;
+    color: white;
+    @extend %styleBtn;
+    @extend %margin;
+    &:hover {
+      background-color: $backColorFocusBtn;
+    }
+  }
+}
+
+.add-user-block {
+  display: flex;
+  .add-user-email,
+  .add-user-role {
+    margin: 15px 5px 15px 0;
+    input {
+      width: 100%;
+    }
+  }
+  .add-user-role {
+    select {
+      padding: 2.5px;
+    }
+  }
+  .add-user-delete-btn {
+    margin-top: 53px;
+    float: right;
+    button {
+      color: white;
+      padding: 2px 15px 2px 15px;
+      width: 100%;
+      @extend %styleBtn;
+      &:hover {
+        background-color: $backColorFocusBtn;
+      }
+    }
+  }
+  p {
+    font-size: 15px;
+    font-weight: 700;
+  }
+}
+
+.create-proj-btn,
+.clear-form-btn {
+  @extend %styleBtn;
+  margin-top: 5px;
+  padding: 5px;
+  color: white;
+  width: 50%;
+  &:hover {
+    background-color: $backColorFocusBtn;
+  }
 }

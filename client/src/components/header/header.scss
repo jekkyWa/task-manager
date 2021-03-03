@@ -1,25 +1,53 @@
-.header {
-  background-color: white;
-}
-
 %padd {
   padding: 4px;
   margin-top: 4px;
 }
 
-.inf-bar {
-  > p {
-    float: right !important;
-    margin-right: 10px;
-    @extend %padd;
-    font-size: 20px;
+.header {
+  background-color: rgb(13, 17, 23);
+  padding: 5px;
+  h1 {
+    font-size: 30px;
+    color: white;
+    margin-left: 5px;
+  }
+  p {
+    font-size: 10px;
+    color: white;
+  }
+  .item-header-input {
+    text-align: center !important;
+    justify-content: center;
+    margin-top: 5px;
+    .search-input {
+      background-color: black;
+      border: 1px solid #444d56;
+      color: white;
+      border-radius: 5px;
+      padding: 5px 32px 5px 5px;
+      width: 65%;
+      &:focus {
+        transition: all 0.2s ease-out 0s;
+        width: 100%;
+        background-color: white;
+        color: black;
+      }
+    }
+  }
+  .item-header-email {
+    > p {
+      text-align: end;
+      font-size: 14px;
+      margin-top: 5px;
+    }
+  }
+  input {
+    width: 200px;
   }
 }
 
-.back-button-block {
-  @extend %padd;
-}
-
-.back-button{
-    cursor: pointer;
+@media screen and (max-width: 800px) {
+  .item-header-input {
+    visibility: hidden;
+  }
 }

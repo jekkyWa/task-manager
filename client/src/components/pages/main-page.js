@@ -1,17 +1,18 @@
 import React, { useState } from "react";
 import ModalAddImg from "../modal";
 import Header from "../header";
+import "./pages.scss";
 
 const Page = () => {
   const [modalShow, setModalShow] = useState(false);
 
   return (
-    <div>
+    <div className="main-page">
       <Header />
-      <p>Ваши проекты</p>
-      <div>
-        <p>У вас нет созданных проектов</p>
-        <button onClick={() => setModalShow(true)}>Создать проект</button>
+      <p>Your projects</p>
+      <div className="none-project">
+        <p>You have no projects created</p>
+        <button onClick={() => setModalShow(true)}>Create a project</button>
         <ModalAddImg show={modalShow} onHide={() => setModalShow(false)} />
       </div>
     </div>

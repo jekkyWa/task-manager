@@ -1,0 +1,33 @@
+@import "../../templates.scss";
+@import "../../variables.scss";
+
+%font {
+  font-size: 20px;
+  font-weight: 700;
+}
+
+.main-page {
+  > p {
+    padding: 20px 20px 0px 20px;
+    @extend %font;
+  }
+  .none-project {
+    border: 1px solid black;
+    padding: 40px;
+    margin: 0px 10px 0 10px;
+    border-radius: 5px;
+    text-align: center;
+    p {
+      @extend %font;
+    }
+    button {
+      @extend %styleBtn;
+      padding: 5px;
+      width: 200px;
+      color:white;
+      &:hover{
+        background-color: $backColorFocusBtn ;
+      }
+    }
+  }
+}

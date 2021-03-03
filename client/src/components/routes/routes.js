@@ -6,7 +6,7 @@ import {
 } from "react-router-dom";
 import Register from "../authentication/register";
 import Login from "../authentication/login";
-import Page from "../page/page";
+import Page from "../pages/main-page";
 
 const useRoutes = (isAuthenticated) => {
   if (isAuthenticated) {
