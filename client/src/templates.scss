@@ -1,0 +1,7 @@
+@import './variables.scss';
+
+%styleBtn {
+  background-color: $backColorBtn;
+  border-radius: $borderRadiusBtn;
+  border: $borderBtn;
+}
