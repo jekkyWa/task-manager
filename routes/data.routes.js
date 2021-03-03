@@ -6,8 +6,8 @@ const ObjectId = require("mongodb").ObjectId;
 
 router.get("/test", auth, async (req, res) => {
   try {
-    const links = await User.find({ _id: ObjectId(req.user.userId) });
-    res.json(links);
+    const value = await User.find({ _id: ObjectId(req.user.userId) });
+    res.json({ email: value[0].email, name: value[0].name });
   } catch (e) {
     res.status(500).json({ message: "Что-то пошло не так, попробуйте снова" });
   }
