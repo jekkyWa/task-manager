@@ -17,7 +17,9 @@ app.use(
 
 app.use("/api/auth", require("./routes/auth.routes"));
 
-app.use("/api/getData", require('./routes/data.routes'))
+app.use("/api/getData", require("./routes/data.routes"));
+
+// app.use("/api/createBoard", require("./routes/board.routes"))
 
 const PORT = config.get("port") || 5000;
 
