@@ -1,11 +1,18 @@
 import React, { useState, useEffect } from "react";
 import { Modal } from "react-bootstrap";
 import "./modal-create-project.scss";
+import { saveDataIdentification } from "../../action/action-login";
 import shortid from "shortid";
 import { useHttp } from "../hooks/http.hook";
 import { connect } from "react-redux";
 
-const ModalCreateProject = ({ onHide, show, token }) => {
+const ModalCreateProject = ({
+  onHide,
+  show,
+  token,
+  active_rooms,
+  saveDataIdentification,
+}) => {
   const [addedUsers, setAddedUsers] = useState([]);
 
   const { request } = useHttp();
@@ -39,6 +46,10 @@ const ModalCreateProject = ({ onHide, show, token }) => {
       await request("/api/createBoard", "POST", objForSend, {
         Authorization: `Bearer ${token}`,
       });
+      const data = await request("/api/getData/test", "GET", null, {
+        Authorization: `Bearer ${token}`,
+      });
+      saveDataIdentification(data.email, data.name, data.active_rooms);
     } catch (e) {
       console.error(e);
     }
@@ -125,15 +136,9 @@ const ModalCreateProject = ({ onHide, show, token }) => {
   const { nameProject, description, date } = formCreateProject;
 
   return (
-    <Modal
-      show={show}
-      onHide={onHide}
-      aria-labelledby="contained-modal-title-vcenter"
-      centered
-      size="lg"
-    >
+    <Modal show={show} onHide={onHide}>
       <Modal.Header closeButton>
-        <Modal.Title>
+        <Modal.Title id="example-custom-modal-styling-title">
           <h1 className="title-modal">Create a project(board)</h1>
         </Modal.Title>
       </Modal.Header>
@@ -205,8 +210,19 @@ const ModalCreateProject = ({ onHide, show, token }) => {
   );
 };
 
-const mapStateToProps = ({ loginReducer: { token } }) => {
-  return { token };
+const mapStateToProps = ({
+  loginReducer: { token },
+  getDataReducer: { active_rooms },
+}) => {
+  return { token, active_rooms };
 };
 
-export default connect(mapStateToProps, null)(ModalCreateProject);
+const mapDispatchToProps = (dispatch) => {
+  return {
+    saveDataIdentification: (email, name, active_rooms) => {
+      dispatch(saveDataIdentification(email, name, active_rooms));
+    },
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(ModalCreateProject);

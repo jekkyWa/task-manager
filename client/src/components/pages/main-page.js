@@ -27,26 +27,70 @@ const NoneProj = () => {
   );
 };
 
-const Proj = () => {
+const Proj = ({ active_rooms, name }) => {
+  useEffect(() => {
+    console.log(active_rooms);
+  }, []);
+
   const [modalShow, setModalShow] = useState(false);
   const [test, setTest] = useState(false);
+
+  const label = active_rooms.map((e) => {
+    return (
+      <React.Fragment key={e.board_id}>
+        <div
+          className="sidebar-block-two-item-work-place"
+          onClick={() => {
+            setTest(!test);
+          }}
+        >
+          <SupervisorAccountIcon className="test" />
+          <h2>{`${name}: ${e.name_Project}`}</h2>
+          <ExpandMoreIcon className="test" />
+        </div>
+        <div className={`retractable-block ${!test ? "hidden" : ""}`}>
+          <div className="retractable-block-item">
+            <CheckBoxOutlinedIcon fontSize="small" />
+            <h1>Beginning of work</h1>
+          </div>
+          <div className="retractable-block-item">
+            <DashboardIcon fontSize="small" />
+            <h1>Boards</h1>
+          </div>
+          <div className="retractable-block-item">
+            <FavoriteBorderOutlinedIcon fontSize="small" />
+            <h1>Important events</h1>
+          </div>
+          <div className="retractable-block-item">
+            <PeopleOutlineOutlinedIcon fontSize="small" />
+            <h1>Participants</h1>
+          </div>
+          <div className="retractable-block-item">
+            <SettingsIcon fontSize="small" />
+            <h1>Settings</h1>
+          </div>
+        </div>
+      </React.Fragment>
+    );
+  });
+
   return (
     <div className="projects">
       <nav className="main-page-left-sidebar">
         <div className="sidebar-block-one">
           <div className="sidebar-block-one-item">
             <DashboardIcon fontSize="small" />
-            <h1>Доски</h1>
+            <h1>Boards</h1>
           </div>
           <div className="sidebar-block-one-item">
             <TimelineIcon fontSize="small" />
-            <h1>Главная страница</h1>
+            <h1>Home page</h1>
           </div>
         </div>
         <div className="sidebar-block-two">
           <div className="sidebar-block-two-item-comand">
             <div>
-              <h2>Команды</h2>
+              <h2>Commands</h2>
             </div>
             <div>
               <AddIcon
@@ -60,53 +104,20 @@ const Proj = () => {
               />
             </div>
           </div>
-          <div
-            className="sidebar-block-two-item-work-place"
-            onClick={() => {
-              setTest(!test);
-            }}
-          >
-            <SupervisorAccountIcon className="test" />
-            <h2>user: nieTask</h2>
-            <ExpandMoreIcon className="test" />
-          </div>
-          <div className={`retractable-block ${!test ? "hidden" : ""}`}>
-            <div className="retractable-block-item">
-              <CheckBoxOutlinedIcon fontSize="small" />
-              <h1>Начало работы</h1>
-            </div>
-            <div className="retractable-block-item">
-              <DashboardIcon fontSize="small" />
-              <h1>Доски</h1>
-            </div>
-            <div className="retractable-block-item">
-              <FavoriteBorderOutlinedIcon fontSize="small" />
-              <h1>Важные события</h1>
-            </div>
-            <div className="retractable-block-item">
-              <PeopleOutlineOutlinedIcon fontSize="small" />
-              <h1>Участники</h1>
-            </div>
-            <div className="retractable-block-item">
-              <SettingsIcon fontSize="small" />
-              <h1>Настройки</h1>
-            </div>
-          </div>
+          {label}
         </div>
       </nav>
     </div>
   );
 };
 
-const Page = ({ token, active_rooms, saveDataIdentification }) => {
+const Page = ({ token, active_rooms, saveDataIdentification, name }) => {
   const { request, loading } = useHttp();
-
   const getData = async () => {
     try {
       const data = await request("/api/getData/test", "GET", null, {
         Authorization: `Bearer ${token}`,
       });
-      console.log(data);
       saveDataIdentification(data.email, data.name, data.active_rooms);
     } catch (e) {}
   };
@@ -123,7 +134,12 @@ const Page = ({ token, active_rooms, saveDataIdentification }) => {
     );
   }
 
-  const label = active_rooms.length > 0 ? <Proj /> : <NoneProj />;
+  const label =
+    active_rooms.length > 0 ? (
+      <Proj active_rooms={active_rooms} name={name} />
+    ) : (
+      <NoneProj />
+    );
 
   return (
     <div className="main-page">
@@ -134,10 +150,10 @@ const Page = ({ token, active_rooms, saveDataIdentification }) => {
 };
 
 const mapStateToProps = ({
-  getDataReducer: { active_rooms },
+  getDataReducer: { active_rooms, name },
   loginReducer: { token },
 }) => {
-  return { token, active_rooms };
+  return { token, active_rooms, name };
 };
 
 const mapDispatchToProps = (dispatch) => {
