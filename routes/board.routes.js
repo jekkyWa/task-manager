@@ -26,7 +26,7 @@ router.post("/createBoard", auth, async (req, res) => {
 
     await User.updateOne(value[0], {
       ...value,
-      active_rooms: [id],
+      active_rooms: [...value[0].active_rooms, id],
     });
 
     res.status(201).json({ message: "Доска создана" });
