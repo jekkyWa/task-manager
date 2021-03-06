@@ -4,50 +4,87 @@
 }
 
 .header {
-  background-color: rgb(13, 17, 23);
+  background-color: #161b22;
   padding: 5px;
-  h1 {
-    font-size: 30px;
-    color: white;
-    margin-left: 5px;
-  }
-  p {
-    font-size: 10px;
-    color: white;
-  }
-  .item-header-input {
-    text-align: center !important;
-    justify-content: center;
-    margin-top: 5px;
-    .search-input {
-      background-color: black;
-      border: 1px solid #444d56;
+  display: flex;
+  padding-left: 5px;
+  justify-content: space-between;
+  .menu-header {
+    display: flex;
+    .header-item {
+      display: flex;
+      align-self: center;
       color: white;
-      border-radius: 5px;
-      padding: 5px 32px 5px 5px;
-      width: 65%;
-      &:focus {
-        transition: all 0.2s ease-out 0s;
+      border: 1px solid white;
+      margin-left: 7px;
+      border-radius: 2px;
+      padding: 2px 4px 2px 4px;
+      background-color: #313131;
+      &:hover {
+        background-color: #3b3b3b;
+        cursor: pointer;
+      }
+      div {
+        align-self: center;
+      }
+      h1 {
+        font-size: 14px;
+        margin: 5px 10px 5px 12px;
+      }
+    }
+    .header-input {
+      margin-left: 5px;
+      > input {
+        padding: 2.5px;
         width: 100%;
-        background-color: white;
-        color: black;
+        &:focus {
+          width: 175%;
+          transition: all 0.2s ease-out 0s;
+        }
       }
     }
   }
-  .item-header-email {
-    > p {
-      text-align: end;
-      font-size: 14px;
-      margin-top: 5px;
+  .header-logo {
+    display: flex;
+    color: white;
+    flex-basis: 310px;
+    h1 {
+      font-size: 20px;
     }
   }
-  input {
-    width: 200px;
+  .item-header-email {
+    display: flex;
+    .notification-icon {
+      color: white;
+      border: 1px solid white;
+      border-radius: 2px;
+      margin-right: 5px;
+      padding: 0px 4px 0 4px;
+      background-color: #313131;
+      &:hover {
+        background-color: #3b3b3b;
+        cursor: pointer;
+      }
+    }
+    .icon-profile {
+      background-color: rgb(119, 119, 119);
+      border-radius: 100%;
+      width: 31px;
+      height: 31px;
+      margin-top: 1px;
+      p {
+        text-align: center;
+        margin-top: 2px;
+      }
+      &:hover{
+        cursor: pointer;
+      }
+    }
   }
 }
 
 @media screen and (max-width: 800px) {
-  .item-header-input {
-    visibility: hidden;
+  .header-input {
+    display: none;
   }
 }

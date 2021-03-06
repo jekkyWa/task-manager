@@ -3,11 +3,12 @@ import { Modal } from "react-bootstrap";
 import "./modal-create-project.scss";
 import shortid from "shortid";
 import { useHttp } from "../hooks/http.hook";
+import { connect } from "react-redux";
 
-const ModalCreateProject = (props) => {
+const ModalCreateProject = ({ onHide, show, token }) => {
   const [addedUsers, setAddedUsers] = useState([]);
 
-  const { required } = useHttp();
+  const { request } = useHttp();
 
   const [formCreateProject, setFormCreateProject] = useState({
     nameProject: "",
@@ -26,16 +27,18 @@ const ModalCreateProject = (props) => {
     try {
       let cleanAddedUsers = addedUsers.map((e) => {
         return {
-          emailOfUserToAdd: e.emailOfUserToAdd,
-          roleOfUserToAdd: e.roleOfUserToAdd,
-          levelOfUserToAdd: e.levelOfUserToAdd,
+          email: e.emailOfUserToAdd,
+          role: e.roleOfUserToAdd,
+          level: e.levelOfUserToAdd,
         };
       });
       let objForSend = {
         ...formCreateProject,
         addedUsers: cleanAddedUsers,
       };
-      console.log(objForSend);
+      await request("/api/createBoard", "POST", objForSend, {
+        Authorization: `Bearer ${token}`,
+      });
     } catch (e) {
       console.error(e);
     }
@@ -123,7 +126,8 @@ const ModalCreateProject = (props) => {
 
   return (
     <Modal
-      {...props}
+      show={show}
+      onHide={onHide}
       aria-labelledby="contained-modal-title-vcenter"
       centered
       size="lg"
@@ -201,4 +205,8 @@ const ModalCreateProject = (props) => {
   );
 };
 
-export default ModalCreateProject;
+const mapStateToProps = ({ loginReducer: { token } }) => {
+  return { token };
+};
+
+export default connect(mapStateToProps, null)(ModalCreateProject);

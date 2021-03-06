@@ -1,12 +1,12 @@
 import React, { useEffect } from "react";
 import "./header.scss";
-import SearchIcon from "@material-ui/icons/Search";
 import { useHistory } from "react-router-dom";
+import HomeOutlinedIcon from "@material-ui/icons/HomeOutlined";
+import DashboardIcon from "@material-ui/icons/Dashboard";
+import NotificationsNoneOutlinedIcon from "@material-ui/icons/NotificationsNoneOutlined";
 import { connect } from "react-redux";
-import { useHttp } from "../hooks/http.hook";
-import { saveDataIdentification } from "../../action/action-login";
 
-const Header = ({ saveDataIdentification, email, name, logout, token }) => {
+const Header = ({ email, name, logout }) => {
   const history = useHistory();
 
   const logoutHandler = (event) => {
@@ -15,40 +15,41 @@ const Header = ({ saveDataIdentification, email, name, logout, token }) => {
     history.push("/login");
   };
 
-  const { request, loading } = useHttp();
-
-  const getData = async () => {
-    try {
-      const data = await request("/api/getData/test", "GET", null, {
-        Authorization: `Bearer ${token}`,
-      });
-      console.log(data);
-      saveDataIdentification(data.email, data.name);
-    } catch (e) {}
-  };
-
-  useEffect(() => {
-    getData();
-  }, []);
-
-  if (loading) {
-    return <div>load</div>;
-  }
-
   return (
-    <div className="header container-fluid">
-      <div className="row">
-        <div className="col-4 item-header">
-          <h1>nieTask</h1>
+    <div className="header ">
+      <div className="menu-header">
+        <div className="header-item">
+          <div>
+            <HomeOutlinedIcon />
+          </div>
         </div>
-        <div className="col-4 item-header-input">
+        <div className="header-item">
+          <div>
+            <DashboardIcon />
+          </div>
+          <div>
+            <h1>Доски</h1>
+          </div>
+        </div>
+        <div className="header-input">
           <input
             placeholder="Search and filter projects"
             className="search-input"
           />
         </div>
-        <div className="col-4 item-header-email">
-          <p onClick={logoutHandler}>{email}</p>
+      </div>
+      <div className="header-logo">
+        <div>
+          <DashboardIcon />
+        </div>
+        <h1>nieTask</h1>
+      </div>
+      <div className="item-header-email">
+        <div className="notification-icon">
+          <NotificationsNoneOutlinedIcon />
+        </div>
+        <div className="icon-profile" onClick={logoutHandler}>
+          <p>{email[0].toUpperCase()}</p>
         </div>
       </div>
     </div>
@@ -57,17 +58,9 @@ const Header = ({ saveDataIdentification, email, name, logout, token }) => {
 
 const mapStateToProps = ({
   getDataReducer: { email, name },
-  loginReducer: { logout, userId, token },
+  loginReducer: { logout },
 }) => {
-  return { email, name, logout, userId, token };
+  return { email, name, logout };
 };
 
-const mapDispatchToProps = (dispatch) => {
-  return {
-    saveDataIdentification: (email, name) => {
-      dispatch(saveDataIdentification(email, name));
-    },
-  };
-};
-
-export default connect(mapStateToProps, mapDispatchToProps)(Header);
+export default connect(mapStateToProps, null)(Header);

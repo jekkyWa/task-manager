@@ -3,6 +3,7 @@ const getDataReducer = (state, action) => {
     return {
       email: "email",
       name: "name",
+      active_rooms: [],
     };
   }
   switch (action.type) {
@@ -10,6 +11,7 @@ const getDataReducer = (state, action) => {
       return {
         email: action.email,
         name: action.name,
+        active_rooms: action.active_rooms,
       };
     default:
       return state.getDataReducer;
