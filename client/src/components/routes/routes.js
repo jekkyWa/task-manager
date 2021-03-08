@@ -1,12 +1,10 @@
 import React from "react";
-import {
-  Redirect,
-  Route,
-  Switch,
-} from "react-router-dom";
+import { Redirect, Route, Switch } from "react-router-dom";
 import Register from "../authentication/register";
 import Login from "../authentication/login";
 import Page from "../pages/main-page";
+import BeginningOfWorkPage from "../pages/beginning-of-work-page";
+import BoardPage from "../pages/boards-page";
 
 const useRoutes = (isAuthenticated) => {
   if (isAuthenticated) {
@@ -14,6 +12,12 @@ const useRoutes = (isAuthenticated) => {
       <Switch>
         <Route path="/page" exact>
           <Page />
+        </Route>
+        <Route path="/begin" exact>
+          <BeginningOfWorkPage />
+        </Route>
+        <Route path="/boards/:id" exact>
+          <BoardPage/>
         </Route>
         <Redirect to="/page" />
       </Switch>

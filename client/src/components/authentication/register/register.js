@@ -15,7 +15,7 @@ const Register = () => {
   const [validMessageReg, setValidMessageReg] = useState({
     emailMessage: "",
     passwordMessage: "",
-    nameMessage: "",
+    nameMessage: ""
   });
   const [styleDifficult, setStyleDifficult] = useState("");
 
@@ -328,7 +328,7 @@ const Register = () => {
         </div>
         <div className="reliability-block">
           <div className={`reliability-block-one ${styleDifficult}`}>
-            <span className="reliability-block-two "/>
+            <span className="reliability-block-two " />
           </div>
           <p className="message-text"> {warningMessageReg}</p>
         </div>

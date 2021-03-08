@@ -1,0 +1,113 @@
+%flexMarg {
+  display: flex;
+  margin-bottom: 2px;
+  padding: 5px 8px 6px 5px;
+}
+.main-page-left-sidebar {
+  margin: 40px 0 0 0;
+  width: 300px;
+  .sidebar-block-one {
+    display: flex;
+    flex-direction: column-reverse;
+    .sidebar-block-one-item {
+      display: flex;
+      padding: 8px 8px 3px 5px;
+      margin-top: 3px;
+      &:hover {
+        background-color: rgb(231, 231, 231);
+        border-radius: 4px;
+        transition: 0.2s all;
+        cursor: pointer;
+      }
+      > h1 {
+        font-size: 14px;
+        font-weight: 700;
+        margin-left: 10px;
+        margin-top: 1px;
+      }
+      .icon-sidebar {
+        margin-bottom: 1px;
+      }
+    }
+  }
+  .sidebar-block-two {
+    display: flex;
+    flex-direction: column;
+    margin-top: 10px;
+    .sidebar-block-two-item-comand {
+      display: flex;
+      @extend %flexMarg;
+      justify-content: space-between;
+      h2 {
+        font-size: 20px;
+        color: rgb(85, 84, 84);
+        font-weight: 200;
+        text-align: end;
+      }
+      .add-icon {
+        margin-top: 5px;
+        color: rgb(85, 84, 84);
+        &:hover {
+          background-color: rgb(231, 231, 231);
+          border-radius: 4px;
+          transition: 0.2s all;
+          cursor: pointer;
+        }
+        justify-content: end;
+      }
+    }
+    .sidebar-block-two-item-work-place {
+      @extend %flexMarg;
+      display: flex;
+      justify-content: space-between;
+      margin-top: 10px;
+      > h2 {
+        font-size: 16px;
+        font-weight: 400;
+        line-height: 25px;
+        margin-left: 10px;
+        margin-right: auto;
+        margin-top: 5px;
+      }
+      .test {
+        align-self: center;
+      }
+      &:hover {
+        background-color: rgb(231, 231, 231);
+        border-radius: 4px;
+        transition: 0.2s all;
+        cursor: pointer;
+      }
+    }
+    .hidden {
+      display: none !important;
+    }
+    .retractable-block {
+      display: flex;
+      flex-direction: column;
+      .retractable-block-item {
+        display: flex;
+        margin-left: 35px;
+        margin-top: 5px;
+        padding: 8px 8px 3px 5px;
+        h1 {
+          font-size: 14px;
+          margin-left: 5px;
+          margin-top: 1px;
+        }
+        &:hover {
+          background-color: rgb(231, 231, 231);
+          border-radius: 4px;
+          transition: 0.2s all;
+          cursor: pointer;
+        }
+      }
+    }
+  }
+}
+
+@media screen and (max-width: 800px) {
+  .main-page-left-sidebar {
+    display: none;
+  }
+}
