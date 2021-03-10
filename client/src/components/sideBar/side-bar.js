@@ -14,10 +14,6 @@ import "./side-bar.scss";
 import { Link } from "react-router-dom";
 
 const SideBar = ({ active_rooms, name }) => {
-  useEffect(() => {
-    console.log(active_rooms);
-  }, []);
-
   const [modalShow, setModalShow] = useState(false);
   const [arrId, setArrId] = useState([]);
 
@@ -53,7 +49,7 @@ const SideBar = ({ active_rooms, name }) => {
           <div className="retractable-block-item">
             <DashboardIcon fontSize="small" />
             <h1>
-              <Link to={`/boards/${e.board_id}`}> Boards</Link>
+              <Link to={`/boards/${e.name_Project + e.board_id}`}>Boards</Link>
             </h1>
           </div>
           <div className="retractable-block-item">

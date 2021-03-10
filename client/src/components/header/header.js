@@ -28,7 +28,7 @@ const Header = ({ email, name, logout }) => {
             <DashboardIcon />
           </div>
           <div>
-            <h1>Доски</h1>
+            <h1>Boards</h1>
           </div>
         </div>
         <div className="header-input">
