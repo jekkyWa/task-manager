@@ -6,7 +6,7 @@ const shema = new Schema({
   description: { type: String },
   date: { type: String },
   addedUsers: [],
-  task: [],
+  board_item: [],
 });
 
 module.exports = model("Board", shema);
