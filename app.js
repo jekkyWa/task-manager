@@ -21,6 +21,8 @@ app.use("/api/getData", require("./routes/data.routes"));
 
 app.use("/api/", require("./routes/board.routes"));
 
+app.use("/api/", require("./routes/task.routes"));
+
 const PORT = config.get("port") || 5000;
 
 async function start() {
