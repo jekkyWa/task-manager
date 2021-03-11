@@ -23,6 +23,10 @@ app.use("/api/", require("./routes/board.routes"));
 
 app.use("/api/", require("./routes/task.routes"));
 
+app.use("/api/", require("./routes/data-boards.routes"));
+
+app.use("/api/", require("./routes/data-cards.routes"));
+
 const PORT = config.get("port") || 5000;
 
 async function start() {
