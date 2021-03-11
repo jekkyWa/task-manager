@@ -7,7 +7,7 @@ const Card = require("../models/Cards");
 
 router.post("/createCard", auth, async (req, res) => {
   try {
-    const { name_Board, color, card_id, cards } = req.body;
+    const { name_Board, color, card_id, cards, board_id } = req.body;
 
     const card = new Card({
       name_Board,
@@ -19,9 +19,10 @@ router.post("/createCard", auth, async (req, res) => {
 
     await card.save();
 
-    const value = await Board.find({ board_id });
+    const value = await Board.find({ board_id: board_id });
+    console.log(value);
 
-    await User.updateOne(value[0], {
+    await Board.updateOne(value[0], {
       ...value,
       board_item: [...value[0].board_item, card_id],
     });
