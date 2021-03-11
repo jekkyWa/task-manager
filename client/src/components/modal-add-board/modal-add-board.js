@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Modal } from "react-bootstrap";
-import { saveDataIdentification } from "../../action/action-login";
+import { saveDataCards } from "../../action/action-login";
 import { connect } from "react-redux";
 import "./modal-add-board.scss";
 import { useParams } from "react-router-dom";
@@ -8,13 +8,13 @@ import CloseIcon from "@material-ui/icons/Close";
 import { useHttp } from "../hooks/http.hook";
 import shortid from "shortid";
 
-const ModalAddBoard = ({ show, onHide, token }) => {
+const ModalAddBoard = ({ show, onHide, token, saveDataCards }) => {
   let { id } = useParams();
   let [backColor, setBackColor] = useState("blue-one");
   let [disable, setDisable] = useState(true);
   let [formAddedBoard, setFormAddedBoard] = useState("");
 
-  const { request } = useHttp();
+  const { request, loading } = useHttp();
 
   const onChangeModalBoardHandler = (e) => {
     if (e.target.value.length > 0) setDisable(false);
@@ -36,10 +36,20 @@ const ModalAddBoard = ({ show, onHide, token }) => {
           { card_name: "Done", card_body: [] },
         ],
       };
-      console.log(dataForSend);
+      setDisable(true);
       await request("/api/createCard", "POST", dataForSend, {
         Authorization: `Bearer ${token}`,
       });
+      const value = await request(
+        "/api/getBoards",
+        "POST",
+        { board_id: id.slice(id.length - 9) },
+        {
+          Authorization: `Bearer ${token}`,
+        }
+      );
+      saveDataCards(value.filterCards);
+      onHide();
     } catch (e) {
       console.error(e);
     }
@@ -134,7 +144,7 @@ const ModalAddBoard = ({ show, onHide, token }) => {
           disabled={disable}
           onClick={sendInfoBoard}
         >
-          Создать доску
+          {loading ? "loading" : "Cоздать доску"}
         </button>
       </div>
     </Modal>
@@ -150,8 +160,8 @@ const mapStateToProps = ({
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    saveDataIdentification: (email, name, active_rooms) => {
-      dispatch(saveDataIdentification(email, name, active_rooms));
+    saveDataCards: (boards) => {
+      dispatch(saveDataCards(boards));
     },
   };
 };

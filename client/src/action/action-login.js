@@ -9,13 +9,27 @@ const fetchLogin = (token, userId, login, logout, isAuthenticated) => {
   };
 };
 
-const saveDataIdentification = (email, name,active_rooms) => {
+const saveDataIdentification = (email, name, active_rooms) => {
   return {
     type: "SAVE_DATA_IDENT",
     email,
     name,
-    active_rooms
+    active_rooms,
   };
 };
 
-export { fetchLogin, saveDataIdentification };
+const saveDataCards = (boards) => {
+  return {
+    type: "SAVE_BOARD_DATA",
+    boards,
+  };
+};
+
+const saveActivityCard = (card) => {
+  return {
+    type: "SAVE_ACTIVITY_CARD",
+    card,
+  };
+};
+
+export { fetchLogin, saveDataIdentification, saveDataCards, saveActivityCard };

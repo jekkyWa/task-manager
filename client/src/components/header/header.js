@@ -1,12 +1,12 @@
 import React, { useEffect } from "react";
 import "./header.scss";
-import { useHistory } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 import HomeOutlinedIcon from "@material-ui/icons/HomeOutlined";
 import DashboardIcon from "@material-ui/icons/Dashboard";
 import NotificationsNoneOutlinedIcon from "@material-ui/icons/NotificationsNoneOutlined";
 import { connect } from "react-redux";
 
-const Header = ({ email, name, logout }) => {
+const Header = ({ email, name, logout, color }) => {
   const history = useHistory();
 
   const logoutHandler = (event) => {
@@ -16,11 +16,13 @@ const Header = ({ email, name, logout }) => {
   };
 
   return (
-    <div className="header ">
+    <div className={`header ${color + "-header"}`}>
       <div className="menu-header">
         <div className="header-item">
           <div>
-            <HomeOutlinedIcon />
+            <Link to="/page">
+              <HomeOutlinedIcon />
+            </Link>
           </div>
         </div>
         <div className="header-item">

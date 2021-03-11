@@ -136,15 +136,31 @@
     padding: 10px;
     .board {
       flex-basis: 175px;
-      height: 85px;
+      height: 100px;
       background-color: rgb(241, 241, 241);
       margin: 5px;
       border-radius: 5px;
       padding: 5px;
-      &:hover {
-        background-color: rgb(201, 201, 201);
-        cursor: pointer;
+      position: relative;
+      cursor: pointer;
+      color: black;
+      text-decoration: none;
+      &::after {
+        content: "";
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.208);
+        left: 0;
+        top: 0;
+        transition: opacity 0.2s;
+        opacity: 0;
+        border-radius: 5px !important;
       }
+      &:hover::after {
+        opacity: 1;
+      }
+
       > p {
         display: flex;
         align-items: center;
@@ -153,9 +169,43 @@
         width: 100%;
         text-align: center;
         margin: 10% 0;
-        min-height: 40px;
+        min-height: 50px;
         font-size: 14px;
       }
+    }
+  }
+}
+
+// ---------------------------------------------------------------------------------
+
+.card-page {
+  min-height: 100vh;
+  .card-body {
+    display: flex;
+    width: 100%;
+    justify-content: flex-start;
+    flex-wrap: wrap;
+    align-content: flex-start;
+    margin-top: 20px;
+    padding: 10px;
+    .card-add{
+      padding: 10px;
+      background-color:rgba(0, 0, 0, 0.250) ;
+      border-radius: 5px;
+      color:white;
+      align-self: flex-start;
+      margin: 10px;
+      >p{
+        margin-bottom: 0;
+      }
+    }
+    .card-item {
+      background-color: rgb(235, 236, 240);
+      flex-basis: 225px;
+      min-height: 80px;
+      margin: 10px;
+      border-radius: 5px;
+      padding: 10px 10px 0px 10px;
     }
   }
 }

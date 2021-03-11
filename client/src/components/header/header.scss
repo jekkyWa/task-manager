@@ -9,6 +9,7 @@
   display: flex;
   padding-left: 5px;
   justify-content: space-between;
+  
   .menu-header {
     display: flex;
     .header-item {
@@ -76,7 +77,7 @@
         text-align: center;
         margin-top: 2px;
       }
-      &:hover{
+      &:hover {
         cursor: pointer;
       }
     }

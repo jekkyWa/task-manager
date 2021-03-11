@@ -5,6 +5,7 @@ import Login from "../authentication/login";
 import Page from "../pages/main-page";
 import BeginningOfWorkPage from "../pages/beginning-of-work-page";
 import BoardPage from "../pages/boards-page";
+import CardPage from "../pages/card-page";
 
 const useRoutes = (isAuthenticated) => {
   if (isAuthenticated) {
@@ -17,7 +18,10 @@ const useRoutes = (isAuthenticated) => {
           <BeginningOfWorkPage />
         </Route>
         <Route path="/boards/:id" exact>
-          <BoardPage/>
+          <BoardPage />
+        </Route>
+        <Route path="/boards/:id/:name" exact>
+          <CardPage />
         </Route>
         <Redirect to="/page" />
       </Switch>
@@ -31,7 +35,7 @@ const useRoutes = (isAuthenticated) => {
         <Route path="/login" exact>
           <Login />
         </Route>
-        <Redirect to="/login" />
+        <Redirect to="/" />
       </Switch>
     );
   }
