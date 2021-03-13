@@ -20,6 +20,7 @@
     "redux": "^4.0.5",
     "sass": "^1.32.8",
     "shortid": "^2.2.16",
+    "socket.io-client": "^4.0.0",
     "web-vitals": "^1.1.0"
   },
   "scripts": {

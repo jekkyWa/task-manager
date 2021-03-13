@@ -19,11 +19,11 @@ const Header = ({ email, name, logout, color }) => {
     <div className={`header ${color + "-header"}`}>
       <div className="menu-header">
         <div className="header-item">
-          <div>
-            <Link to="/page">
+          <Link to="/page">
+            <div>
               <HomeOutlinedIcon />
-            </Link>
-          </div>
+            </div>
+          </Link>
         </div>
         <div className="header-item">
           <div>

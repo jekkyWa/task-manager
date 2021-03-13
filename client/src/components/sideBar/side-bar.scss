@@ -79,9 +79,7 @@
         cursor: pointer;
       }
     }
-    .hidden {
-      display: none !important;
-    }
+
     .retractable-block {
       display: flex;
       flex-direction: column;
@@ -104,6 +102,9 @@
       }
     }
   }
+}
+.hidden {
+  display: none !important;
 }
 
 @media screen and (max-width: 800px) {

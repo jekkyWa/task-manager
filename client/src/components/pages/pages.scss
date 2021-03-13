@@ -180,34 +180,128 @@
 
 .card-page {
   min-height: 100vh;
+  .header-card-page {
+    display: flex;
+    padding: 5px;
+    margin-top: 5px;
+    .name-command-card-page {
+      margin-left: 5px;
+      > h1 {
+        background-color: rgba(0, 0, 0, 0.1);
+        margin-left: 7px;
+        border-radius: 2px;
+        padding: 5px 10px 7px 10px;
+        font-size: 16px;
+        font-weight: 400;
+      }
+    }
+    .name-board-card-page {
+      margin-left: 5px;
+      > h1 {
+        margin-left: 7px;
+        border-radius: 2px;
+        padding: 3px 10px 4px 10px;
+        font-size: 20px;
+        font-weight: 700;
+        &:hover {
+          background-color: rgba(0, 0, 0, 0.2);
+        }
+      }
+    }
+  }
   .card-body {
     display: flex;
     width: 100%;
     justify-content: flex-start;
     flex-wrap: wrap;
     align-content: flex-start;
-    margin-top: 20px;
     padding: 10px;
-    .card-add{
-      padding: 10px;
-      background-color:rgba(0, 0, 0, 0.250) ;
+    .none-card-add {
+      display: none;
+    }
+    .card-add {
+      padding: 10px 25px 10px 25px;
+      background-color: rgba(0, 0, 0, 0.25);
       border-radius: 5px;
-      color:white;
+      color: white;
       align-self: flex-start;
       margin: 10px;
-      >p{
+      cursor: pointer;
+      &:hover {
+        background-color: rgba(0, 0, 0, 0.5);
+      }
+      > p {
         margin-bottom: 0;
       }
     }
     .card-item {
       background-color: rgb(235, 236, 240);
-      flex-basis: 225px;
+      flex-basis: 270px;
       min-height: 80px;
       margin: 10px;
       border-radius: 5px;
       padding: 10px 10px 0px 10px;
+      align-self: start;
+      .card-item-input-title {
+        margin-bottom: 7px;
+        > input {
+          width: 100%;
+          border-radius: 5px;
+          border: 2px solid rgb(0, 121, 191);
+          padding: 5px;
+        }
+      }
+      > textarea {
+        height: 80px;
+        resize: none;
+        width: 100%;
+        border-radius: 5px;
+      }
+      .add-card-text {
+        cursor: pointer;
+        padding: 10px;
+        &:hover {
+          background-color: rgba(122, 122, 122, 0.534);
+          border-radius: 5px;
+        }
+      }
+      .add-card-btn-block {
+        > button {
+          padding: 2px;
+          width: 110px;
+          background-color: rgb(90, 172, 68);
+          color: white;
+          border-radius: 2px;
+          border: none;
+          margin-bottom: 5px;
+        }
+      }
     }
   }
+}
+
+.task-item {
+  background-color: white;
+  border-radius: 2px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.137);
+  overflow: hidden;
+  padding: 6px 8px 2px;
+  margin-bottom:10px ;
+  > p {
+    clear: both;
+    display: block;
+    margin: 0 0 4px;
+    overflow: hidden;
+    text-decoration: none;
+    word-wrap: break-word;
+    color: #172b4d;
+  }
+}
+
+.close-icon {
+  margin-left: 7px;
+  margin-bottom: 5px;
+  cursor: pointer;
 }
 
 @media screen and (max-width: 800px) {

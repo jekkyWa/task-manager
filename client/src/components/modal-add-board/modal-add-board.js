@@ -25,15 +25,30 @@ const ModalAddBoard = ({ show, onHide, token, saveDataCards }) => {
   const sendInfoBoard = async () => {
     try {
       let card_id = shortid.generate();
+      let card_item_id_one = shortid.generate();
+      let card_item_id_two = shortid.generate();
+      let card_item_id_three = shortid.generate();
       let dataForSend = {
         name_Board: formAddedBoard,
         color: backColor,
         card_id,
         board_id: id.slice(id.length - 9),
         cards: [
-          { card_name: "Need to do", card_body: [] },
-          { card_name: "During", card_body: [] },
-          { card_name: "Done", card_body: [] },
+          {
+            card_name: "Need to do",
+            card_body: [],
+            card_item_id: card_item_id_one,
+          },
+          {
+            card_name: "During",
+            card_body: [],
+            card_item_id: card_item_id_two,
+          },
+          {
+            card_name: "Done",
+            card_body: [],
+            card_item_id: card_item_id_three,
+          },
         ],
       };
       setDisable(true);
