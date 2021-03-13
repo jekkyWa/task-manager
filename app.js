@@ -27,6 +27,8 @@ app.use("/api/", require("./routes/data-boards.routes"));
 
 app.use("/api/", require("./routes/data-cards.routes"));
 
+app.use("/api/", require("./routes/add-card.routes"));
+
 const PORT = config.get("port") || 5000;
 
 async function start() {
