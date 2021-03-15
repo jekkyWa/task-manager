@@ -20,6 +20,22 @@ router.post("/createBoard", auth, async (req, res) => {
       board_id: id,
     });
 
+    const check = await User.find(
+      { email: { $in: addedUsers.map((e) => e.email) } },
+      function (err, data) {}
+    );
+
+    if (check.length !== addedUsers.length) {
+      const errorEmail = addedUsers.filter((e) => {
+        return check.map((e) => e.email).indexOf(e.email) == -1;
+      });
+      res.status(500).json({
+        message: `${errorEmail
+          .map((e) => e.email)
+          .join(", ")} не существует(ют)`,
+      });
+    }
+
     await board.save();
 
     const value = await User.find({ _id: ObjectId(req.user.userId) });
@@ -28,6 +44,11 @@ router.post("/createBoard", auth, async (req, res) => {
       ...value,
       active_rooms: [...value[0].active_rooms, id],
     });
+
+    await User.updateMany(
+      { email: { $in: addedUsers.map((e) => e.email) } },
+      { $addToSet: { passive_rooms: [id] } }
+    );
 
     res.status(201).json({ message: "Доска создана" });
   } catch (e) {
