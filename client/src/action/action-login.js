@@ -9,12 +9,12 @@ const fetchLogin = (token, userId, login, logout, isAuthenticated) => {
   };
 };
 
-const saveDataIdentification = (email, name, active_rooms) => {
+const saveDataIdentification = (email, name, rooms) => {
   return {
     type: "SAVE_DATA_IDENT",
     email,
     name,
-    active_rooms,
+    rooms,
   };
 };
 

@@ -8,6 +8,7 @@ import Loading from "../loading/loading";
 import AddIcon from "@material-ui/icons/Add";
 import CloseIcon from "@material-ui/icons/Close";
 import shortid from "shortid";
+import io from "socket.io-client";
 
 const CardPage = ({ token, saveActivityCard, card }) => {
   const { request } = useHttp();
@@ -20,6 +21,7 @@ const CardPage = ({ token, saveActivityCard, card }) => {
   ]);
   const [stateList, setStateList] = useState(false);
   const [update, setUpdate] = useState(false);
+  const [activeObj, setActiveObj] = useState("");
 
   // Отслеживаем по какому элементу нажал пользователь, если вне одного из элемента с необходимым id
   // обновляются формы
@@ -60,6 +62,14 @@ const CardPage = ({ token, saveActivityCard, card }) => {
     getDataCards();
   }, [name, update]);
 
+  useEffect(() => {
+    const socket = io();
+    socket.emit("CARDS:GET", { card_id: name });
+    socket.on("CARD:GET", (data) =>{
+      console.log("New user",data)
+    })
+  }, []);
+
   if (loading) {
     return (
       <div className="loading">
@@ -73,6 +83,12 @@ const CardPage = ({ token, saveActivityCard, card }) => {
   const label = cards.map((e) => {
     const card_body_id = shortid.generate();
     const addTask = async (value) => {
+      setActiveObj({
+        card_item_id: e.card_item_id,
+        card_id: name,
+        task: { title: value.title, id_task: card_body_id },
+      });
+
       try {
         console.log(e.card_item_id);
 

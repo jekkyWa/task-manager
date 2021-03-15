@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import SideBar from "../sideBar/side-bar";
 import Header from "../header";
 import "./pages.scss";
@@ -14,7 +14,7 @@ const MainPage = ({ token, saveDataIdentification }) => {
       const data = await request("/api/getData/test", "GET", null, {
         Authorization: `Bearer ${token}`,
       });
-      saveDataIdentification(data.email, data.name, data.active_rooms);
+      saveDataIdentification(data.email, data.name, data.rooms);
     } catch (e) {}
   };
 
@@ -41,16 +41,16 @@ const MainPage = ({ token, saveDataIdentification }) => {
 };
 
 const mapStateToProps = ({
-  getDataReducer: { active_rooms, name },
+  getDataReducer: { name },
   loginReducer: { token },
 }) => {
-  return { token, active_rooms, name };
+  return { token, name };
 };
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    saveDataIdentification: (email, name, active_rooms) => {
-      dispatch(saveDataIdentification(email, name, active_rooms));
+    saveDataIdentification: (email, name, rooms) => {
+      dispatch(saveDataIdentification(email, name, rooms));
     },
   };
 };

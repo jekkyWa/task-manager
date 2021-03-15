@@ -3,7 +3,7 @@ const getDataReducer = (state, action) => {
     return {
       email: "email",
       name: "name",
-      active_rooms: [],
+      rooms: {active: [], passive: [] },
       boards: [],
       card: {},
     };
@@ -14,7 +14,7 @@ const getDataReducer = (state, action) => {
         ...state.getDataReducer,
         email: action.email,
         name: action.name,
-        active_rooms: action.active_rooms,
+        rooms: action.rooms,
       };
     case "SAVE_BOARD_DATA":
       return {

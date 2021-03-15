@@ -10,7 +10,7 @@ const ModalCreateProject = ({
   onHide,
   show,
   token,
-  active_rooms,
+  rooms,
   saveDataIdentification,
 }) => {
   const [addedUsers, setAddedUsers] = useState([]);
@@ -49,7 +49,7 @@ const ModalCreateProject = ({
       const data = await request("/api/getData/test", "GET", null, {
         Authorization: `Bearer ${token}`,
       });
-      saveDataIdentification(data.email, data.name, data.active_rooms);
+      saveDataIdentification(data.email, data.name, data.rooms);
     } catch (e) {
       console.error(e);
     }
@@ -136,7 +136,7 @@ const ModalCreateProject = ({
   const { nameProject, description, date } = formCreateProject;
 
   return (
-    <Modal show={show} onHide={onHide} size="lg">
+    <Modal show={show} onHide={onHide} size="xl">
       <Modal.Header closeButton>
         <Modal.Title id="example-custom-modal-styling-title">
           <h1 className="title-modal">Create a project(board)</h1>
@@ -212,15 +212,15 @@ const ModalCreateProject = ({
 
 const mapStateToProps = ({
   loginReducer: { token },
-  getDataReducer: { active_rooms },
+  getDataReducer: { rooms },
 }) => {
-  return { token, active_rooms };
+  return { token, rooms };
 };
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    saveDataIdentification: (email, name, active_rooms) => {
-      dispatch(saveDataIdentification(email, name, active_rooms));
+    saveDataIdentification: (email, name, rooms) => {
+      dispatch(saveDataIdentification(email, name, rooms));
     },
   };
 };

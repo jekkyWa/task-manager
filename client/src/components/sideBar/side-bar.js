@@ -13,7 +13,7 @@ import { connect } from "react-redux";
 import "./side-bar.scss";
 import { Link } from "react-router-dom";
 
-const SideBar = ({ active_rooms, name }) => {
+const SideBar = ({ rooms, name }) => {
   const [modalShow, setModalShow] = useState(false);
   const [arrId, setArrId] = useState([]);
 
@@ -28,7 +28,48 @@ const SideBar = ({ active_rooms, name }) => {
     }
   };
 
-  const label = active_rooms.map((e) => {
+  const labelActive = rooms.active.map((e) => {
+    return (
+      <React.Fragment key={e.board_id}>
+        <div
+          className="sidebar-block-two-item-work-place"
+          onClick={() => {
+            menuState(e.board_id);
+          }}
+        >
+          <SupervisorAccountIcon className="test" />
+          <h2>{`${name}: ${e.name_Project}`}</h2>
+          <ExpandMoreIcon className="test" />
+        </div>
+        <div
+          className={`retractable-block ${
+            arrId.indexOf(e.board_id) == -1 ? "hidden" : ""
+          }`}
+        >
+          <div className="retractable-block-item">
+            <DashboardIcon fontSize="small" />
+            <h1>
+              <Link to={`/boards/${e.name_Project + e.board_id}`}>Boards</Link>
+            </h1>
+          </div>
+          <div className="retractable-block-item">
+            <FavoriteBorderOutlinedIcon fontSize="small" />
+            <h1>Important events</h1>
+          </div>
+          <div className="retractable-block-item">
+            <PeopleOutlineOutlinedIcon fontSize="small" />
+            <h1>Participants</h1>
+          </div>
+          <div className="retractable-block-item">
+            <SettingsIcon fontSize="small" />
+            <h1>Settings</h1>
+          </div>
+        </div>
+      </React.Fragment>
+    );
+  });
+
+  const labelPassive = rooms.passive.map((e) => {
     return (
       <React.Fragment key={e.board_id}>
         <div
@@ -107,15 +148,18 @@ const SideBar = ({ active_rooms, name }) => {
               />
             </div>
           </div>
-          {label}
+          <p>Active:</p>
+          {labelActive}
+          <p>Passive:</p>
+          {labelPassive}
         </div>
       </nav>
     </div>
   );
 };
 
-const mapStateToProps = ({ getDataReducer: { active_rooms, name } }) => {
-  return { active_rooms, name };
+const mapStateToProps = ({ getDataReducer: { rooms, name } }) => {
+  return { rooms, name };
 };
 
 export default connect(mapStateToProps, null)(SideBar);

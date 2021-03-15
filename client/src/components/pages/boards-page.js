@@ -8,11 +8,53 @@ import { saveDataCards } from "../../action/action-login";
 import { useHttp } from "../hooks/http.hook";
 import { Link, useParams } from "react-router-dom";
 import Loading from "../loading/loading";
+import io from "socket.io-client";
 
 const BoardPage = ({ saveDataCards, token, boards }) => {
   const [modalShow, setModalShow] = useState(false);
   const { request, loading } = useHttp();
   let { id } = useParams();
+  const [socket, setSocket] = useState(null);
+
+  const setupSocket = () => {
+    const newSocket = io("http://localhost:5000", {
+      query: {
+        token,
+      },
+    });
+    console.log(newSocket);
+    newSocket.on("disconnect", () => {
+      setSocket(null);
+      setTimeout(setupSocket, 3000);
+      console.log("disconnecnt");
+    });
+
+    newSocket.on("connect", () => {
+      console.log("succes");
+    });
+
+    setSocket(newSocket);
+    console.log(newSocket);
+  };
+
+  useEffect(() => {
+    setupSocket();
+    if (socket) {
+      socket.emit("joinRoom", {
+        chatroomId: id.slice(id.length - 9),
+      });
+    }
+
+    return () => {
+      //Component Unmount
+      if (socket) {
+        socket.emit("leaveRoom", {
+          chatroomId: id.slice(id.length - 9),
+        });
+      }
+    };
+    //eslint-disable-next-line
+  }, []);
 
   const getDataCards = async () => {
     try {
@@ -32,6 +74,7 @@ const BoardPage = ({ saveDataCards, token, boards }) => {
 
   useEffect(() => {
     getDataCards();
+    console.log(boards)
   }, [id]);
 
   const label = boards.map((e) => {
@@ -66,7 +109,11 @@ const BoardPage = ({ saveDataCards, token, boards }) => {
           <div className="board" onClick={() => setModalShow(true)}>
             <p>Create a board</p>
           </div>
-          <ModalAddBoard show={modalShow} onHide={() => setModalShow(false)} />
+          <ModalAddBoard
+            show={modalShow}
+            onHide={() => setModalShow(false)}
+            socket={socket}
+          />
         </div>
       </div>
     </div>
