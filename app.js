@@ -56,20 +56,24 @@ io.on("connection", (socket) => {
     console.log("Disconnected: " + socket.id);
   });
 
-  socket.on("joinRoom", ({ chatroomId }) => {
-    socket.join(chatroomId);
-    console.log("A user joined chatroom: " + chatroomId);
+  socket.on("joinroom", async ({ id }) => {
+    console.log("join room");
+    console.log(id);
+    socket.join(id);
+    const value = await Board.find({ board_id: id });
+    console.log(value)
+    const filterCards = await Card.find({ card_id: value[0].board_item });
+
+    socket.emit("getBoard", { filterCards });
   });
 
-  socket.on("leaveRoom", ({ chatroomId }) => {
-    socket.leave(chatroomId);
-    console.log("A user left chatroom: " + chatroomId);
+  socket.on("leaveRoom", ({ id }) => {
+    socket.leave(id);
+    console.log("A user left chatroom: " + id);
   });
 
   socket.on("board", async ({ dataForSend, id }) => {
-    console.log(dataForSend);
     const { name_Board, color, card_id, cards, board_id } = dataForSend;
-
     const card = new Card({
       name_Board,
       color,
@@ -78,17 +82,18 @@ io.on("connection", (socket) => {
       cards,
     });
 
-    const value = await Board.find({ board_id: board_id });
+    console.log("--------------", dataForSend);
+
+    io.in(id).emit("newBoard", {
+      card_id,
+      cards,
+      color,
+      name_Board,
+    });
 
     await card.save();
 
-    io.emit("newBoard", {
-      color,
-      name_Board,
-      card_id,
-      board_id,
-      cards,
-    });
+    const value = await Board.find({ board_id: board_id });
 
     await Board.updateOne(value[0], {
       ...value,
