@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useMemo, useEffect } from "react";
 import { Modal } from "react-bootstrap";
 import { saveDataCards } from "../../action/action-login";
 import { connect } from "react-redux";
@@ -21,8 +21,6 @@ const ModalAddBoard = ({
   let [disable, setDisable] = useState(true);
   let [formAddedBoard, setFormAddedBoard] = useState("");
 
-  const [test, setTest] = useState([]);
-
   const { request, loading } = useHttp();
 
   const onChangeModalBoardHandler = (e) => {
@@ -30,6 +28,7 @@ const ModalAddBoard = ({
     else setDisable(true);
     setFormAddedBoard(e.target.value);
   };
+  const [test, setTest] = useState(false);
 
   const sendInfoBoard = async () => {
     let card_id = shortid.generate();
@@ -60,73 +59,18 @@ const ModalAddBoard = ({
       ],
     };
     socket.emit("board", { dataForSend, id: id.slice(id.length - 9) });
-    // const value = await request(
-    //   "/api/getBoards",
-    //   "POST",
-    //   { board_id: id.slice(id.length - 9) },
-    //   {
-    //     Authorization: `Bearer ${token}`,
-    //   }
-    // );
-    // saveDataCards(value.filterCards);
-
-    // try {
-    //   let card_id = shortid.generate();
-    //   let card_item_id_one = shortid.generate();
-    //   let card_item_id_two = shortid.generate();
-    //   let card_item_id_three = shortid.generate();
-    //   let dataForSend = {
-    //     name_Board: formAddedBoard,
-    //     color: backColor,
-    //     card_id,
-    //     board_id: id.slice(id.length - 9),
-    //     cards: [
-    //       {
-    //         card_name: "Need to do",
-    //         card_body: [],
-    //         card_item_id: card_item_id_one,
-    //       },
-    //       {
-    //         card_name: "During",
-    //         card_body: [],
-    //         card_item_id: card_item_id_two,
-    //       },
-    //       {
-    //         card_name: "Done",
-    //         card_body: [],
-    //         card_item_id: card_item_id_three,
-    //       },
-    //     ],
-    //   };
-    //   setTest(dataForSend);
-    //   setDisable(true);
-    //   await request("/api/createCard", "POST", dataForSend, {
-    //     Authorization: `Bearer ${token}`,
-    //   });
-    //   const value = await request(
-    //     "/api/getBoards",
-    //     "POST",
-    //     { board_id: id.slice(id.length - 9) },
-    //     {
-    //       Authorization: `Bearer ${token}`,
-    //     }
-    //   );
-    //   saveDataCards(value.filterCards);
-    //   onHide();
-    // } catch (e) {
-    //   console.error(e);
-    // }
   };
 
   useEffect(() => {
-    console.log(boards)
     if (socket) {
       socket.on("newBoard", (value) => {
         saveDataCards([...boards, value]);
+        console.log(boards);
       });
+      return () => socket.off("newBoard");
     }
     //eslint-disable-next-line
-  }, [boards]);
+  }, [socket, boards]);
 
   return (
     <Modal
@@ -226,9 +170,9 @@ const ModalAddBoard = ({
 
 const mapStateToProps = ({
   loginReducer: { token },
-  getDataReducer: { active_rooms, name, boards },
+  getDataReducer: { active_rooms, name, boards, socket },
 }) => {
-  return { token, active_rooms, name, boards };
+  return { token, active_rooms, name, boards, socket };
 };
 
 const mapDispatchToProps = (dispatch) => {

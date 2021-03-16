@@ -6,15 +6,15 @@ import "./app.css";
 import useRoutes from "../routes/routes";
 import { BrowserRouter as Router } from "react-router-dom";
 
-
-const App = ({ fetchLogin }) => {
+const App = ({ fetchLogin, saveSocket }) => {
   const { login, logout, token, userId } = useAuth();
   const isAuthenticated = !!token;
   useEffect(() => {
     fetchLogin(token, userId, login, logout, isAuthenticated);
   }, [token, login]);
   const routes = useRoutes(isAuthenticated);
-  return <Router >{routes}</Router>;
+
+  return <Router>{routes}</Router>;
 };
 
 const mapDispatchToProps = (dispatch) => {

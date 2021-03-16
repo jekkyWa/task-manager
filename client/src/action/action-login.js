@@ -1,3 +1,5 @@
+import { Socket } from "socket.io-client";
+
 const fetchLogin = (token, userId, login, logout, isAuthenticated) => {
   return {
     type: "FETCH_LOGIN",
@@ -32,4 +34,17 @@ const saveActivityCard = (card) => {
   };
 };
 
-export { fetchLogin, saveDataIdentification, saveDataCards, saveActivityCard };
+const saveSocket = (socket) => {
+  return {
+    type: "SAVE_SOCKET",
+    socket,
+  };
+};
+
+export {
+  fetchLogin,
+  saveDataIdentification,
+  saveDataCards,
+  saveActivityCard,
+  saveSocket,
+};

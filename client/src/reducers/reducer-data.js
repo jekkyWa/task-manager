@@ -3,9 +3,10 @@ const getDataReducer = (state, action) => {
     return {
       email: "email",
       name: "name",
-      rooms: {active: [], passive: [] },
+      rooms: { active: [], passive: [] },
       boards: [],
       card: {},
+      socket: null,
     };
   }
   switch (action.type) {
@@ -26,6 +27,12 @@ const getDataReducer = (state, action) => {
       return {
         ...state.getDataReducer,
         card: action.card,
+      };
+
+    case "SAVE_SOCKET":
+      return {
+        ...state.getDataReducer,
+        socket: action.socket,
       };
 
     default:
