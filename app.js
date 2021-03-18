@@ -2,7 +2,7 @@ const express = require("express");
 const config = require("config");
 const mongoose = require("mongoose");
 const cors = require("cors");
-const Card = require("./models/Cards");
+const Cards = require("./models/Cards");
 const Board = require("./models/Board");
 
 mongoose.connect(config.get("mongoUri"), {
@@ -29,13 +29,13 @@ app.use("/api/getData", require("./routes/data.routes"));
 
 app.use("/api/", require("./routes/board.routes"));
 
-app.use("/api/", require("./routes/task.routes"));
+// app.use("/api/", require("./routes/task.routes"));
 
-app.use("/api/", require("./routes/data-boards.routes"));
+// app.use("/api/", require("./routes/data-boards.routes"));
 
-app.use("/api/", require("./routes/data-cards.routes"));
+// app.use("/api/", require("./routes/data-cards.routes"));
 
-app.use("/api/", require("./routes/add-card.routes"));
+// app.use("/api/", require("./routes/add-card.routes"));
 
 const PORT = config.get("port") || 5000;
 
@@ -58,11 +58,9 @@ io.on("connection", (socket) => {
 
   socket.on("joinroom", async ({ id }) => {
     console.log("join room");
-    console.log(id);
     socket.join(id);
     const value = await Board.find({ board_id: id });
-    console.log(value)
-    const filterCards = await Card.find({ card_id: value[0].board_item });
+    const filterCards = await Cards.find({ card_id: value[0].board_item });
 
     socket.emit("getBoard", { filterCards });
   });
@@ -72,17 +70,97 @@ io.on("connection", (socket) => {
     console.log("A user left chatroom: " + id);
   });
 
+  socket.on("addTask", async ({ data, roleBack, levelBack }) => {
+    const { card_item_id, card_id, task } = data;
+
+    const value = await Cards.find({ card_id });
+
+    const filterItem = value[0].cards.filter(
+      (e) => e.card_item_id === card_item_id
+    );
+
+    const newItem = {
+      ...filterItem[0],
+      card_body: [...filterItem[0].card_body, task],
+    };
+
+    const itemFilter = newItem.card_body.filter((elem) => {
+      const statusProfile = (status) => {
+        return status == "Senior" ? 3 : status == "Middle" ? 2 : 1;
+      };
+      return (
+        (elem.role.findIndex((element) => element.role == roleBack) !== -1 &&
+          elem.role.findIndex(
+            (element) =>
+              statusProfile(element.level) <= statusProfile(levelBack)
+          ) !== -1) ||
+        roleBack == "Product manager"
+      );
+    });
+
+    io.in(card_id).emit("newTask", { ...newItem, card_body: itemFilter });
+
+    await Cards.updateOne(value[0], {
+      ...value,
+      cards: value[0].cards.map((e) => {
+        return e.card_item_id === newItem.card_item_id ? newItem : e;
+      }),
+    });
+  });
+
+  socket.on("addCard", async ({ data, id }) => {
+    console.log("add");
+    const value = await Cards.find({ card_id: id });
+
+    io.in(id).emit("getCardItem", {
+      cards: [...value[0].cards, data],
+    });
+
+    await Cards.updateOne(value[0], {
+      ...value,
+      cards: [...value[0].cards, data],
+    });
+  });
+
+  socket.on("joinCard", async ({ id, roleBack, levelBack }) => {
+    console.log("Join_CARD", id);
+    socket.join(id);
+    const value = await Cards.find({ card_id: id });
+    // Получение данных по роли
+    const filterTaskRole = value[0].cards.map((e) => {
+      return {
+        ...e,
+        card_body: e.card_body.filter((elem) => {
+          const statusProfile = (status) => {
+            return status == "Senior" ? 3 : status == "Middle" ? 2 : 1;
+          };
+          return (
+            (elem.role.findIndex((element) => element.role == roleBack) !==
+              -1 &&
+              elem.role.findIndex(
+                (element) =>
+                  statusProfile(element.level) <= statusProfile(levelBack)
+              ) !== -1) ||
+            roleBack == "Product manager"
+          );
+        }),
+      };
+    });
+
+    value[0].cards = filterTaskRole;
+
+    socket.emit("getCard", { filterCards: value });
+  });
+
   socket.on("board", async ({ dataForSend, id }) => {
     const { name_Board, color, card_id, cards, board_id } = dataForSend;
-    const card = new Card({
+    const board = new Cards({
       name_Board,
       color,
       card_id,
       board_id,
       cards,
     });
-
-    console.log("--------------", dataForSend);
 
     io.in(id).emit("newBoard", {
       card_id,
@@ -91,7 +169,7 @@ io.on("connection", (socket) => {
       name_Board,
     });
 
-    await card.save();
+    await board.save();
 
     const value = await Board.find({ board_id: board_id });
 
