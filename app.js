@@ -84,21 +84,7 @@ io.on("connection", (socket) => {
       card_body: [...filterItem[0].card_body, task],
     };
 
-    const itemFilter = newItem.card_body.filter((elem) => {
-      const statusProfile = (status) => {
-        return status == "Senior" ? 3 : status == "Middle" ? 2 : 1;
-      };
-      return (
-        (elem.role.findIndex((element) => element.role == roleBack) !== -1 &&
-          elem.role.findIndex(
-            (element) =>
-              statusProfile(element.level) <= statusProfile(levelBack)
-          ) !== -1) ||
-        roleBack == "Product manager"
-      );
-    });
-
-    io.in(card_id).emit("newTask", { ...newItem, card_body: itemFilter });
+    io.in(card_id).emit("newTask", { ...newItem });
 
     await Cards.updateOne(value[0], {
       ...value,
