@@ -1,4 +1,4 @@
-import React from 'react'
+import React from "react";
 
 export const roleDependencies = (value, roleAndLvlHandler) => {
   const { role, level } = value;
@@ -186,6 +186,25 @@ export const roleDependencies = (value, roleAndLvlHandler) => {
         <select name="level" onChange={roleAndLvlHandler}>
           <option>Junior</option>
           <option>Middle</option>
+        </select>
+      </React.Fragment>
+    );
+  } else if (level == "god" && role == "Product manager") {
+    return (
+      <React.Fragment>
+        <select name="role" onChange={roleAndLvlHandler}>
+          <option>Back-end developer</option>
+          <option>Front-end developer</option>
+          <option>QA</option>
+          <option>Business Analyst</option>
+          <option>UX/UI designer</option>
+          <option>Marketing specialist</option>
+          <option>Product manager</option>
+        </select>
+        <select name="level" onChange={roleAndLvlHandler}>
+          <option>Junior</option>
+          <option>Middle</option>
+          <option>Senior</option>
         </select>
       </React.Fragment>
     );

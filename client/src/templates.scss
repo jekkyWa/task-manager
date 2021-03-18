@@ -1,7 +1,23 @@
-@import './variables.scss';
+@import "./variables.scss";
 
 %styleBtn {
   background-color: $backColorBtn;
   border-radius: $borderRadiusBtn;
   border: $borderBtn;
+}
+
+%styleProfileIcon {
+  background-color: rgb(0,135,90);
+  border-radius: 100%;
+  width: 31px;
+  height: 31px;
+  margin-top: 1px;
+  p {
+    text-align: center;
+    margin-top: 2px;
+    color:white;
+  }
+  &:hover {
+    cursor: pointer;
+  }
 }

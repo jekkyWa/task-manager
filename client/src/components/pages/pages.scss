@@ -183,29 +183,48 @@
   overflow-x: auto;
   .header-card-page {
     display: flex;
-    padding: 5px;
-    margin-top: 5px;
-    .name-command-card-page {
-      margin-left: 5px;
-      > h1 {
+    justify-content: space-between;
+    .header-card-page-block-two {
+      display: flex;
+      padding: 5px;
+      margin-top: 5px;
+      cursor: pointer;
+      p {
         background-color: rgba(0, 0, 0, 0.1);
-        margin-left: 7px;
+        margin-right: 7px;
         border-radius: 2px;
-        padding: 5px 10px 7px 10px;
+        padding: 1px 10px 1px 10px;
         font-size: 16px;
         font-weight: 400;
+        margin-bottom: 8px;
       }
     }
-    .name-board-card-page {
-      margin-left: 5px;
-      > h1 {
-        margin-left: 7px;
-        border-radius: 2px;
-        padding: 3px 10px 4px 10px;
-        font-size: 20px;
-        font-weight: 700;
-        &:hover {
-          background-color: rgba(0, 0, 0, 0.2);
+    .header-card-page-block-one {
+      display: flex;
+      padding: 5px;
+      margin-top: 5px;
+      .name-command-card-page {
+        margin-left: 5px;
+        > h1 {
+          background-color: rgba(0, 0, 0, 0.1);
+          margin-left: 7px;
+          border-radius: 2px;
+          padding: 5px 10px 7px 10px;
+          font-size: 16px;
+          font-weight: 400;
+        }
+      }
+      .name-board-card-page {
+        margin-left: 5px;
+        > h1 {
+          margin-left: 7px;
+          border-radius: 2px;
+          padding: 3px 10px 4px 10px;
+          font-size: 20px;
+          font-weight: 700;
+          &:hover {
+            background-color: rgba(0, 0, 0, 0.2);
+          }
         }
       }
     }
@@ -286,22 +305,22 @@
           margin-bottom: 5px;
         }
         .role-add-card-page {
-          .header-role-block{
+          .header-role-block {
             display: flex;
             justify-content: space-between;
-            border-bottom:1px solid rgb(214, 214, 214) ;
+            border-bottom: 1px solid rgb(214, 214, 214);
             margin-bottom: 10px;
             height: 35px;
           }
-          .add-role-to-form-btn{
+          .add-role-to-form-btn {
             width: 100% !important;
             margin-top: 5px;
           }
-          .add-role-to-task-btn{
+          .add-role-to-task-btn {
             width: 100%;
             background-color: rgb(66, 66, 192);
           }
-          >select{
+          > select {
             padding: 3px;
             border-radius: 2px;
             margin-top: 5px;
@@ -345,6 +364,8 @@
   overflow: hidden;
   padding: 6px 8px 2px;
   margin-bottom: 10px;
+  border: 1px solid white;
+  cursor: pointer;
   > p {
     clear: both;
     display: block;
@@ -354,10 +375,24 @@
     word-wrap: break-word;
     color: #172b4d;
   }
+  &:hover {
+    background-color: rgb(231, 229, 229);
+    border: 1px solid black;
+    transition: 0.2s all;
+  }
 }
 
 @media screen and (max-width: 800px) {
   .begin-container {
     margin: 20px 0 0 0 !important;
   }
+}
+
+.vis-hidden {
+  visibility: hidden;
+}
+
+.menu-emergence {
+  transition: 1s all;
+  visibility: visiable;
 }

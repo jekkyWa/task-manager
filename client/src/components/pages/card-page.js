@@ -12,6 +12,7 @@ import MoreHorizIcon from "@material-ui/icons/MoreHoriz";
 import { roleDependencies } from "../role";
 import MenuIcon from "@material-ui/icons/Menu";
 import ModalDescription from "../modal-description-task/modal-description";
+import Menu from "../menu/menu";
 
 const CardPage = ({ saveActivityCard, card, socket, roleProfileInBoard }) => {
   let { name, id } = useParams();
@@ -37,6 +38,8 @@ const CardPage = ({ saveActivityCard, card, socket, roleProfileInBoard }) => {
   });
   const [dataRoleToSend, setDataRoleToSend] = useState([]);
   const [roleHandler, setRoleHandler] = useState("");
+
+  const [stateMenu, setStateMenu] = useState(false);
 
   const ref = useRef(null);
 
@@ -110,7 +113,29 @@ const CardPage = ({ saveActivityCard, card, socket, roleProfileInBoard }) => {
         ];
         const newItem = { ...card, cards: newCardsItem };
         console.log(newItem);
-        saveActivityCard(newItem);
+        const filterTaskRole = newItem.cards.map((e) => {
+          return {
+            ...e,
+            card_body: e.card_body.filter((elem) => {
+              const statusProfile = (status) => {
+                return status == "Senior" ? 3 : status == "Middle" ? 2 : 1;
+              };
+              return (
+                (elem.role.findIndex(
+                  (element) => element.role == roleProfileInBoard.role
+                ) !== -1 &&
+                  elem.role.findIndex(
+                    (element) =>
+                      statusProfile(element.level) <=
+                      statusProfile(roleProfileInBoard.level)
+                  ) !== -1) ||
+                roleProfileInBoard.role == "Product manager"
+              );
+            }),
+          };
+        });
+        newItem.cards = filterTaskRole;
+        saveActivityCard({ ...newItem });
       });
       // После того как данные придут остановить дальнейшую отправку
       return () => socket.off("newTask");
@@ -153,6 +178,7 @@ const CardPage = ({ saveActivityCard, card, socket, roleProfileInBoard }) => {
           role: dataRoleToSend,
         },
       };
+      console.log(value);
       socket.emit("addTask", {
         data: active,
         roleBack: roleProfileInBoard.role,
@@ -273,6 +299,7 @@ const CardPage = ({ saveActivityCard, card, socket, roleProfileInBoard }) => {
           key={i}
           onClick={() => {
             setModalShow(true);
+            setStateMenu(false);
             setDataToModal({
               name: element.title,
               column: e.card_name,
@@ -386,26 +413,53 @@ const CardPage = ({ saveActivityCard, card, socket, roleProfileInBoard }) => {
         <Header color={color} />
       </div>
       <div className="header-card-page">
-        <div className="name-command-card-page">
-          <h1> {id.slice(0, id.length - 9)}</h1>
+        <div className="header-card-page-block-one">
+          <div className="name-command-card-page">
+            <h1> {id.slice(0, id.length - 9)}</h1>
+          </div>
+          <div className="name-board-card-page">
+            <h1> {name_Board}</h1>
+          </div>
+          <div className="name-command-card-page">
+            <h1>{`${roleProfileInBoard.role}(${roleProfileInBoard.level})`}</h1>
+          </div>
         </div>
-        <div className="name-board-card-page">
-          <h1> {name_Board}</h1>
+        <div className={stateMenu ? "menu-emergence" : "vis-hidden"}>
+          <Menu onHide={() => setStateMenu(false)} />
         </div>
-        <div>{`${roleProfileInBoard.role}(${roleProfileInBoard.level})`}</div>
+        <div
+          className="header-card-page-block-two"
+          onClick={() => {
+            setStateMenu((prev) => !prev);
+          }}
+        >
+          <p>
+            <MenuIcon fontSize="small" />
+            Menu
+          </p>
+        </div>
       </div>
       <div className="card-body">
         {label}
         <div
-          className={`card-add ${stateList ? "none-card-add" : ""}`}
-          onClick={() => {
-            setStateList(true);
-          }}
+          className={`${
+            roleProfileInBoard.level == "Senior" ||
+            roleProfileInBoard.role == "Product manager"
+              ? ""
+              : "none-card-add"
+          }`}
         >
-          <p>
-            <AddIcon />
-            Add another card
-          </p>
+          <div
+            className={`card-add ${stateList ? "none-card-add" : ""}`}
+            onClick={() => {
+              setStateList(true);
+            }}
+          >
+            <p>
+              <AddIcon />
+              Add another card
+            </p>
+          </div>
         </div>
         <div className={`card-item ${!stateList ? "none-card-add" : ""}`}>
           <div className="card-item-input-title">
