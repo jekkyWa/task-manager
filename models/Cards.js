@@ -7,4 +7,4 @@ const shema = new Schema({
   color: { type: String },
 });
 
-module.exports = model("Card", shema);
+module.exports = model("Cards", shema);
