@@ -180,6 +180,7 @@
 
 .card-page {
   min-height: 100vh;
+  overflow-x: auto;
   .header-card-page {
     display: flex;
     padding: 5px;
@@ -242,6 +243,7 @@
       border-radius: 5px;
       padding: 10px 10px 0px 10px;
       align-self: start;
+
       .card-item-input-title {
         margin-bottom: 7px;
         > input {
@@ -266,7 +268,15 @@
         }
       }
       .add-card-btn-block {
-        > button {
+        display: flex;
+        justify-content: space-between;
+        .close-icon {
+          margin-left: 7px;
+          margin-bottom: 5px;
+          cursor: pointer;
+          color: rgb(109, 109, 109);
+        }
+        button {
           padding: 2px;
           width: 110px;
           background-color: rgb(90, 172, 68);
@@ -274,6 +284,54 @@
           border-radius: 2px;
           border: none;
           margin-bottom: 5px;
+        }
+        .role-add-card-page {
+          .header-role-block{
+            display: flex;
+            justify-content: space-between;
+            border-bottom:1px solid rgb(214, 214, 214) ;
+            margin-bottom: 10px;
+            height: 35px;
+          }
+          .add-role-to-form-btn{
+            width: 100% !important;
+            margin-top: 5px;
+          }
+          .add-role-to-task-btn{
+            width: 100%;
+            background-color: rgb(66, 66, 192);
+          }
+          >select{
+            padding: 3px;
+            border-radius: 2px;
+            margin-top: 5px;
+          }
+          position: absolute;
+          z-index: 99999;
+          margin-right: 20px;
+          background-color: white;
+          display: flex;
+          margin-top: 32px;
+          margin-left: 220px;
+          flex-direction: column;
+          width: 450px;
+          padding: 10px;
+          border-radius: 3px;
+          border: 1px solid rgb(207, 207, 207);
+          box-shadow: 0 0 10px rgba(0, 0, 0, 0.137);
+        }
+        .more-icon {
+          position: relative;
+          color: rgb(109, 109, 109);
+          margin-top: 1.5px;
+          cursor: pointer;
+          padding: 1px;
+          &:hover {
+            background-color: rgb(196, 196, 196);
+            color: rgb(20, 20, 20);
+            transition: 0.2s all;
+            border-radius: 3px;
+          }
         }
       }
     }
@@ -286,7 +344,7 @@
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.137);
   overflow: hidden;
   padding: 6px 8px 2px;
-  margin-bottom:10px ;
+  margin-bottom: 10px;
   > p {
     clear: both;
     display: block;
@@ -296,12 +354,6 @@
     word-wrap: break-word;
     color: #172b4d;
   }
-}
-
-.close-icon {
-  margin-left: 7px;
-  margin-bottom: 5px;
-  cursor: pointer;
 }
 
 @media screen and (max-width: 800px) {

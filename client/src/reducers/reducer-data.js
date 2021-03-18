@@ -7,6 +7,7 @@ const getDataReducer = (state, action) => {
       boards: [],
       card: {},
       socket: null,
+      roleProfileInBoard: {},
     };
   }
   switch (action.type) {
@@ -33,6 +34,11 @@ const getDataReducer = (state, action) => {
       return {
         ...state.getDataReducer,
         socket: action.socket,
+      };
+    case "SAVE_ROLE":
+      return {
+        ...state.getDataReducer,
+        roleProfileInBoard: action.roleProfileInBoard,
       };
 
     default:

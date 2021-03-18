@@ -8,67 +8,125 @@ import Loading from "../loading/loading";
 import AddIcon from "@material-ui/icons/Add";
 import CloseIcon from "@material-ui/icons/Close";
 import shortid from "shortid";
-import io from "socket.io-client";
+import MoreHorizIcon from "@material-ui/icons/MoreHoriz";
+import { roleDependencies } from "../role";
+import MenuIcon from "@material-ui/icons/Menu";
+import ModalDescription from "../modal-description-task/modal-description";
 
-const CardPage = ({ token, saveActivityCard, card }) => {
-  const { request } = useHttp();
+const CardPage = ({ saveActivityCard, card, socket, roleProfileInBoard }) => {
   let { name, id } = useParams();
-
   const [loading, setLoading] = useState(true);
   const [arrInput, setArrInput] = useState([]);
+  const [visiableBlock, setVisiableBlock] = useState([]);
   const [handlerTitleCard, setHandlerTitleCard] = useState([
     { id: "", title: "" },
   ]);
+  const [inputAddCard, setInputAddCard] = useState(" ");
   const [stateList, setStateList] = useState(false);
-  const [update, setUpdate] = useState(false);
-  const [activeObj, setActiveObj] = useState("");
+
+  const [dataToModal, setDataToModal] = useState({
+    name: "",
+    column: "",
+    id: "",
+  });
+  const [modalShow, setModalShow] = useState(false);
+
+  const [dataRole, setDataRole] = useState({
+    role: "Back-end developer",
+    level: "Junior",
+  });
+  const [dataRoleToSend, setDataRoleToSend] = useState([]);
+  const [roleHandler, setRoleHandler] = useState("");
+
+  const ref = useRef(null);
 
   // Отслеживаем по какому элементу нажал пользователь, если вне одного из элемента с необходимым id
   // обновляются формы
 
   const handleClickOutside = (e) => {
-    console.log(card);
-    if (e.target.id !== "click-outside-check" && e.which == 1) {
-      setArrInput([]);
-      setStateList(false);
-      setHandlerTitleCard([{ id: "", title: "" }]);
-    }
+    // console.log(e.target.id);
+    // if (e.target.id !== "click-outside-check" && e.which == 1) {
+    //   setArrInput([]);
+    //   setStateList(false);
+    //   setHandlerTitleCard([{ id: "", title: "" }]);
+    //   setInputAddCard("");
+    //   setVisiableBlock([]);
+    // }
   };
 
-  useEffect(() => {
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => document.removeEventListener("mousedown", handleClickOutside);
-  });
+  // Обработка данных формы для добавления новой карточки
 
-  const getDataCards = async () => {
-    try {
-      const value = await request(
-        "/api/getCard",
-        "POST",
-        { card_id: name },
-        {
-          Authorization: `Bearer ${token}`,
-        }
-      );
-      saveActivityCard(value.filterCard[0]);
-      setLoading(false);
-      setUpdate(false);
-    } catch (e) {
-      console.error(e);
-    }
+  const handlerInputAddCard = (e) => {
+    setInputAddCard(e.target.value);
   };
 
-  useEffect(() => {
-    getDataCards();
-  }, [name, update]);
+  // Добавление новой карточки с помощью socket
+  const addCard = async () => {
+    const id = shortid.generate();
+    const item = {
+      card_name: inputAddCard,
+      card_body: [],
+      card_item_id: id,
+    };
+    socket.emit("addCard", { data: item, id: name });
+  };
+
+  // useEffect(() => {
+  //   document.addEventListener("mousedown", handleClickOutside);
+  //   return () => document.removeEventListener("mousedown", handleClickOutside);
+  // });
+
+  // Получение данных при первой загрузке страницы
 
   useEffect(() => {
-    const socket = io();
-    socket.emit("CARDS:GET", { card_id: name });
-    socket.on("CARD:GET", (data) =>{
-      console.log("New user",data)
-    })
-  }, []);
+    if (socket) {
+      socket.emit("joinCard", {
+        id: name,
+        roleBack: roleProfileInBoard.role,
+        levelBack: roleProfileInBoard.level,
+      });
+      socket.on("getCard", (value) => {
+        saveActivityCard(value.filterCards[0]);
+        setLoading(false);
+      });
+    }
+  }, [name, socket]);
+
+  // Добавлнение нового task через socket
+  useEffect(() => {
+    if (socket) {
+      socket.on("newTask", (value) => {
+        console.log(value);
+        const id = value.card_item_id;
+        const newCardsItem = [
+          ...card.cards.slice(
+            0,
+            card.cards.findIndex((e) => e.card_item_id === id)
+          ),
+          value,
+          ...card.cards.slice(
+            card.cards.findIndex((e) => e.card_item_id == id) + 1
+          ),
+        ];
+        const newItem = { ...card, cards: newCardsItem };
+        console.log(newItem);
+        saveActivityCard(newItem);
+      });
+      // После того как данные придут остановить дальнейшую отправку
+      return () => socket.off("newTask");
+    }
+  }, [socket, card]);
+
+  // Получение новой карточки через socket
+
+  useEffect(() => {
+    if (socket) {
+      socket.on("getCardItem", (value) => {
+        saveActivityCard({ ...card, cards: value.cards });
+      });
+      return () => socket.off("getCardItem");
+    }
+  }, [socket, card]);
 
   if (loading) {
     return (
@@ -80,37 +138,77 @@ const CardPage = ({ token, saveActivityCard, card }) => {
 
   const { name_Board, color, cards } = card;
 
+  // Вынести в отдельный файл
+
   const label = cards.map((e) => {
     const card_body_id = shortid.generate();
+    // Отправка данных на сервер
     const addTask = async (value) => {
-      setActiveObj({
+      let active = {
         card_item_id: e.card_item_id,
         card_id: name,
-        task: { title: value.title, id_task: card_body_id },
+        task: {
+          title: value.title,
+          id_task: card_body_id,
+          role: dataRoleToSend,
+        },
+      };
+      socket.emit("addTask", {
+        data: active,
+        roleBack: roleProfileInBoard.role,
+        levelBack: roleProfileInBoard.level,
       });
-
-      try {
-        console.log(e.card_item_id);
-
-        const data = await request(
-          "/api/addTask",
-          "POST",
-          {
-            card_item_id: e.card_item_id,
-            card_id: name,
-            task: { title: value.title, id_task: card_body_id },
-          },
-          {
-            Authorization: `Bearer ${token}`,
-          }
-        );
-        setUpdate(true);
-      } catch (e) {
-        console.error(e);
-      }
-      console.log(value);
     };
 
+    // Отображение формы с кнопками для создания Task
+    const addCardBlock = () => {
+      setArrInput([...arrInput, e.card_item_id]);
+      let arr = [...arrInput, e.card_item_id];
+      let index = arr.findIndex((element) => {
+        return element === e.card_item_id;
+      });
+      const newItem = {
+        id: e.card_item_id,
+        title: "",
+      };
+      setHandlerTitleCard([
+        ...handlerTitleCard.slice(0, index),
+        newItem,
+        ...handlerTitleCard.slice(index + 1),
+      ]);
+    };
+
+    // Реализация close btn
+    const closeBtn = () => {
+      setHandlerTitleCard([
+        ...handlerTitleCard.slice(
+          0,
+          handlerTitleCard.findIndex((element) => {
+            return element.id === e.card_item_id;
+          })
+        ),
+        ...handlerTitleCard.slice(
+          handlerTitleCard.findIndex((element) => {
+            return element.id === e.card_item_id;
+          }) + 1
+        ),
+      ]);
+      setArrInput([
+        ...arrInput.slice(0, arrInput.indexOf(e.card_item_id)),
+        ...arrInput.slice(arrInput.indexOf(e.card_item_id) + 1),
+      ]);
+    };
+
+    // !Отображение блока для добавления ролей.
+
+    const visiabilityBlock = () => {
+      setVisiableBlock([
+        ...visiableBlock.slice(0, visiableBlock.indexOf(e.card_item_id)),
+        ...visiableBlock.slice(visiableBlock.indexOf(e.card_item_id) + 1),
+      ]);
+    };
+
+    // Обработка данных для новой карточки
     const onChangeTitleTaskHandler = (event) => {
       let index = arrInput.findIndex((element) => element == event.target.name);
       const newItem = {
@@ -124,110 +222,169 @@ const CardPage = ({ token, saveActivityCard, card }) => {
       ]);
     };
 
-    const arrTask = e.card_body.map((e, i) => {
+    // Обработка данных формы, блока для добавления ролей и уровней
+
+    const inputRoleHandler = (e) => {
+      setRoleHandler(e.target.value);
+    };
+
+    // Обработка данных ролей и уровней
+
+    const roleAndLvlHandler = (e) => {
+      setDataRole({ ...dataRole, [e.target.name]: e.target.value });
+    };
+
+    // Добавление роли в форму
+
+    const addRole = () => {
+      setRoleHandler(
+        (prev) =>
+          `${prev.length !== 0 ? prev + ", " : prev} ${dataRole.role}-${
+            dataRole.level
+          }`
+      );
+    };
+
+    // Сохранение всех добавленных ролей для задачи
+
+    const addRolesToSend = () => {
+      const arrRole = roleHandler.split(", ");
+      const newItem = arrRole.map((e, i) => {
+        const id = e.lastIndexOf("-");
+        return (e = {
+          role: e.slice(0, id).trim(),
+          level: e.slice(id + 1).trim(),
+        });
+      });
+      setDataRoleToSend(newItem);
+      visiabilityBlock();
+    };
+
+    // Отрисовка новых карточек
+
+    const arrTask = e.card_body.map((element, i) => {
+      const label = element.role.map((e, i) => {
+        return <span key={i}>{e.role + e.level}</span>;
+      });
+
       return (
-        <div className="task-item" key={i}>
-          <p>{e.title}</p>
+        <div
+          className="task-item"
+          key={i}
+          onClick={() => {
+            setModalShow(true);
+            setDataToModal({
+              name: element.title,
+              column: e.card_name,
+              id: element.id_task,
+            });
+          }}
+        >
+          <p>
+            {element.title}({label})
+          </p>
         </div>
       );
     });
 
+    // Отображение только нужного блока для ввода нового Task
+    const valueBodyTask =
+      handlerTitleCard.findIndex((element) => {
+        return element.id === e.card_item_id;
+      }) !== -1
+        ? handlerTitleCard[
+            handlerTitleCard.findIndex((element) => {
+              return element.id === e.card_item_id;
+            })
+          ].title
+        : "";
+
     return (
-      <div key={e.card_item_id} className="card-item" id="click-outside-check">
-        <p id="click-outside-check">{e.card_name}</p>
+      <div key={e.card_item_id} className="card-item">
+        <p>{e.card_name}</p>
         {arrTask}
         <textarea
-          id="click-outside-check"
           className={arrInput.indexOf(e.card_item_id) == -1 ? "hidden" : ""}
           placeholder="Enter a title for this card"
           onChange={onChangeTitleTaskHandler}
           name={e.card_item_id}
-          value={
-            handlerTitleCard.findIndex((element) => {
-              return element.id === e.card_item_id;
-            }) !== -1
-              ? handlerTitleCard[
-                  handlerTitleCard.findIndex((element) => {
-                    return element.id === e.card_item_id;
-                  })
-                ].title
-              : ""
-          }
+          value={valueBodyTask}
         />
         <p
-          id="click-outside-check"
           className={`add-card-text ${
             arrInput.indexOf(e.card_item_id) !== -1 ? "hidden" : ""
           }`}
-          onClick={() => {
-            setArrInput([...arrInput, e.card_item_id]);
-            let arr = [...arrInput, e.card_item_id];
-            let index = arr.findIndex((element) => {
-              return element === e.card_item_id;
-            });
-            console.log(index);
-            const newItem = {
-              id: e.card_item_id,
-              title: "",
-            };
-            setHandlerTitleCard([
-              ...handlerTitleCard.slice(0, index),
-              newItem,
-              ...handlerTitleCard.slice(index + 1),
-            ]);
-          }}
+          onClick={addCardBlock}
         >
-          <AddIcon id="click-outside-check" /> Add card
+          <AddIcon /> Add card
         </p>
         <div
-          id="click-outside-check"
           className={
             arrInput.indexOf(e.card_item_id) == -1
               ? "hidden"
               : "add-card-btn-block"
           }
         >
-          <button
-            id="click-outside-check"
+          <div>
+            <button
+              onClick={() => {
+                const index = handlerTitleCard.findIndex((element) => {
+                  return element.id === e.card_item_id;
+                });
+                if (handlerTitleCard[index]) addTask(handlerTitleCard[index]);
+              }}
+            >
+              Add card
+            </button>
+            <CloseIcon className="close-icon" onClick={closeBtn} />
+          </div>
+          <MoreHorizIcon
+            className="more-icon"
             onClick={() => {
-              const index = handlerTitleCard.findIndex((element) => {
-                return element.id === e.card_item_id;
-              });
-              if (handlerTitleCard[index]) addTask(handlerTitleCard[index]);
-            }}
-          >
-            Add card
-          </button>
-          <CloseIcon
-            id="click-outside-check"
-            className="close-icon"
-            onClick={() => {
-              setHandlerTitleCard([
-                ...handlerTitleCard.slice(
-                  0,
-                  handlerTitleCard.findIndex((element) => {
-                    return element.id === e.card_item_id;
-                  })
-                ),
-                ...handlerTitleCard.slice(
-                  handlerTitleCard.findIndex((element) => {
-                    return element.id === e.card_item_id;
-                  }) + 1
-                ),
-              ]);
-              setArrInput([
-                ...arrInput.slice(0, arrInput.indexOf(e.card_item_id)),
-                ...arrInput.slice(arrInput.indexOf(e.card_item_id) + 1),
-              ]);
+              setVisiableBlock([e.card_item_id]);
             }}
           />
+          <div
+            className={
+              visiableBlock.indexOf(e.card_item_id) == -1
+                ? "hidden"
+                : "role-add-card-page"
+            }
+          >
+            <div className="header-role-block">
+              <p>Выбрать роль</p>
+              <CloseIcon className="close-icon" onClick={visiabilityBlock} />
+            </div>
+
+            <input
+              placeholder="List participants in role-level format separated by commas"
+              value={roleHandler}
+              onChange={inputRoleHandler}
+            />
+            {roleDependencies(roleProfileInBoard, roleAndLvlHandler)}
+            <button className="add-role-to-form-btn" onClick={addRole}>
+              Add role to form
+            </button>
+            <button className="add-role-to-task-btn" onClick={addRolesToSend}>
+              Save and close
+            </button>
+          </div>
         </div>
       </div>
     );
   });
+
+  // main
   return (
     <div className={`${color} card-page`}>
-      <Header color={color} />
+      <ModalDescription
+        show={modalShow}
+        onHide={() => setModalShow(false)}
+        dataToModal={dataToModal}
+      />
+      <div className="main-header-card-page">
+        <Header color={color} />
+      </div>
       <div className="header-card-page">
         <div className="name-command-card-page">
           <h1> {id.slice(0, id.length - 9)}</h1>
@@ -235,6 +392,7 @@ const CardPage = ({ token, saveActivityCard, card }) => {
         <div className="name-board-card-page">
           <h1> {name_Board}</h1>
         </div>
+        <div>{`${roleProfileInBoard.role}(${roleProfileInBoard.level})`}</div>
       </div>
       <div className="card-body">
         {label}
@@ -243,27 +401,23 @@ const CardPage = ({ token, saveActivityCard, card }) => {
           onClick={() => {
             setStateList(true);
           }}
-          id="click-outside-check"
         >
-          <p id="click-outside-check">
+          <p>
             <AddIcon />
             Add another card
           </p>
         </div>
-        <div
-          id="click-outside-check"
-          className={`card-item ${!stateList ? "none-card-add" : ""}`}
-        >
-          <div id="click-outside-check" className="card-item-input-title">
+        <div className={`card-item ${!stateList ? "none-card-add" : ""}`}>
+          <div className="card-item-input-title">
             <input
-              id="click-outside-check"
               placeholder="Enter a title for the list"
+              onChange={handlerInputAddCard}
+              value={inputAddCard}
             />
           </div>
-          <div id="click-outside-check" className="add-card-btn-block">
-            <button id="click-outside-check">Add a list</button>
+          <div className="add-card-btn-block">
+            <button onClick={addCard}>Add a list</button>
             <CloseIcon
-              id="click-outside-check"
               className="close-icon"
               onClick={() => {
                 setStateList(false);
@@ -277,10 +431,10 @@ const CardPage = ({ token, saveActivityCard, card }) => {
 };
 
 const mapStateToProps = ({
-  getDataReducer: { card },
+  getDataReducer: { card, socket, roleProfileInBoard },
   loginReducer: { token },
 }) => {
-  return { token, card };
+  return { token, card, socket, roleProfileInBoard };
 };
 
 const mapDispatchToProps = (dispatch) => {

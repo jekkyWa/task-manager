@@ -1,5 +1,3 @@
-import { Socket } from "socket.io-client";
-
 const fetchLogin = (token, userId, login, logout, isAuthenticated) => {
   return {
     type: "FETCH_LOGIN",
@@ -41,10 +39,18 @@ const saveSocket = (socket) => {
   };
 };
 
+const saveRole = (roleProfileInBoard) => {
+  return {
+    type: "SAVE_ROLE",
+    roleProfileInBoard,
+  };
+};
+
 export {
   fetchLogin,
   saveDataIdentification,
   saveDataCards,
   saveActivityCard,
   saveSocket,
+  saveRole,
 };
