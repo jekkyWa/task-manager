@@ -13,6 +13,20 @@
 }
 
 .modal-description-body {
+  .take-task {
+    display: flex;
+    margin-top: 15px;
+  }
+  .take-task-btn {
+    margin-top: 10px;
+    margin-bottom: 10px;
+    > button {
+      border: none;
+      padding: 4px 12px 4px 12px;
+      background-color: rgb(90, 172, 68);
+      color: white;
+    }
+  }
   h2 {
     font-size: 20px;
     margin-left: 10px;
@@ -148,4 +162,44 @@
 
 .clip {
   margin-top: 11px;
+}
+
+.comment-main-block{
+  display: flex;
+  flex-direction: column-reverse;
+}
+
+.comment-item {
+  display: flex;
+
+  .icon-profile-comment {
+    @extend %styleProfileIcon;
+    margin-right: 10px;
+    width: 31px;
+    align-self: center;
+    > p {
+      font-weight: 600;
+    }
+  }
+  .сommentators-info-item {
+    display: flex;
+    > p {
+      font-weight: 500;
+      font-size: 14px;
+      margin-top: 10px;
+      margin-left: 5px;
+    }
+  }
+  .comment-text {
+    margin-left: 5px;
+    background-color: rgb(234, 236, 240);
+    border-radius: 5px;
+    > p {
+      padding: 5px;
+      font-weight: 600;
+    }
+  }
+}
+.comment-item-another {
+  display: flex;
 }

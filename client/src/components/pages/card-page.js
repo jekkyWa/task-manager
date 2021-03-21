@@ -1,6 +1,5 @@
 import React, { useEffect, useState, useRef } from "react";
 import Header from "../header";
-import { useHttp } from "../hooks/http.hook";
 import { Link, useParams } from "react-router-dom";
 import { saveActivityCard } from "../../action/action-login";
 import { connect } from "react-redux";
@@ -13,8 +12,15 @@ import { roleDependencies } from "../role";
 import MenuIcon from "@material-ui/icons/Menu";
 import ModalDescription from "../modal-description-task/modal-description";
 import Menu from "../menu/menu";
+import { availCheck } from "../hooks/availability-check.hook";
 
-const CardPage = ({ saveActivityCard, card, socket, roleProfileInBoard }) => {
+const CardPage = ({
+  saveActivityCard,
+  card,
+  socket,
+  roleProfileInBoard,
+  email,
+}) => {
   let { name, id } = useParams();
   const [loading, setLoading] = useState(true);
   const [arrInput, setArrInput] = useState([]);
@@ -89,6 +95,7 @@ const CardPage = ({ saveActivityCard, card, socket, roleProfileInBoard }) => {
         levelBack: roleProfileInBoard.level,
       });
       socket.on("getCard", (value) => {
+        console.log(value);
         saveActivityCard(value.filterCards[0]);
         setLoading(false);
       });
@@ -99,43 +106,7 @@ const CardPage = ({ saveActivityCard, card, socket, roleProfileInBoard }) => {
   useEffect(() => {
     if (socket) {
       socket.on("newTask", (value) => {
-        console.log(value);
-        const id = value.card_item_id;
-        const newCardsItem = [
-          ...card.cards.slice(
-            0,
-            card.cards.findIndex((e) => e.card_item_id === id)
-          ),
-          value,
-          ...card.cards.slice(
-            card.cards.findIndex((e) => e.card_item_id == id) + 1
-          ),
-        ];
-        const newItem = { ...card, cards: newCardsItem };
-        console.log(newItem);
-        const filterTaskRole = newItem.cards.map((e) => {
-          return {
-            ...e,
-            card_body: e.card_body.filter((elem) => {
-              const statusProfile = (status) => {
-                return status == "Senior" ? 3 : status == "Middle" ? 2 : 1;
-              };
-              return (
-                (elem.role.findIndex(
-                  (element) => element.role == roleProfileInBoard.role
-                ) !== -1 &&
-                  elem.role.findIndex(
-                    (element) =>
-                      statusProfile(element.level) <=
-                      statusProfile(roleProfileInBoard.level)
-                  ) !== -1) ||
-                roleProfileInBoard.role == "Product manager"
-              );
-            }),
-          };
-        });
-        newItem.cards = filterTaskRole;
-        saveActivityCard({ ...newItem });
+        saveActivityCard({ ...availCheck(value, card, roleProfileInBoard) });
       });
       // После того как данные придут остановить дальнейшую отправку
       return () => socket.off("newTask");
@@ -174,11 +145,14 @@ const CardPage = ({ saveActivityCard, card, socket, roleProfileInBoard }) => {
         card_id: name,
         task: {
           title: value.title,
+          description: "",
           id_task: card_body_id,
           role: dataRoleToSend,
+          name_add: email,
+          comment: [],
+          nameOfTaker: "",
         },
       };
-      console.log(value);
       socket.emit("addTask", {
         data: active,
         roleBack: roleProfileInBoard.role,
@@ -298,12 +272,16 @@ const CardPage = ({ saveActivityCard, card, socket, roleProfileInBoard }) => {
           className="task-item"
           key={i}
           onClick={() => {
+            console.log(element);
             setModalShow(true);
             setStateMenu(false);
             setDataToModal({
               name: element.title,
               column: e.card_name,
               id: element.id_task,
+              card_id: e.card_item_id,
+              board_id: name,
+              name_add: element.name_add,
             });
           }}
         >
@@ -485,10 +463,10 @@ const CardPage = ({ saveActivityCard, card, socket, roleProfileInBoard }) => {
 };
 
 const mapStateToProps = ({
-  getDataReducer: { card, socket, roleProfileInBoard },
+  getDataReducer: { card, socket, roleProfileInBoard, email },
   loginReducer: { token },
 }) => {
-  return { token, card, socket, roleProfileInBoard };
+  return { token, card, socket, roleProfileInBoard, email };
 };
 
 const mapDispatchToProps = (dispatch) => {

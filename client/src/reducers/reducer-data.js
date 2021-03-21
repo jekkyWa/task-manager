@@ -6,6 +6,7 @@ const getDataReducer = (state, action) => {
       rooms: { active: [], passive: [] },
       boards: [],
       card: {},
+      cardFull: {},
       socket: null,
       roleProfileInBoard: {},
     };
@@ -40,7 +41,11 @@ const getDataReducer = (state, action) => {
         ...state.getDataReducer,
         roleProfileInBoard: action.roleProfileInBoard,
       };
-
+    case "SAVE_FULL_TASK":
+      return {
+        ...state.getDataReducer,
+        cardFull: action.cardFull,
+      };
     default:
       return state.getDataReducer;
   }

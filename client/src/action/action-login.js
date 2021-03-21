@@ -46,6 +46,13 @@ const saveRole = (roleProfileInBoard) => {
   };
 };
 
+const saveFullCard = (cardFull) => {
+  return {
+    type: "SAVE_FULL_TASK",
+    cardFull,
+  };
+};
+
 export {
   fetchLogin,
   saveDataIdentification,
@@ -53,4 +60,5 @@ export {
   saveActivityCard,
   saveSocket,
   saveRole,
+  saveFullCard,
 };

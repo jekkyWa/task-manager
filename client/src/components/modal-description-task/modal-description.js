@@ -1,26 +1,79 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { Modal } from "react-bootstrap";
-import { saveDataCards } from "../../action/action-login";
+import { saveActivityCard } from "../../action/action-login";
 import { connect } from "react-redux";
 import ListAltIcon from "@material-ui/icons/ListAlt";
 import ReorderIcon from "@material-ui/icons/Reorder";
 import FormatListBulletedIcon from "@material-ui/icons/FormatListBulleted";
-import CloseIcon from "@material-ui/icons/Close";
-import AttachFileIcon from "@material-ui/icons/AttachFile";
+import CheckBoxOutlinedIcon from "@material-ui/icons/CheckBoxOutlined";
 import "./modal-description.scss";
-import { useParams } from "react-router-dom";
-import { useHttp } from "../hooks/http.hook";
-import shortid from "shortid";
+import DescriptionBlock from "./description-block";
+import { availCheck } from "../hooks/availability-check.hook";
+import CardOfTaker from "./card-of-taker";
+import Comment from "./comment";
 
-const ModalDescription = ({ show, onHide, dataToModal, email }) => {
-  const [descriptionState, setDescriptionState] = useState(false);
-  const ref = useRef(null);
+// -----------------------------------------------------
 
-  const [commentState, setCommentState] = useState(false);
+const ModalDescription = ({
+  show,
+  onHide,
+  dataToModal,
+  email,
+  socket,
+  card,
+  saveActivityCard,
+  roleProfileInBoard,
+}) => {
+  // добавление описания к заданию
+  useEffect(() => {
+    if (socket) {
+      socket.on("newDescriptionTask", (value) => {
+        if (dataToModal) {
+          const item = value.cards.filter(
+            (e) => e.card_item_id == dataToModal.card_id
+          )[0];
+          saveActivityCard({ ...availCheck(item, card, roleProfileInBoard) });
+        }
+      });
 
-  const focus = () => {
-    ref.current.focus();
-  };
+      return () => socket.off("newDescriptionTask");
+    }
+  }, [socket, card, dataToModal]);
+
+  // закрпеление задание за пользователем
+  useEffect(() => {
+    if (socket) {
+      socket.on("newUserToDo", (value) => {
+        if (dataToModal) {
+          console.log(value);
+          const item = value.cards.filter(
+            (e) => e.card_item_id == dataToModal.card_id
+          )[0];
+          saveActivityCard({ ...availCheck(item, card, roleProfileInBoard) });
+        }
+      });
+
+      return () => socket.off("newUserToDo");
+    }
+  }, [socket, card, dataToModal]);
+
+  // Добавеление комментария
+  useEffect(() => {
+    if (socket) {
+      socket.on("newComment", (value) => {
+        if (dataToModal) {
+          console.log(value);
+          const item = value.cards.filter(
+            (e) => e.card_item_id == dataToModal.card_id
+          )[0];
+          saveActivityCard({ ...availCheck(item, card, roleProfileInBoard) });
+        }
+      });
+
+      return () => socket.off("newComment");
+    }
+  }, [socket, card, dataToModal]);
+
   return (
     <Modal
       dialogClassName="modal-50w"
@@ -48,27 +101,27 @@ const ModalDescription = ({ show, onHide, dataToModal, email }) => {
               <h2>Описание</h2>
             </div>
           </div>
-          <div
-            className={
-              !descriptionState ? "modal-description-select-input" : "hidden"
-            }
-            onClick={() => {
-              setDescriptionState(true);
-            }}
-          >
-            <p onClick={focus}>Добавить более подробное описание...</p>
-          </div>
+          {/* Отображение описания по ролям */}
+          <DescriptionBlock
+            dataToModal={dataToModal}
+            email={email}
+            socket={socket}
+          />
+          {/* Отображение состояния задания */}
 
-          <div
-            className={descriptionState ? "modal-description-input" : "hidden"}
-          >
-            <textarea ref={ref} />
-            <button className="modal-description-btn-save">Сохранить</button>
-            <CloseIcon
-              className="modal-description-close-icon"
-              onClick={() => {
-                setDescriptionState(false);
-              }}
+          <div>
+            <div className="take-task">
+              <div>
+                <CheckBoxOutlinedIcon />
+              </div>
+              <div>
+                <h2>Взять задание</h2>
+              </div>
+            </div>
+            <CardOfTaker
+              dataToModal={dataToModal}
+              email={email}
+              socket={socket}
             />
           </div>
           <div className="modal-description-actions-block">
@@ -82,42 +135,7 @@ const ModalDescription = ({ show, onHide, dataToModal, email }) => {
             </div>
             <button>Показать подробнее</button>
           </div>
-          <div className="modal-description-comment">
-            <div className="icon-profile-comment">
-              <p>{email[0]}</p>
-            </div>
-            <div
-              className={
-                !commentState ? "modal-description-add-comment-btn" : "hidden"
-              }
-              onClick={() => {
-                setCommentState(true);
-              }}
-            >
-              <p>Напишите комментарий...</p>
-            </div>
-            <div
-              className={
-                !commentState ? "hidden" : "modal-decription-active-add"
-              }
-            >
-              <input placeholder="Напишите комментарий..." />
-              <div className="modal-decription-active-add-btn">
-                <div>
-                  <button>Сохранить</button>
-                  <CloseIcon
-                    className="modal-description-close-icon"
-                    onClick={() => {
-                      setCommentState(false);
-                    }}
-                  />
-                </div>
-                <div>
-                  <AttachFileIcon fontSize="small" className="clip"/>
-                </div>
-              </div>
-            </div>
-          </div>
+          <Comment dataToModal={dataToModal} email={email} socket={socket} />
           <div></div>
         </div>
       </Modal.Body>
@@ -127,15 +145,15 @@ const ModalDescription = ({ show, onHide, dataToModal, email }) => {
 
 const mapStateToProps = ({
   loginReducer: { token },
-  getDataReducer: { email, name, boards, socket },
+  getDataReducer: { email, name, boards, socket, card, roleProfileInBoard },
 }) => {
-  return { token, name, boards, socket, email };
+  return { token, name, boards, socket, email, card, roleProfileInBoard };
 };
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    saveDataCards: (boards) => {
-      dispatch(saveDataCards(boards));
+    saveActivityCard: (card) => {
+      dispatch(saveActivityCard(card));
     },
   };
 };
