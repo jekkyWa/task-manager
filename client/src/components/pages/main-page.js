@@ -63,6 +63,7 @@ const MainPage = ({ token, saveDataIdentification, saveSocket }) => {
       <Header />
       <div className="container">
         <SideBar />
+        
       </div>
     </div>
   );

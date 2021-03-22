@@ -180,7 +180,7 @@
 
 .card-page {
   min-height: 100vh;
-  overflow-x: auto;
+  overflow: auto;
   .header-card-page {
     display: flex;
     justify-content: space-between;
@@ -231,11 +231,12 @@
   }
   .card-body {
     display: flex;
-    width: 100%;
+    min-width: 100%;
+    min-height: calc(100vh - 100px);
+    overflow-x: auto;
     justify-content: flex-start;
-    flex-wrap: wrap;
     align-content: flex-start;
-    padding: 10px;
+  
     .none-card-add {
       display: none;
     }
@@ -246,6 +247,7 @@
       color: white;
       align-self: flex-start;
       margin: 10px;
+      width: 200px;
       cursor: pointer;
       &:hover {
         background-color: rgba(0, 0, 0, 0.5);
@@ -260,8 +262,9 @@
       min-height: 80px;
       margin: 10px;
       border-radius: 5px;
-      padding: 10px 10px 0px 10px;
+      padding: 10px 10px 10px 10px;
       align-self: start;
+      flex-shrink: 0;
 
       .card-item-input-title {
         margin-bottom: 7px;
@@ -395,4 +398,9 @@
 .menu-emergence {
   transition: 1s all;
   visibility: visiable;
+}
+
+.arr-task {
+  max-height: calc(70vh - 100px);
+  overflow: auto;
 }

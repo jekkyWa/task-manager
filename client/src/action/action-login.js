@@ -53,6 +53,20 @@ const saveFullCard = (cardFull) => {
   };
 };
 
+const saveDataToModal = (dataToModal) => {
+  return {
+    type: "SAVE_DATA_TO_MODAL",
+    dataToModal,
+  };
+};
+
+const modalShow = (show) => {
+  return {
+    type: "MODAL_SHOW",
+    show,
+  };
+};
+
 export {
   fetchLogin,
   saveDataIdentification,
@@ -61,4 +75,6 @@ export {
   saveSocket,
   saveRole,
   saveFullCard,
+  saveDataToModal,
+  modalShow,
 };

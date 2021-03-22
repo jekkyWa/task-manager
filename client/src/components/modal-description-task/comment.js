@@ -36,9 +36,10 @@ const Comment = ({ email, socket, dataToModal, card }) => {
     .filter((e) => e.card_item_id == dataToModal.card_id)[0]
     .card_body.filter((e) => dataToModal.id == e.id_task)[0];
 
-  const label = commentToPage.comment.map((e) => {
+  const label = commentToPage.comment.map((e, i) => {
     return (
       <div
+        key={i}
         className={
           e.сommentatorsEmail == email ? "comment-item" : "comment-item"
         }

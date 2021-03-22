@@ -1,7 +1,12 @@
 import React, { useEffect, useState, useRef } from "react";
 import Header from "../header";
 import { Link, useParams } from "react-router-dom";
-import { saveActivityCard } from "../../action/action-login";
+import {
+  saveActivityCard,
+  saveDataToModal,
+  saveFullCard,
+  modalShow,
+} from "../../action/action-login";
 import { connect } from "react-redux";
 import Loading from "../loading/loading";
 import AddIcon from "@material-ui/icons/Add";
@@ -16,10 +21,15 @@ import { availCheck } from "../hooks/availability-check.hook";
 
 const CardPage = ({
   saveActivityCard,
+  saveFullCard,
+  saveDataToModal,
   card,
   socket,
   roleProfileInBoard,
   email,
+  dataToModal,
+  show,
+  modalShow,
 }) => {
   let { name, id } = useParams();
   const [loading, setLoading] = useState(true);
@@ -30,13 +40,6 @@ const CardPage = ({
   ]);
   const [inputAddCard, setInputAddCard] = useState(" ");
   const [stateList, setStateList] = useState(false);
-
-  const [dataToModal, setDataToModal] = useState({
-    name: "",
-    column: "",
-    id: "",
-  });
-  const [modalShow, setModalShow] = useState(false);
 
   const [dataRole, setDataRole] = useState({
     role: "Back-end developer",
@@ -53,7 +56,6 @@ const CardPage = ({
   // обновляются формы
 
   const handleClickOutside = (e) => {
-    // console.log(e.target.id);
     // if (e.target.id !== "click-outside-check" && e.which == 1) {
     //   setArrInput([]);
     //   setStateList(false);
@@ -95,8 +97,8 @@ const CardPage = ({
         levelBack: roleProfileInBoard.level,
       });
       socket.on("getCard", (value) => {
-        console.log(value);
         saveActivityCard(value.filterCards[0]);
+        saveFullCard(value.original[0]);
         setLoading(false);
       });
     }
@@ -272,17 +274,19 @@ const CardPage = ({
           className="task-item"
           key={i}
           onClick={() => {
-            console.log(element);
-            setModalShow(true);
             setStateMenu(false);
-            setDataToModal({
-              name: element.title,
-              column: e.card_name,
-              id: element.id_task,
-              card_id: e.card_item_id,
-              board_id: name,
-              name_add: element.name_add,
-            });
+            modalShow(true);
+            saveDataToModal(
+              {
+                name: element.title,
+                column: e.card_name,
+                id: element.id_task,
+                card_id: e.card_item_id,
+                board_id: name,
+                name_add: element.name_add,
+              },
+              true
+            );
           }}
         >
           <p>
@@ -307,7 +311,7 @@ const CardPage = ({
     return (
       <div key={e.card_item_id} className="card-item">
         <p>{e.card_name}</p>
-        {arrTask}
+        <div className="arr-task">{arrTask}</div>
         <textarea
           className={arrInput.indexOf(e.card_item_id) == -1 ? "hidden" : ""}
           placeholder="Enter a title for this card"
@@ -382,11 +386,7 @@ const CardPage = ({
   // main
   return (
     <div className={`${color} card-page`}>
-      <ModalDescription
-        show={modalShow}
-        onHide={() => setModalShow(false)}
-        dataToModal={dataToModal}
-      />
+      <ModalDescription show={show} dataToModal={dataToModal} />
       <div className="main-header-card-page">
         <Header color={color} />
       </div>
@@ -400,6 +400,9 @@ const CardPage = ({
           </div>
           <div className="name-command-card-page">
             <h1>{`${roleProfileInBoard.role}(${roleProfileInBoard.level})`}</h1>
+          </div>
+          <div className="name-board-card-page">
+            <p>В данный момент отображаются только доступные для вашей роли задания</p>
           </div>
         </div>
         <div className={stateMenu ? "menu-emergence" : "vis-hidden"}>
@@ -463,14 +466,30 @@ const CardPage = ({
 };
 
 const mapStateToProps = ({
-  getDataReducer: { card, socket, roleProfileInBoard, email },
+  getDataReducer: {
+    card,
+    socket,
+    roleProfileInBoard,
+    email,
+    dataToModal,
+    show,
+  },
   loginReducer: { token },
 }) => {
-  return { token, card, socket, roleProfileInBoard, email };
+  return { token, card, socket, roleProfileInBoard, email, dataToModal, show };
 };
 
 const mapDispatchToProps = (dispatch) => {
   return {
+    modalShow: (show) => {
+      dispatch(modalShow(show));
+    },
+    saveDataToModal: (dataToModal) => {
+      dispatch(saveDataToModal(dataToModal));
+    },
+    saveFullCard: (cardFull) => {
+      dispatch(saveFullCard(cardFull));
+    },
     saveActivityCard: (card) => {
       dispatch(saveActivityCard(card));
     },

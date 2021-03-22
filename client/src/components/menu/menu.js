@@ -8,9 +8,9 @@ import AssignmentOutlinedIcon from "@material-ui/icons/AssignmentOutlined";
 import AssignmentTurnedInOutlinedIcon from "@material-ui/icons/AssignmentTurnedInOutlined";
 import FormatListBulletedIcon from "@material-ui/icons/FormatListBulleted";
 import AssignmentIndOutlinedIcon from "@material-ui/icons/AssignmentIndOutlined";
-import MenuAboutBoard from "./menu-about-board";
 import ArrowBackIcon from "@material-ui/icons/ArrowBack";
 import MyTask from "./my-task";
+import CreatedTasks from "./created-tasks";
 
 const Menu = ({ onHide }) => {
   const [selectState, setSelectState] = useState("Menu");
@@ -64,11 +64,16 @@ const Menu = ({ onHide }) => {
           </div>
           <h1> Показать все задания</h1>
         </div>
-        <div className="menu-item">
+        <div
+          className="menu-item"
+          onClick={() => {
+            setSelectState("Created tasks");
+          }}
+        >
           <div>
             <AssignmentTurnedInOutlinedIcon />
           </div>
-          <h1> Созданные задания</h1>
+          <h1> Созданные задания (Готово)</h1>
         </div>
         <div
           className="menu-item"
@@ -79,7 +84,7 @@ const Menu = ({ onHide }) => {
           <div>
             <AssignmentIndOutlinedIcon />
           </div>
-          <h1>Мои задания</h1>
+          <h1>Мои задания (Готово)</h1>
         </div>
         <hr />
         <div className="menu-recent-activity">
@@ -90,10 +95,13 @@ const Menu = ({ onHide }) => {
         </div>
       </div>
       <div className={selectState == "About board" ? "" : "hidden"}>
-        <MenuAboutBoard />{" "}
+        {/* <MenuAboutBoard />{" "} */}
       </div>
       <div className={selectState == "My task" ? "" : "hidden"}>
-        <MyTask />{" "}
+        <MyTask />
+      </div>
+      <div className={selectState == "Created tasks" ? "" : "hidden"}>
+        <CreatedTasks />
       </div>
     </div>
   );

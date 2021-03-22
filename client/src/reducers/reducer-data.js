@@ -9,6 +9,8 @@ const getDataReducer = (state, action) => {
       cardFull: {},
       socket: null,
       roleProfileInBoard: {},
+      dataToModal: {},
+      show: false,
     };
   }
   switch (action.type) {
@@ -45,6 +47,16 @@ const getDataReducer = (state, action) => {
       return {
         ...state.getDataReducer,
         cardFull: action.cardFull,
+      };
+    case "SAVE_DATA_TO_MODAL":
+      return {
+        ...state.getDataReducer,
+        dataToModal: action.dataToModal,
+      };
+    case "MODAL_SHOW":
+      return {
+        ...state.getDataReducer,
+        show: action.show,
       };
     default:
       return state.getDataReducer;

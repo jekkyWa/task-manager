@@ -1,6 +1,10 @@
 import React, { useState, useRef, useEffect } from "react";
 import { Modal } from "react-bootstrap";
-import { saveActivityCard } from "../../action/action-login";
+import {
+  saveActivityCard,
+  modalShow,
+  saveFullCard,
+} from "../../action/action-login";
 import { connect } from "react-redux";
 import ListAltIcon from "@material-ui/icons/ListAlt";
 import ReorderIcon from "@material-ui/icons/Reorder";
@@ -16,13 +20,15 @@ import Comment from "./comment";
 
 const ModalDescription = ({
   show,
-  onHide,
+  cardFull,
   dataToModal,
   email,
   socket,
   card,
   saveActivityCard,
   roleProfileInBoard,
+  saveFullCard,
+  modalShow,
 }) => {
   // добавление описания к заданию
   useEffect(() => {
@@ -45,24 +51,23 @@ const ModalDescription = ({
     if (socket) {
       socket.on("newUserToDo", (value) => {
         if (dataToModal) {
-          console.log(value);
           const item = value.cards.filter(
             (e) => e.card_item_id == dataToModal.card_id
           )[0];
           saveActivityCard({ ...availCheck(item, card, roleProfileInBoard) });
+          saveFullCard(value);
         }
       });
 
       return () => socket.off("newUserToDo");
     }
-  }, [socket, card, dataToModal]);
+  }, [socket, card, dataToModal, cardFull]);
 
   // Добавеление комментария
   useEffect(() => {
     if (socket) {
       socket.on("newComment", (value) => {
         if (dataToModal) {
-          console.log(value);
           const item = value.cards.filter(
             (e) => e.card_item_id == dataToModal.card_id
           )[0];
@@ -79,7 +84,7 @@ const ModalDescription = ({
       dialogClassName="modal-50w"
       show={show}
       onHide={() => {
-        onHide();
+        modalShow(false);
       }}
     >
       <Modal.Body>
@@ -145,13 +150,36 @@ const ModalDescription = ({
 
 const mapStateToProps = ({
   loginReducer: { token },
-  getDataReducer: { email, name, boards, socket, card, roleProfileInBoard },
+  getDataReducer: {
+    email,
+    name,
+    boards,
+    socket,
+    card,
+    cardFull,
+    roleProfileInBoard,
+  },
 }) => {
-  return { token, name, boards, socket, email, card, roleProfileInBoard };
+  return {
+    token,
+    name,
+    boards,
+    socket,
+    email,
+    card,
+    roleProfileInBoard,
+    cardFull,
+  };
 };
 
 const mapDispatchToProps = (dispatch) => {
   return {
+    saveFullCard: (cardFull) => {
+      dispatch(saveFullCard(cardFull));
+    },
+    modalShow: (show) => {
+      dispatch(modalShow(show));
+    },
     saveActivityCard: (card) => {
       dispatch(saveActivityCard(card));
     },

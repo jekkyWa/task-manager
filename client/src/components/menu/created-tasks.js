@@ -1,16 +1,15 @@
 import React from "react";
 import { connect } from "react-redux";
+import { Link, useParams } from "react-router-dom";
 import { modalShow, saveDataToModal } from "../../action/action-login";
 
-import { Link, useParams } from "react-router-dom";
-
-const MyTask = ({ cardFull, email, modalShow, saveDataToModal }) => {
+const CreatedTasks = ({ cardFull, email, modalShow, saveDataToModal }) => {
   let { name } = useParams();
 
   const filterItem = cardFull.cards
     .map((e) => (e = e.card_body))
     .flat()
-    .filter((e) => e.nameOfTaker == email);
+    .filter((e) => e.name_add == email);
 
   const findOtherData = (id) => {
     const findItem = cardFull.cards.filter(
@@ -20,6 +19,9 @@ const MyTask = ({ cardFull, email, modalShow, saveDataToModal }) => {
   };
 
   const label = filterItem.map((e, i) => {
+    const arrRole = e.role.map((element) => {
+      return <span>{element.role + " " + element.level}</span>;
+    });
     return (
       <div
         className="task-item"
@@ -38,14 +40,14 @@ const MyTask = ({ cardFull, email, modalShow, saveDataToModal }) => {
         }}
       >
         <h2 className="my-task-item-title">{e.title}</h2>
-        <p className="my-task-item-name-add">Создатель:{e.name_add}</p>
+        <p className="my-task-item-name-add">Для ролей:{arrRole}</p>
       </div>
     );
   });
 
   return (
     <div className="my-task">
-      <h1>Взятые задания в этой доске</h1>
+      <h1>Созданные задания на этой доске</h1>
       {label}
     </div>
   );
@@ -69,4 +71,4 @@ const mapDispatchToProps = (dispatch) => {
   };
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(MyTask);
+export default connect(mapStateToProps, mapDispatchToProps)(CreatedTasks);

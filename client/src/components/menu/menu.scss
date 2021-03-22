@@ -49,3 +49,20 @@
     }
   }
 }
+
+.my-task {
+  max-height: calc(100vh - 100px);
+  overflow: auto;
+  .my-task-item-title {
+    font-size: 14px;
+    font-weight: 700;
+  }
+  .my-task-item-name-add {
+    font-size: 12px;
+  }
+  > h1 {
+    text-align: center;
+    margin-top: 10px;
+    margin-bottom: 10px;
+  }
+}
