@@ -67,6 +67,13 @@ const modalShow = (show) => {
   };
 };
 
+const displaySelection = (valueDisplay) => {
+  return {
+    type: "DISPLAY_SELECTION",
+    valueDisplay,
+  };
+};
+
 export {
   fetchLogin,
   saveDataIdentification,
@@ -77,4 +84,5 @@ export {
   saveFullCard,
   saveDataToModal,
   modalShow,
+  displaySelection,
 };

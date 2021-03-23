@@ -6,6 +6,7 @@ import {
   saveDataToModal,
   saveFullCard,
   modalShow,
+  displaySelection,
 } from "../../action/action-login";
 import { connect } from "react-redux";
 import Loading from "../loading/loading";
@@ -24,12 +25,15 @@ const CardPage = ({
   saveFullCard,
   saveDataToModal,
   card,
+  cardFull,
   socket,
   roleProfileInBoard,
   email,
   dataToModal,
   show,
   modalShow,
+  valueDisplay,
+  displaySelection,
 }) => {
   let { name, id } = useParams();
   const [loading, setLoading] = useState(true);
@@ -99,6 +103,10 @@ const CardPage = ({
       socket.on("getCard", (value) => {
         saveActivityCard(value.filterCards[0]);
         saveFullCard(value.original[0]);
+        displaySelection({
+          valueDisp: value.filterCards[0],
+          stateFilter: true,
+        });
         setLoading(false);
       });
     }
@@ -108,23 +116,57 @@ const CardPage = ({
   useEffect(() => {
     if (socket) {
       socket.on("newTask", (value) => {
-        saveActivityCard({ ...availCheck(value, card, roleProfileInBoard) });
+        saveActivityCard({
+          ...availCheck(value, valueDisplay.valueDisp, roleProfileInBoard),
+        });
+        const index = valueDisplay.valueDisp.cards.findIndex(
+          (e) => e.card_item_id == value.card_item_id
+        );
+        const newItem = {
+          ...valueDisplay.valueDisp,
+          cards: [
+            ...valueDisplay.valueDisp.cards.slice(0, index),
+            value,
+            ...valueDisplay.valueDisp.cards.slice(index + 1),
+          ],
+        };
+        saveFullCard(newItem);
+        if (!valueDisplay.stateFilter) {
+          displaySelection({ valueDisp: newItem, stateFilter: false });
+        } else {
+          displaySelection({
+            valueDisp: availCheck(
+              value,
+              valueDisplay.valueDisp,
+              roleProfileInBoard
+            ),
+            stateFilter: true,
+          });
+        }
       });
       // После того как данные придут остановить дальнейшую отправку
       return () => socket.off("newTask");
     }
-  }, [socket, card]);
+  }, [socket, valueDisplay]);
 
   // Получение новой карточки через socket
 
   useEffect(() => {
     if (socket) {
       socket.on("getCardItem", (value) => {
-        saveActivityCard({ ...card, cards: value.cards });
+        saveActivityCard({ ...valueDisplay.valueDisp, cards: value.cards });
+        if (!valueDisplay.stateFilter) {
+          displaySelection({ valueDisp: value, stateFilter: false });
+        } else {
+          displaySelection({
+            valueDisp: { ...valueDisplay.valueDisp, cards: value.cards },
+            stateFilter: true,
+          });
+        }
       });
       return () => socket.off("getCardItem");
     }
-  }, [socket, card]);
+  }, [socket, valueDisplay]);
 
   if (loading) {
     return (
@@ -134,7 +176,7 @@ const CardPage = ({
     );
   }
 
-  const { name_Board, color, cards } = card;
+  const { name_Board, color, cards } = valueDisplay.valueDisp;
 
   // Вынести в отдельный файл
 
@@ -268,7 +310,43 @@ const CardPage = ({
       const label = element.role.map((e, i) => {
         return <span key={i}>{e.role + e.level}</span>;
       });
-
+      const statusProfile = (status) => {
+        return status == "Senior" ? 3 : status == "Middle" ? 2 : 1;
+      };
+      if (
+        !(
+          element.role.findIndex((e) => e.role !== roleProfileInBoard.role) ==
+            -1 &&
+          element.role.findIndex(
+            (e) =>
+              statusProfile(e.level) <= statusProfile(roleProfileInBoard.level)
+          ) !== -1
+        ) ||
+        roleProfileInBoard.role == "Product manager"
+      ) {
+        return (
+          <div
+            className="task-item task-item-for-all"
+            key={i}
+            onClick={() => {
+              setStateMenu(false);
+              modalShow(true);
+              saveDataToModal({
+                name: element.title,
+                column: e.card_name,
+                id: element.id_task,
+                card_id: e.card_item_id,
+                board_id: name,
+                name_add: element.name_add,
+              });
+            }}
+          >
+            <p>
+              {element.title}({label})
+            </p>
+          </div>
+        );
+      }
       return (
         <div
           className="task-item"
@@ -276,17 +354,14 @@ const CardPage = ({
           onClick={() => {
             setStateMenu(false);
             modalShow(true);
-            saveDataToModal(
-              {
-                name: element.title,
-                column: e.card_name,
-                id: element.id_task,
-                card_id: e.card_item_id,
-                board_id: name,
-                name_add: element.name_add,
-              },
-              true
-            );
+            saveDataToModal({
+              name: element.title,
+              column: e.card_name,
+              id: element.id_task,
+              card_id: e.card_item_id,
+              board_id: name,
+              name_add: element.name_add,
+            });
           }}
         >
           <p>
@@ -325,7 +400,7 @@ const CardPage = ({
           }`}
           onClick={addCardBlock}
         >
-          <AddIcon /> Add card
+          <AddIcon fontSize="small" /> Add card
         </p>
         <div
           className={
@@ -401,8 +476,21 @@ const CardPage = ({
           <div className="name-command-card-page">
             <h1>{`${roleProfileInBoard.role}(${roleProfileInBoard.level})`}</h1>
           </div>
-          <div className="name-board-card-page">
-            <p>В данный момент отображаются только доступные для вашей роли задания</p>
+          <div className="name-command-card-page">
+            <h1
+              className={
+                valueDisplay.stateFilter ? "text-display-state" : "hidden"
+              }
+            >
+              Available
+            </h1>
+            <h1
+              className={
+                !valueDisplay.stateFilter ? "text-display-state" : "hidden"
+              }
+            >
+              All
+            </h1>
           </div>
         </div>
         <div className={stateMenu ? "menu-emergence" : "vis-hidden"}>
@@ -468,19 +556,34 @@ const CardPage = ({
 const mapStateToProps = ({
   getDataReducer: {
     card,
+    cardFull,
     socket,
     roleProfileInBoard,
     email,
     dataToModal,
     show,
+    valueDisplay,
   },
   loginReducer: { token },
 }) => {
-  return { token, card, socket, roleProfileInBoard, email, dataToModal, show };
+  return {
+    token,
+    card,
+    socket,
+    roleProfileInBoard,
+    email,
+    dataToModal,
+    show,
+    valueDisplay,
+    cardFull,
+  };
 };
 
 const mapDispatchToProps = (dispatch) => {
   return {
+    displaySelection: (valueDisplay) => {
+      dispatch(displaySelection(valueDisplay));
+    },
     modalShow: (show) => {
       dispatch(modalShow(show));
     },

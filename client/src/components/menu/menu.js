@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import "./menu.scss";
+import { connect } from "react-redux";
 import CloseIcon from "@material-ui/icons/Close";
 import InfoOutlinedIcon from "@material-ui/icons/InfoOutlined";
 import PhotoSizeSelectActualOutlinedIcon from "@material-ui/icons/PhotoSizeSelectActualOutlined";
@@ -11,8 +12,9 @@ import AssignmentIndOutlinedIcon from "@material-ui/icons/AssignmentIndOutlined"
 import ArrowBackIcon from "@material-ui/icons/ArrowBack";
 import MyTask from "./my-task";
 import CreatedTasks from "./created-tasks";
+import { displaySelection } from "../../action/action-login";
 
-const Menu = ({ onHide }) => {
+const Menu = ({ onHide, card, cardFull, displaySelection }) => {
   const [selectState, setSelectState] = useState("Menu");
   return (
     <div className="menu">
@@ -52,17 +54,27 @@ const Menu = ({ onHide }) => {
           </div>
           <h1> Сменить фон</h1>
         </div>
-        <div className="menu-item">
+        <div
+          className="menu-item"
+          onClick={() => {
+            displaySelection({ valueDisp: card, stateFilter: true });
+          }}
+        >
           <div>
             <AssignmentLateOutlinedIcon />
           </div>
-          <h1> Показать только доступные задания</h1>
+          <h1> Показать только доступные задания(Готово)</h1>
         </div>
-        <div className="menu-item">
+        <div
+          className="menu-item"
+          onClick={() => {
+            displaySelection({ valueDisp: cardFull, stateFilter: false });
+          }}
+        >
           <div>
             <AssignmentOutlinedIcon />
           </div>
-          <h1> Показать все задания</h1>
+          <h1> Показать все задания(Готово)</h1>
         </div>
         <div
           className="menu-item"
@@ -107,4 +119,19 @@ const Menu = ({ onHide }) => {
   );
 };
 
-export default Menu;
+const mapStateToProps = ({ getDataReducer: { card, cardFull } }) => {
+  return {
+    card,
+    cardFull,
+  };
+};
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    displaySelection: (valueDisplay) => {
+      dispatch(displaySelection(valueDisplay));
+    },
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(Menu);

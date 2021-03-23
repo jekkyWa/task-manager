@@ -4,6 +4,7 @@ import {
   saveActivityCard,
   modalShow,
   saveFullCard,
+  displaySelection,
 } from "../../action/action-login";
 import { connect } from "react-redux";
 import ListAltIcon from "@material-ui/icons/ListAlt";
@@ -28,6 +29,8 @@ const ModalDescription = ({
   saveActivityCard,
   roleProfileInBoard,
   saveFullCard,
+  valueDisplay,
+  displaySelection,
   modalShow,
 }) => {
   // добавление описания к заданию
@@ -39,12 +42,37 @@ const ModalDescription = ({
             (e) => e.card_item_id == dataToModal.card_id
           )[0];
           saveActivityCard({ ...availCheck(item, card, roleProfileInBoard) });
+          const index = valueDisplay.valueDisp.cards.findIndex(
+            (e) => e.card_item_id == item.card_item_id
+          );
+
+          const newItem = {
+            ...valueDisplay.valueDisp,
+            cards: [
+              ...valueDisplay.valueDisp.cards.slice(0, index),
+              item,
+              ...valueDisplay.valueDisp.cards.slice(index + 1),
+            ],
+          };
+          saveFullCard(newItem);
+          if (!valueDisplay.stateFilter) {
+            displaySelection({ valueDisp: newItem, stateFilter: false });
+          } else {
+            displaySelection({
+              valueDisp: availCheck(
+                item,
+                valueDisplay.valueDisp,
+                roleProfileInBoard
+              ),
+              stateFilter: true,
+            });
+          }
         }
       });
 
       return () => socket.off("newDescriptionTask");
     }
-  }, [socket, card, dataToModal]);
+  }, [socket, valueDisplay, dataToModal]);
 
   // закрпеление задание за пользователем
   useEffect(() => {
@@ -55,13 +83,37 @@ const ModalDescription = ({
             (e) => e.card_item_id == dataToModal.card_id
           )[0];
           saveActivityCard({ ...availCheck(item, card, roleProfileInBoard) });
-          saveFullCard(value);
+          const index = valueDisplay.valueDisp.cards.findIndex(
+            (e) => e.card_item_id == item.card_item_id
+          );
+
+          const newItem = {
+            ...valueDisplay.valueDisp,
+            cards: [
+              ...valueDisplay.valueDisp.cards.slice(0, index),
+              item,
+              ...valueDisplay.valueDisp.cards.slice(index + 1),
+            ],
+          };
+          saveFullCard(newItem);
+          if (!valueDisplay.stateFilter) {
+            displaySelection({ valueDisp: newItem, stateFilter: false });
+          } else {
+            displaySelection({
+              valueDisp: availCheck(
+                item,
+                valueDisplay.valueDisp,
+                roleProfileInBoard
+              ),
+              stateFilter: true,
+            });
+          }
         }
       });
 
       return () => socket.off("newUserToDo");
     }
-  }, [socket, card, dataToModal, cardFull]);
+  }, [socket, valueDisplay, dataToModal]);
 
   // Добавеление комментария
   useEffect(() => {
@@ -72,12 +124,37 @@ const ModalDescription = ({
             (e) => e.card_item_id == dataToModal.card_id
           )[0];
           saveActivityCard({ ...availCheck(item, card, roleProfileInBoard) });
+          const index = valueDisplay.valueDisp.cards.findIndex(
+            (e) => e.card_item_id == item.card_item_id
+          );
+
+          const newItem = {
+            ...valueDisplay.valueDisp,
+            cards: [
+              ...valueDisplay.valueDisp.cards.slice(0, index),
+              item,
+              ...valueDisplay.valueDisp.cards.slice(index + 1),
+            ],
+          };
+          saveFullCard(newItem);
+          if (!valueDisplay.stateFilter) {
+            displaySelection({ valueDisp: newItem, stateFilter: false });
+          } else {
+            displaySelection({
+              valueDisp: availCheck(
+                item,
+                valueDisplay.valueDisp,
+                roleProfileInBoard
+              ),
+              stateFilter: true,
+            });
+          }
         }
       });
 
       return () => socket.off("newComment");
     }
-  }, [socket, card, dataToModal]);
+  }, [socket, valueDisplay, dataToModal]);
 
   return (
     <Modal
@@ -158,6 +235,7 @@ const mapStateToProps = ({
     card,
     cardFull,
     roleProfileInBoard,
+    valueDisplay,
   },
 }) => {
   return {
@@ -169,11 +247,15 @@ const mapStateToProps = ({
     card,
     roleProfileInBoard,
     cardFull,
+    valueDisplay,
   };
 };
 
 const mapDispatchToProps = (dispatch) => {
   return {
+    displaySelection: (valueDisplay) => {
+      dispatch(displaySelection(valueDisplay));
+    },
     saveFullCard: (cardFull) => {
       dispatch(saveFullCard(cardFull));
     },

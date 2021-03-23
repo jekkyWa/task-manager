@@ -2,7 +2,13 @@ import React, { useState, useRef, useEffect } from "react";
 import { connect } from "react-redux";
 import CloseIcon from "@material-ui/icons/Close";
 
-const DescriptionBlock = ({ dataToModal, email, socket, card }) => {
+const DescriptionBlock = ({
+  dataToModal,
+  email,
+  socket,
+  card,
+  valueDisplay,
+}) => {
   const [descriptionTask, setDescriptionTask] = useState("");
   const [descriptionState, setDescriptionState] = useState(false);
   const ref = useRef(null);
@@ -30,7 +36,7 @@ const DescriptionBlock = ({ dataToModal, email, socket, card }) => {
   };
 
   // Находим нужное описание
-  const description = card.cards
+  const description = valueDisplay.valueDisp.cards
     .filter((e) => e.card_item_id == dataToModal.card_id)[0]
     .card_body.filter((e) => dataToModal.id == e.id_task)[0];
 
@@ -113,9 +119,9 @@ const DescriptionBlock = ({ dataToModal, email, socket, card }) => {
 
 const mapStateToProps = ({
   loginReducer: { token },
-  getDataReducer: { card },
+  getDataReducer: { card, valueDisplay },
 }) => {
-  return { token, card };
+  return { token, card, valueDisplay };
 };
 
 export default connect(mapStateToProps, null)(DescriptionBlock);

@@ -10,6 +10,7 @@ const getDataReducer = (state, action) => {
       socket: null,
       roleProfileInBoard: {},
       dataToModal: {},
+      valueDisplay: { valueDisp: {}, stateFilter: true },
       show: false,
     };
   }
@@ -57,6 +58,11 @@ const getDataReducer = (state, action) => {
       return {
         ...state.getDataReducer,
         show: action.show,
+      };
+    case "DISPLAY_SELECTION":
+      return {
+        ...state.getDataReducer,
+        valueDisplay: action.valueDisplay,
       };
     default:
       return state.getDataReducer;

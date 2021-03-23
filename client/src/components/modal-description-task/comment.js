@@ -3,7 +3,13 @@ import CloseIcon from "@material-ui/icons/Close";
 import AttachFileIcon from "@material-ui/icons/AttachFile";
 import { connect } from "react-redux";
 
-const Comment = ({ email, socket, dataToModal, card }) => {
+const Comment = ({
+  email,
+  socket,
+  dataToModal,
+  roleProfileInBoard,
+  valueDisplay,
+}) => {
   const [commentState, setCommentState] = useState(false);
 
   const [comment, setComment] = useState("");
@@ -32,7 +38,7 @@ const Comment = ({ email, socket, dataToModal, card }) => {
     });
   };
 
-  const commentToPage = card.cards
+  const commentToPage = valueDisplay.valueDisp.cards
     .filter((e) => e.card_item_id == dataToModal.card_id)[0]
     .card_body.filter((e) => dataToModal.id == e.id_task)[0];
 
@@ -60,6 +66,26 @@ const Comment = ({ email, socket, dataToModal, card }) => {
     );
   });
 
+  const statusProfile = (status) => {
+    return status == "Senior" ? 3 : status == "Middle" ? 2 : 1;
+  };
+  if (
+    !(
+      commentToPage.role.findIndex((e) => e.role !== roleProfileInBoard.role) ==
+        -1 &&
+      commentToPage.role.findIndex(
+        (e) => statusProfile(e.level) <= statusProfile(roleProfileInBoard.level)
+      ) !== -1
+    ) ||
+    roleProfileInBoard.role == "Product manager"
+  ) {
+    return (
+      <React.Fragment>
+        <div className="modal-description-comment">Вы не можете оставлять комментарии</div>
+        <div className="comment-main-block">{label}</div>
+      </React.Fragment>
+    );
+  }
   return (
     <React.Fragment>
       <div className="modal-description-comment">
@@ -106,9 +132,9 @@ const Comment = ({ email, socket, dataToModal, card }) => {
 
 const mapStateToProps = ({
   loginReducer: { token },
-  getDataReducer: { card },
+  getDataReducer: { roleProfileInBoard, valueDisplay },
 }) => {
-  return { token, card };
+  return { token, roleProfileInBoard, valueDisplay };
 };
 
 export default connect(mapStateToProps, null)(Comment);

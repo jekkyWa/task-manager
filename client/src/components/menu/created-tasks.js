@@ -19,8 +19,8 @@ const CreatedTasks = ({ cardFull, email, modalShow, saveDataToModal }) => {
   };
 
   const label = filterItem.map((e, i) => {
-    const arrRole = e.role.map((element) => {
-      return <span>{element.role + " " + element.level}</span>;
+    const arrRole = e.role.map((element,index) => {
+      return <span key={index}>{element.role + " " + element.level}</span>;
     });
     return (
       <div
