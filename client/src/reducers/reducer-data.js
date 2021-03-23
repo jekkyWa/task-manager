@@ -12,6 +12,7 @@ const getDataReducer = (state, action) => {
       dataToModal: {},
       valueDisplay: { valueDisp: {}, stateFilter: true },
       show: false,
+      activData: [],
     };
   }
   switch (action.type) {
@@ -63,6 +64,11 @@ const getDataReducer = (state, action) => {
       return {
         ...state.getDataReducer,
         valueDisplay: action.valueDisplay,
+      };
+    case "RECENT_ACTIVITY":
+      return {
+        ...state.getDataReducer,
+        activData: action.activData,
       };
     default:
       return state.getDataReducer;

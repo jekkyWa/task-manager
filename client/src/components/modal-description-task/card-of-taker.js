@@ -25,7 +25,13 @@ const CardOfTaker = ({
     return status == "Senior" ? 3 : status == "Middle" ? 2 : 1;
   };
   if (name.nameOfTaker == email) {
-    return <div>Вы взяли задание, для отменты нажмите кнопку</div>;
+    return (
+      <div className="panel-of-control-task">
+        <h1>Задание закреплено за вами</h1>
+        <button>Выполенено</button>
+        <button>Отменить</button>
+      </div>
+    );
   } else if (name.nameOfTaker.length > 0) {
     return <div>Задание взял {name.nameOfTaker}</div>;
   } else if (

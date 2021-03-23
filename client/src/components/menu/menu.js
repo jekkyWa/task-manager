@@ -14,7 +14,7 @@ import MyTask from "./my-task";
 import CreatedTasks from "./created-tasks";
 import { displaySelection } from "../../action/action-login";
 
-const Menu = ({ onHide, card, cardFull, displaySelection }) => {
+const Menu = ({ onHide, card, cardFull, displaySelection, activData }) => {
   const [selectState, setSelectState] = useState("Menu");
   return (
     <div className="menu">
@@ -48,7 +48,12 @@ const Menu = ({ onHide, card, cardFull, displaySelection }) => {
           </div>
           <h1>О доске</h1>
         </div>
-        <div className="menu-item">
+        <div
+          className="menu-item"
+          onClick={() => {
+            console.log(activData);
+          }}
+        >
           <div>
             <PhotoSizeSelectActualOutlinedIcon />
           </div>
@@ -105,6 +110,28 @@ const Menu = ({ onHide, card, cardFull, displaySelection }) => {
           </div>
           <h1> Последние действия</h1>
         </div>
+        <p>
+          {activData.map((e, i) => {
+            return (
+              <div
+                onClick={() => {
+                  console.log(e);
+                }}
+                key={i}
+                className="activity-item"
+              >
+                <div className="icon-profile-recent-activity">
+                  <p> {e.email[0]}</p>
+                </div>
+                <div className="сommentators-info">
+                  <p>
+                    {e.message} in card "{e.cardName}" to the "{e.taskName}"
+                  </p>
+                </div>
+              </div>
+            );
+          })}
+        </p>
       </div>
       <div className={selectState == "About board" ? "" : "hidden"}>
         {/* <MenuAboutBoard />{" "} */}
@@ -119,10 +146,11 @@ const Menu = ({ onHide, card, cardFull, displaySelection }) => {
   );
 };
 
-const mapStateToProps = ({ getDataReducer: { card, cardFull } }) => {
+const mapStateToProps = ({ getDataReducer: { card, cardFull, activData } }) => {
   return {
     card,
     cardFull,
+    activData,
   };
 };
 

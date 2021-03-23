@@ -74,6 +74,13 @@ const displaySelection = (valueDisplay) => {
   };
 };
 
+const recentActivity = (activData) => {
+  return {
+    type: "RECENT_ACTIVITY",
+    activData,
+  };
+};
+
 export {
   fetchLogin,
   saveDataIdentification,
@@ -85,4 +92,5 @@ export {
   saveDataToModal,
   modalShow,
   displaySelection,
+  recentActivity
 };

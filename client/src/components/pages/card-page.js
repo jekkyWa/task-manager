@@ -7,6 +7,7 @@ import {
   saveFullCard,
   modalShow,
   displaySelection,
+  recentActivity,
 } from "../../action/action-login";
 import { connect } from "react-redux";
 import Loading from "../loading/loading";
@@ -24,8 +25,7 @@ const CardPage = ({
   saveActivityCard,
   saveFullCard,
   saveDataToModal,
-  card,
-  cardFull,
+  recentActivity,
   socket,
   roleProfileInBoard,
   email,
@@ -107,6 +107,7 @@ const CardPage = ({
           valueDisp: value.filterCards[0],
           stateFilter: true,
         });
+        recentActivity(value.original[0].recentActivity);
         setLoading(false);
       });
     }
@@ -581,6 +582,9 @@ const mapStateToProps = ({
 
 const mapDispatchToProps = (dispatch) => {
   return {
+    recentActivity: (activData) => {
+      dispatch(recentActivity(activData));
+    },
     displaySelection: (valueDisplay) => {
       dispatch(displaySelection(valueDisplay));
     },

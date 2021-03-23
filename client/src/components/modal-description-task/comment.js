@@ -1,7 +1,8 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import CloseIcon from "@material-ui/icons/Close";
 import AttachFileIcon from "@material-ui/icons/AttachFile";
 import { connect } from "react-redux";
+import { recentActivity } from "../../action/action-login";
 
 const Comment = ({
   email,
@@ -9,16 +10,26 @@ const Comment = ({
   dataToModal,
   roleProfileInBoard,
   valueDisplay,
+  recentActivity,
+  activData,
 }) => {
   const [commentState, setCommentState] = useState(false);
 
   const [comment, setComment] = useState("");
 
+  const item = valueDisplay.valueDisp.cards.filter(
+    (e) => e.card_item_id == dataToModal.card_id
+  )[0];
+
+  const commentToPage = item.card_body.filter(
+    (e) => dataToModal.id == e.id_task
+  )[0];
+
   const onHandlerComment = (e) => {
     setComment(e.target.value);
   };
 
-  const addComment = () => {
+  const addComment = async () => {
     const date = new Date();
     const value = {
       text_comment: comment,
@@ -30,25 +41,39 @@ const Comment = ({
         ("0" + date.getDate()).slice(-2),
       сommentatorsEmail: email,
     };
-    socket.emit("addComment", {
+    await socket.emit("addComment", {
       id_board: dataToModal.board_id,
       id_card: dataToModal.card_id,
       id_task: dataToModal.id,
       data: value,
+      dataActiv: {
+        message: `User ${email} added a comment: "${value.text_comment}"`,
+        email,
+        cardName: item.card_name,
+        taskName: commentToPage.title,
+      },
     });
   };
 
-  const commentToPage = valueDisplay.valueDisp.cards
-    .filter((e) => e.card_item_id == dataToModal.card_id)[0]
-    .card_body.filter((e) => dataToModal.id == e.id_task)[0];
+  useEffect(() => {
+    if (socket) {
+      socket.on("newСommentEvent", (value) => {
+        console.log(value)
+        recentActivity(value);
+      });
+      // После того как данные придут остановить дальнейшую отправку
+      return () => socket.off("newСommentEvent");
+    }
+  }, [socket, activData]);
 
   const label = commentToPage.comment.map((e, i) => {
     return (
       <div
+        onClick={() => {
+          console.log(item);
+        }}
         key={i}
-        className={
-          e.сommentatorsEmail == email ? "comment-item" : "comment-item"
-        }
+        className={"comment-item"}
       >
         <div className="icon-profile-comment">
           <p> {e.сommentatorsEmail[0]}</p>
@@ -81,7 +106,9 @@ const Comment = ({
   ) {
     return (
       <React.Fragment>
-        <div className="modal-description-comment">Вы не можете оставлять комментарии</div>
+        <div className="modal-description-comment">
+          Вы не можете оставлять комментарии
+        </div>
         <div className="comment-main-block">{label}</div>
       </React.Fragment>
     );
@@ -129,12 +156,19 @@ const Comment = ({
     </React.Fragment>
   );
 };
-
 const mapStateToProps = ({
   loginReducer: { token },
-  getDataReducer: { roleProfileInBoard, valueDisplay },
+  getDataReducer: { roleProfileInBoard, valueDisplay, activData },
 }) => {
-  return { token, roleProfileInBoard, valueDisplay };
+  return { token, roleProfileInBoard, valueDisplay, activData };
 };
 
-export default connect(mapStateToProps, null)(Comment);
+const mapDispatchToProps = (dispatch) => {
+  return {
+    recentActivity: (activData) => {
+      dispatch(recentActivity(activData));
+    },
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(Comment);

@@ -203,3 +203,17 @@
 .comment-item-another {
   display: flex;
 }
+
+.panel-of-control-task{
+  >h1{
+    font-size:20px;
+    margin-top:10px;
+  }
+  >button{
+    margin-right: 10px;
+    margin-top: 10px;
+    border-radius: 2px;
+    border:1px solid black;
+    padding: 5px;
+  }
+}

@@ -1,3 +1,5 @@
+@import "../../templates.scss";
+
 .menu {
   z-index: 99999;
   position: absolute;
@@ -5,7 +7,10 @@
   width: 300px;
   background-color: white;
   padding: 10px;
+  max-height: calc(100vh - 43px) !important;
   height: calc(100vh - 43px) !important;
+  overflow-y: auto;
+  overflow-x: hidden;
   h1 {
     color: rgb(68, 85, 111);
     font-size: 15px;
@@ -65,4 +70,17 @@
     margin-top: 10px;
     margin-bottom: 10px;
   }
+}
+
+.activity-item {
+  display: flex;
+  margin-top: 15px;
+  .icon-profile-recent-activity {
+    @extend %styleProfileIcon;
+    width: 65px !important;
+    margin-top: 5px;
+  }
+}
+.сommentators-info {
+  margin-left: 10px;
 }
