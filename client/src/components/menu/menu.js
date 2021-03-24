@@ -13,6 +13,7 @@ import ArrowBackIcon from "@material-ui/icons/ArrowBack";
 import MyTask from "./my-task";
 import CreatedTasks from "./created-tasks";
 import { displaySelection } from "../../action/action-login";
+import RecentActivity from "./recent-activity";
 
 const Menu = ({ onHide, card, cardFull, displaySelection, activData }) => {
   const [selectState, setSelectState] = useState("Menu");
@@ -110,28 +111,7 @@ const Menu = ({ onHide, card, cardFull, displaySelection, activData }) => {
           </div>
           <h1> Последние действия</h1>
         </div>
-        <p>
-          {activData.map((e, i) => {
-            return (
-              <div
-                onClick={() => {
-                  console.log(e);
-                }}
-                key={i}
-                className="activity-item"
-              >
-                <div className="icon-profile-recent-activity">
-                  <p> {e.email[0]}</p>
-                </div>
-                <div className="сommentators-info">
-                  <p>
-                    {e.message} in card "{e.cardName}" to the "{e.taskName}"
-                  </p>
-                </div>
-              </div>
-            );
-          })}
-        </p>
+        <RecentActivity />
       </div>
       <div className={selectState == "About board" ? "" : "hidden"}>
         {/* <MenuAboutBoard />{" "} */}

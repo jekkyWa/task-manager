@@ -3,6 +3,7 @@ import CloseIcon from "@material-ui/icons/Close";
 import AttachFileIcon from "@material-ui/icons/AttachFile";
 import { connect } from "react-redux";
 import { recentActivity } from "../../action/action-login";
+import dateFormat from "dateformat";
 
 const Comment = ({
   email,
@@ -30,15 +31,10 @@ const Comment = ({
   };
 
   const addComment = async () => {
-    const date = new Date();
+    let now = new Date();
     const value = {
       text_comment: comment,
-      date:
-        date.getFullYear() +
-        "-" +
-        ("0" + (date.getMonth() + 1)).slice(-2) +
-        "-" +
-        ("0" + date.getDate()).slice(-2),
+      date: dateFormat(now, "dd-mm-yyyy, hh:MM:ss "),
       сommentatorsEmail: email,
     };
     await socket.emit("addComment", {
@@ -47,10 +43,9 @@ const Comment = ({
       id_task: dataToModal.id,
       data: value,
       dataActiv: {
-        message: `User ${email} added a comment: "${value.text_comment}"`,
+        message: `User ${email} added a comment: "${value.text_comment}" in card "${item.card_name}" to the "${commentToPage.title}"`,
         email,
-        cardName: item.card_name,
-        taskName: commentToPage.title,
+        date: dateFormat(now, "dd-mm-yyyy, hh:MM:ss "),
       },
     });
   };
@@ -58,10 +53,10 @@ const Comment = ({
   useEffect(() => {
     if (socket) {
       socket.on("newСommentEvent", (value) => {
-        console.log(value)
+        console.log(value);
         recentActivity(value);
       });
-      // После того как данные придут остановить дальнейшую отправку
+      // After the data come to stop further sending
       return () => socket.off("newСommentEvent");
     }
   }, [socket, activData]);

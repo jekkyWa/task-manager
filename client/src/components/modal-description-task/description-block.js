@@ -1,21 +1,26 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { connect } from "react-redux";
 import CloseIcon from "@material-ui/icons/Close";
+import dateFormat from "dateformat";
+import { recentActivity } from "../../action/action-login";
 
 const DescriptionBlock = ({
   dataToModal,
   email,
   socket,
-  card,
   valueDisplay,
+  recentActivity,
+  activData,
 }) => {
   const [descriptionTask, setDescriptionTask] = useState("");
   const [descriptionState, setDescriptionState] = useState(false);
-  const ref = useRef(null);
 
-  const focus = () => {
-    ref.current.focus();
-  };
+  const item = valueDisplay.valueDisp.cards.filter(
+    (e) => e.card_item_id == dataToModal.card_id
+  )[0];
+  const description = item.card_body.filter(
+    (e) => dataToModal.id == e.id_task
+  )[0];
 
   // Данные описания Task
   const onChangeDescriptionTask = (e) => {
@@ -24,21 +29,35 @@ const DescriptionBlock = ({
 
   // Добавление данных на сервер
   const addDescriptionToTask = () => {
+    let now = new Date();
     socket.emit("addDescriptionToTask", {
       id_board: dataToModal.board_id,
       id_card: dataToModal.card_id,
       id_task: dataToModal.id,
       data: descriptionTask,
+      dataActiv: {
+        message: `User "${email}" updated/added a description "${descriptionTask}" to the task "${description.title}" in the card "${item.card_name}"`,
+        email,
+        date: dateFormat(now, "dd-mm-yyyy, hh:MM:ss "),
+      },
     });
     setTimeout(() => {
       setDescriptionState(false);
     }, 100);
   };
 
-  // Находим нужное описание
-  const description = valueDisplay.valueDisp.cards
-    .filter((e) => e.card_item_id == dataToModal.card_id)[0]
-    .card_body.filter((e) => dataToModal.id == e.id_task)[0];
+  useEffect(() => {
+    // Getting data if they have changed
+    if (socket) {
+      socket.on("descriptionTaskActivity", (value) => {
+        recentActivity(value);
+      });
+      // After the data come to stop further sending
+      return () => socket.off("descriptionTaskActivity");
+    }
+  }, [socket, activData]);
+
+  // We find the desired description
 
   if (description.description && dataToModal.name_add == email) {
     return (
@@ -52,17 +71,17 @@ const DescriptionBlock = ({
               setDescriptionState(true);
             }}
           >
-            <p onClick={focus}>{description.description}</p>
+            <p>{description.description}</p>
           </div>
           <div
             className={descriptionState ? "modal-description-input" : "hidden"}
           >
-            <textarea ref={ref} onChange={onChangeDescriptionTask} />
+            <textarea onChange={onChangeDescriptionTask} />
             <button
               className="modal-description-btn-save"
               onClick={addDescriptionToTask}
             >
-              Сохранить
+              Save
             </button>
             <CloseIcon
               className="modal-description-close-icon"
@@ -87,17 +106,17 @@ const DescriptionBlock = ({
             setDescriptionState(true);
           }}
         >
-          <p onClick={focus}>Добавить более подробное описание...</p>
+          <p>Add a more detailed description ...</p>
         </div>
         <div
           className={descriptionState ? "modal-description-input" : "hidden"}
         >
-          <textarea ref={ref} onChange={onChangeDescriptionTask} />
+          <textarea onChange={onChangeDescriptionTask} />
           <button
             className="modal-description-btn-save"
             onClick={addDescriptionToTask}
           >
-            Сохранить
+            Save
           </button>
           <CloseIcon
             className="modal-description-close-icon"
@@ -111,7 +130,7 @@ const DescriptionBlock = ({
   } else {
     return (
       <div>
-        <p>Создатель задания еще не добавил описание</p>
+        <p>The creator of the task has not added any description.</p>
       </div>
     );
   }
@@ -119,9 +138,17 @@ const DescriptionBlock = ({
 
 const mapStateToProps = ({
   loginReducer: { token },
-  getDataReducer: { card, valueDisplay },
+  getDataReducer: { card, valueDisplay, activData },
 }) => {
-  return { token, card, valueDisplay };
+  return { token, card, valueDisplay, activData };
 };
 
-export default connect(mapStateToProps, null)(DescriptionBlock);
+const mapDispatchToProps = (dispatch) => {
+  return {
+    recentActivity: (activData) => {
+      dispatch(recentActivity(activData));
+    },
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(DescriptionBlock);
