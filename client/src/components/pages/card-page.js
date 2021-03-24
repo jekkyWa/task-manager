@@ -20,6 +20,7 @@ import MenuIcon from "@material-ui/icons/Menu";
 import ModalDescription from "../modal-description-task/modal-description";
 import Menu from "../menu/menu";
 import { availCheck } from "../hooks/availability-check.hook";
+import dateFormat from "dateformat";
 
 const CardPage = ({
   saveActivityCard,
@@ -34,6 +35,7 @@ const CardPage = ({
   modalShow,
   valueDisplay,
   displaySelection,
+  activData,
 }) => {
   let { name, id } = useParams();
   const [loading, setLoading] = useState(true);
@@ -69,21 +71,29 @@ const CardPage = ({
     // }
   };
 
-  // Обработка данных формы для добавления новой карточки
-
+  // Processing the form data for adding a new card
   const handlerInputAddCard = (e) => {
     setInputAddCard(e.target.value);
   };
 
-  // Добавление новой карточки с помощью socket
+  // Adding a new card with Socket
   const addCard = async () => {
+    let now = new Date();
     const id = shortid.generate();
     const item = {
       card_name: inputAddCard,
       card_body: [],
       card_item_id: id,
     };
-    socket.emit("addCard", { data: item, id: name });
+    socket.emit("addCard", {
+      data: item,
+      id: name,
+      dataActiv: {
+        message: `User ${email} added a card "${inputAddCard}"`,
+        email,
+        date: dateFormat(now, "dd-mm-yyyy, hh:MM:ss "),
+      },
+    });
   };
 
   // useEffect(() => {
@@ -91,8 +101,7 @@ const CardPage = ({
   //   return () => document.removeEventListener("mousedown", handleClickOutside);
   // });
 
-  // Получение данных при первой загрузке страницы
-
+  // Getting data when the page is first loaded
   useEffect(() => {
     if (socket) {
       socket.emit("joinCard", {
@@ -113,7 +122,7 @@ const CardPage = ({
     }
   }, [name, socket]);
 
-  // Добавлнение нового task через socket
+  // Add new Task through socket
   useEffect(() => {
     if (socket) {
       socket.on("newTask", (value) => {
@@ -145,13 +154,12 @@ const CardPage = ({
           });
         }
       });
-      // После того как данные придут остановить дальнейшую отправку
+      // After the data come to stop further sending
       return () => socket.off("newTask");
     }
   }, [socket, valueDisplay]);
 
-  // Получение новой карточки через socket
-
+  // Getting a new card via Socket
   useEffect(() => {
     if (socket) {
       socket.on("getCardItem", (value) => {
@@ -169,6 +177,28 @@ const CardPage = ({
     }
   }, [socket, valueDisplay]);
 
+  // Obtaining new task-related activities
+  useEffect(() => {
+    if (socket) {
+      socket.on("newTaskActivity", (value) => {
+        recentActivity(value);
+      });
+      // After the data come to stop further sending
+      return () => socket.off("newTaskActivity");
+    }
+  }, [socket, activData]);
+
+  // Receiving new activities related to the addition of a new card
+  useEffect(() => {
+    if (socket) {
+      socket.on("getCardActivity", (value) => {
+        recentActivity(value);
+      });
+      // After the data come to stop further sending
+      return () => socket.off("getCardActivity");
+    }
+  }, [socket, activData]);
+
   if (loading) {
     return (
       <div className="loading">
@@ -180,11 +210,13 @@ const CardPage = ({
   const { name_Board, color, cards } = valueDisplay.valueDisp;
 
   // Вынести в отдельный файл
-
   const label = cards.map((e) => {
     const card_body_id = shortid.generate();
-    // Отправка данных на сервер
+
+    // Sending data to the server
     const addTask = async (value) => {
+      let now = new Date();
+
       let active = {
         card_item_id: e.card_item_id,
         card_id: name,
@@ -200,12 +232,15 @@ const CardPage = ({
       };
       socket.emit("addTask", {
         data: active,
-        roleBack: roleProfileInBoard.role,
-        levelBack: roleProfileInBoard.level,
+        dataActiv: {
+          message: `User ${email} added a task "${value.title}" in a card "${e.card_name}"`,
+          email,
+          date: dateFormat(now, "dd-mm-yyyy, hh:MM:ss "),
+        },
       });
     };
 
-    // Отображение формы с кнопками для создания Task
+    // Displays the shape with buttons to create Task
     const addCardBlock = () => {
       setArrInput([...arrInput, e.card_item_id]);
       let arr = [...arrInput, e.card_item_id];
@@ -223,7 +258,7 @@ const CardPage = ({
       ]);
     };
 
-    // Реализация close btn
+    // Realization close btn
     const closeBtn = () => {
       setHandlerTitleCard([
         ...handlerTitleCard.slice(
@@ -244,8 +279,7 @@ const CardPage = ({
       ]);
     };
 
-    // !Отображение блока для добавления ролей.
-
+    // !Displays the block to add roles.
     const visiabilityBlock = () => {
       setVisiableBlock([
         ...visiableBlock.slice(0, visiableBlock.indexOf(e.card_item_id)),
@@ -253,7 +287,7 @@ const CardPage = ({
       ]);
     };
 
-    // Обработка данных для новой карточки
+    // Data Processing for New Card
     const onChangeTitleTaskHandler = (event) => {
       let index = arrInput.findIndex((element) => element == event.target.name);
       const newItem = {
@@ -267,20 +301,17 @@ const CardPage = ({
       ]);
     };
 
-    // Обработка данных формы, блока для добавления ролей и уровней
-
+    // Processing form data, block for adding roles and levels
     const inputRoleHandler = (e) => {
       setRoleHandler(e.target.value);
     };
 
-    // Обработка данных ролей и уровней
-
+    // Processing role data and levels
     const roleAndLvlHandler = (e) => {
       setDataRole({ ...dataRole, [e.target.name]: e.target.value });
     };
 
-    // Добавление роли в форму
-
+    // Adding a role in the form
     const addRole = () => {
       setRoleHandler(
         (prev) =>
@@ -290,8 +321,7 @@ const CardPage = ({
       );
     };
 
-    // Сохранение всех добавленных ролей для задачи
-
+    // Saving all added roles for the task
     const addRolesToSend = () => {
       const arrRole = roleHandler.split(", ");
       const newItem = arrRole.map((e, i) => {
@@ -305,8 +335,7 @@ const CardPage = ({
       visiabilityBlock();
     };
 
-    // Отрисовка новых карточек
-
+    // Recruiling new cards
     const arrTask = e.card_body.map((element, i) => {
       const label = element.role.map((e, i) => {
         return <span key={i}>{e.role + e.level}</span>;
@@ -564,6 +593,7 @@ const mapStateToProps = ({
     dataToModal,
     show,
     valueDisplay,
+    activData,
   },
   loginReducer: { token },
 }) => {
@@ -577,6 +607,7 @@ const mapStateToProps = ({
     show,
     valueDisplay,
     cardFull,
+    activData,
   };
 };
 
