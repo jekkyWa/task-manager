@@ -70,8 +70,7 @@ io.on("connection", (socket) => {
     console.log("A user left chatroom: " + id);
   });
 
-  // Добавление комментария
-
+  // Adding a comment
   socket.on(
     "addComment",
     async ({ id_board, id_card, id_task, data, dataActiv }) => {
@@ -114,44 +113,50 @@ io.on("connection", (socket) => {
     }
   );
 
-  // Добавление описания
+  // Additional opportunities to take a task
+  socket.on(
+    "addUserToDo",
+    async ({ id_board, id_card, id_task, data, dataActiv }) => {
+      // Поиск нужного элемента в БД
+      const value = await Cards.find({ card_id: id_board });
+      // Ищем нужную карточку
+      const filterCardItem = value[0].cards.filter(
+        (e) => e.card_item_id == id_card
+      )[0];
+      // Ищем нужный Task
+      const filterItem = filterCardItem.card_body.filter(
+        (e) => e.id_task == id_task
+      );
+      // Обновляем элемент
+      const newItem = { ...filterItem[0], nameOfTaker: data };
+      // Находим нужный индекс task
+      const index = filterCardItem.card_body.findIndex(
+        (e) => e.id_task == id_task
+      );
+      // Обновляем card_body
+      filterCardItem.card_body[index] = newItem;
+      // Находим index карточки
+      const indexCard = value[0].cards.findIndex(
+        (e) => e.card_item_id == id_card
+      );
+      // Конечное обновление элемента БД
+      value[0].cards[indexCard] = filterCardItem;
+      // Оригинальный элемент без изменений
+      const originalValue = await Cards.find({ card_id: id_board });
 
-  socket.on("addUserToDo", async ({ id_board, id_card, id_task, data }) => {
-    // Поиск нужного элемента в БД
-    const value = await Cards.find({ card_id: id_board });
-    // Ищем нужную карточку
-    const filterCardItem = value[0].cards.filter(
-      (e) => e.card_item_id == id_card
-    )[0];
-    // Ищем нужный Task
-    const filterItem = filterCardItem.card_body.filter(
-      (e) => e.id_task == id_task
-    );
-    // Обновляем элемент
-    const newItem = { ...filterItem[0], nameOfTaker: data };
-    // Находим нужный индекс task
-    const index = filterCardItem.card_body.findIndex(
-      (e) => e.id_task == id_task
-    );
-    // Обновляем card_body
-    filterCardItem.card_body[index] = newItem;
-    // Находим index карточки
-    const indexCard = value[0].cards.findIndex(
-      (e) => e.card_item_id == id_card
-    );
-    // Конечное обновление элемента БД
-    value[0].cards[indexCard] = filterCardItem;
-    // Оригинальный элемент без изменений
-    const originalValue = await Cards.find({ card_id: id_board });
+      value[0].recentActivity = [...value[0].recentActivity, dataActiv];
 
-    io.emit("newUserToDo", value[0]);
+      io.emit("newUserToDo", value[0]);
+      io.emit("taskTake", value[0].recentActivity);
 
-    await Cards.updateOne(originalValue[0], value[0]);
-  });
+      await Cards.updateOne(originalValue[0], value[0]);
+    }
+  );
 
+  // Adding a description
   socket.on(
     "addDescriptionToTask",
-    async ({ id_board, id_card, id_task, data }) => {
+    async ({ id_board, id_card, id_task, data, dataActiv }) => {
       // Поиск нужного элемента в БД
       const value = await Cards.find({ card_id: id_board });
       // Ищем нужную карточку
@@ -179,7 +184,10 @@ io.on("connection", (socket) => {
       // Оригинальный элемент без изменений
       const originalValue = await Cards.find({ card_id: id_board });
 
+      value[0].recentActivity = [...value[0].recentActivity, dataActiv];
+
       io.emit("newDescriptionTask", value[0]);
+      io.emit("descriptionTaskActivity", value[0].recentActivity);
 
       await Cards.updateOne(originalValue[0], value[0]);
     }
@@ -222,6 +230,7 @@ io.on("connection", (socket) => {
       cards: [...value[0].cards, data],
     });
   });
+  
   // Получение карточек
   socket.on("joinCard", async ({ id, roleBack, levelBack }) => {
     console.log("Join_CARD", id);
