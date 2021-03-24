@@ -193,8 +193,8 @@ io.on("connection", (socket) => {
     }
   );
 
-  // Добавление новой карточки
-  socket.on("addTask", async ({ data }) => {
+  // Adding a new task
+  socket.on("addTask", async ({ data, dataActiv }) => {
     const { card_item_id, card_id, task } = data;
 
     const value = await Cards.find({ card_id });
@@ -207,36 +207,47 @@ io.on("connection", (socket) => {
       ...filterItem[0],
       card_body: [...filterItem[0].card_body, task],
     };
+    console.log(newItem);
+
+    value[0].cards = value[0].cards.map((e) => {
+      return e.card_item_id === newItem.card_item_id ? newItem : e;
+    });
+
+    const originalValue = await Cards.find({ card_id });
+
+    value[0].recentActivity = [...value[0].recentActivity, dataActiv];
 
     io.in(card_id).emit("newTask", { ...newItem });
+    io.emit("newTaskActivity", value[0].recentActivity);
 
-    await Cards.updateOne(value[0], {
-      ...value,
-      cards: value[0].cards.map((e) => {
-        return e.card_item_id === newItem.card_item_id ? newItem : e;
-      }),
-    });
+    await Cards.updateOne(originalValue[0], value[0]);
   });
 
-  socket.on("addCard", async ({ data, id }) => {
+  // Add a new card
+  socket.on("addCard", async ({ data, id, dataActiv }) => {
     const value = await Cards.find({ card_id: id });
 
+    value[0].cards = [...value[0].cards, data];
+
+    value[0].recentActivity = [...value[0].recentActivity, dataActiv];
+
+    const originalValue = await Cards.find({ card_id: id });
+
     io.in(id).emit("getCardItem", {
-      cards: [...value[0].cards, data],
+      cards: value[0].cards,
     });
 
-    await Cards.updateOne(value[0], {
-      ...value,
-      cards: [...value[0].cards, data],
-    });
+    io.in(id).emit("getCardActivity", value[0].recentActivity);
+
+    await Cards.updateOne(originalValue[0], value[0]);
   });
-  
-  // Получение карточек
+
+  // Getting cards
   socket.on("joinCard", async ({ id, roleBack, levelBack }) => {
     console.log("Join_CARD", id);
     socket.join(id);
     const value = await Cards.find({ card_id: id });
-    // Получение данных по роли
+    // Obtaining data
     const filterTaskRole = value[0].cards.map((e) => {
       return {
         ...e,
@@ -265,6 +276,7 @@ io.on("connection", (socket) => {
     socket.emit("getCard", { filterCards: value, original: originalValue });
   });
 
+  // Adding a new board
   socket.on("board", async ({ dataForSend, id }) => {
     const { name_Board, color, card_id, cards, board_id } = dataForSend;
     const board = new Cards({
