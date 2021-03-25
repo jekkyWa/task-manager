@@ -70,6 +70,44 @@ io.on("connection", (socket) => {
     console.log("A user left chatroom: " + id);
   });
 
+  socket.on(
+    "completedTask",
+    async ({ id_board, id_card, id_task, complet }) => {
+      const value = await Cards.find({ card_id: id_board });
+      // Ищем нужную карточку
+      const filterCardItem = value[0].cards.filter(
+        (e) => e.card_item_id == id_card
+      )[0];
+      // Ищем нужный Task
+      const filterItem = filterCardItem.card_body.filter(
+        (e) => e.id_task == id_task
+      );
+      // Обновляем элемент
+      const newItem = {
+        ...filterItem[0],
+        state: complet,
+      };
+      // Находим нужный индекс task
+      const index = filterCardItem.card_body.findIndex(
+        (e) => e.id_task == id_task
+      );
+      // Обновляем card_body
+      filterCardItem.card_body[index] = newItem;
+      // Находим index карточки
+      const indexCard = value[0].cards.findIndex(
+        (e) => e.card_item_id == id_card
+      );
+      // Конечное обновление элемента БД
+      value[0].cards[indexCard] = filterCardItem;
+      // Оригинальный элемент без изменений
+      const originalValue = await Cards.find({ card_id: id_board });
+
+      io.emit("updateStateComplit", value[0]);
+
+      await Cards.updateOne(originalValue[0], value[0]);
+    }
+  );
+
   // Adding a comment
   socket.on(
     "addComment",
@@ -224,22 +262,46 @@ io.on("connection", (socket) => {
   });
 
   // Add a new card
-  socket.on("addCard", async ({ data, id, dataActiv }) => {
+  socket.on("addCard", async ({ data, id, dataActiv, roleBack, levelBack }) => {
     const value = await Cards.find({ card_id: id });
-
     value[0].cards = [...value[0].cards, data];
+    // Obtaining data
+    const filterTaskRole = value[0].cards.map((e) => {
+      return {
+        ...e,
+        card_body: e.card_body.filter((elem) => {
+          const statusProfile = (status) => {
+            return status == "Senior" ? 3 : status == "Middle" ? 2 : 1;
+          };
+          return (
+            (elem.role.findIndex((element) => element.role == roleBack) !==
+              -1 &&
+              elem.role.findIndex(
+                (element) =>
+                  statusProfile(element.level) <= statusProfile(levelBack)
+              ) !== -1) ||
+            roleBack == "Product manager"
+          );
+        }),
+      };
+    });
 
+    value[0].cards = filterTaskRole;
     value[0].recentActivity = [...value[0].recentActivity, dataActiv];
+
+    const notFilter = await Cards.find({ card_id: id });
+    notFilter[0].cards = [...notFilter[0].cards, data];
+    notFilter[0].recentActivity = [...notFilter[0].recentActivity, dataActiv];
 
     const originalValue = await Cards.find({ card_id: id });
 
     io.in(id).emit("getCardItem", {
-      cards: value[0].cards,
+      filterCards: value[0],
+      original: notFilter[0],
     });
-
     io.in(id).emit("getCardActivity", value[0].recentActivity);
 
-    await Cards.updateOne(originalValue[0], value[0]);
+    await Cards.updateOne(originalValue[0], notFilter[0]);
   });
 
   // Getting cards
