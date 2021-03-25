@@ -14,6 +14,8 @@ import MyTask from "./my-task";
 import CreatedTasks from "./created-tasks";
 import { displaySelection } from "../../action/action-login";
 import RecentActivity from "./recent-activity";
+import DoneOutlineIcon from "@material-ui/icons/DoneOutline";
+import CompletedTasks from "./completed-tasks";
 
 const Menu = ({ onHide, card, cardFull, displaySelection, activData }) => {
   const [selectState, setSelectState] = useState("Menu");
@@ -52,13 +54,13 @@ const Menu = ({ onHide, card, cardFull, displaySelection, activData }) => {
         <div
           className="menu-item"
           onClick={() => {
-            console.log(activData);
+            setSelectState("Completed tasks");
           }}
         >
           <div>
-            <PhotoSizeSelectActualOutlinedIcon />
+            <DoneOutlineIcon />
           </div>
-          <h1> Сменить фон</h1>
+          <h1> Выполненные задания</h1>
         </div>
         <div
           className="menu-item"
@@ -69,7 +71,7 @@ const Menu = ({ onHide, card, cardFull, displaySelection, activData }) => {
           <div>
             <AssignmentLateOutlinedIcon />
           </div>
-          <h1> Показать только доступные задания(Готово)</h1>
+          <h1> Show only accessible tasks</h1>
         </div>
         <div
           className="menu-item"
@@ -80,7 +82,7 @@ const Menu = ({ onHide, card, cardFull, displaySelection, activData }) => {
           <div>
             <AssignmentOutlinedIcon />
           </div>
-          <h1> Показать все задания(Готово)</h1>
+          <h1>Show all tasks</h1>
         </div>
         <div
           className="menu-item"
@@ -91,7 +93,7 @@ const Menu = ({ onHide, card, cardFull, displaySelection, activData }) => {
           <div>
             <AssignmentTurnedInOutlinedIcon />
           </div>
-          <h1> Созданные задания (Готово)</h1>
+          <h1> Created tasks </h1>
         </div>
         <div
           className="menu-item"
@@ -102,19 +104,22 @@ const Menu = ({ onHide, card, cardFull, displaySelection, activData }) => {
           <div>
             <AssignmentIndOutlinedIcon />
           </div>
-          <h1>Мои задания (Готово)</h1>
+          <h1>My tasks</h1>
         </div>
         <hr />
         <div className="menu-recent-activity">
           <div>
             <FormatListBulletedIcon />
           </div>
-          <h1> Последние действия</h1>
+          <h1> Recent Actions</h1>
         </div>
         <RecentActivity />
       </div>
       <div className={selectState == "About board" ? "" : "hidden"}>
         {/* <MenuAboutBoard />{" "} */}
+      </div>
+      <div className={selectState == "Completed tasks" ? "" : "hidden"}>
+        <CompletedTasks />
       </div>
       <div className={selectState == "My task" ? "" : "hidden"}>
         <MyTask />

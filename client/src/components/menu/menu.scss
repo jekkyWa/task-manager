@@ -85,3 +85,21 @@
   margin-left: 10px;
   width: 480px;
 }
+
+.completed-tasks {
+  .completed-tasks-list {
+    padding-left: 0px;
+    > li {
+      list-style-type: none;
+      margin-top: 10px;
+      font-size: 16px;
+      font-weight: 400;
+      padding: 5px;
+      border-radius: 2px;
+      cursor: pointer;
+      &:hover{
+        background-color: rgb(233, 233, 233);
+      }
+    }
+  }
+}

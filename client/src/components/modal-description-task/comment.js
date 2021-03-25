@@ -11,6 +11,7 @@ const Comment = ({
   dataToModal,
   roleProfileInBoard,
   valueDisplay,
+  cardFull,
   recentActivity,
   activData,
 }) => {
@@ -18,7 +19,7 @@ const Comment = ({
 
   const [comment, setComment] = useState("");
 
-  const item = valueDisplay.valueDisp.cards.filter(
+  const item = cardFull.cards.filter(
     (e) => e.card_item_id == dataToModal.card_id
   )[0];
 
@@ -53,7 +54,6 @@ const Comment = ({
   useEffect(() => {
     if (socket) {
       socket.on("newСommentEvent", (value) => {
-        console.log(value);
         recentActivity(value);
       });
       // After the data come to stop further sending
@@ -122,18 +122,18 @@ const Comment = ({
             setCommentState(true);
           }}
         >
-          <p>Напишите комментарий...</p>
+          <p>Write a comment ...</p>
         </div>
         <div
           className={!commentState ? "hidden" : "modal-decription-active-add"}
         >
           <input
-            placeholder="Напишите комментарий..."
+            placeholder="Write a comment ..."
             onChange={onHandlerComment}
           />
           <div className="modal-decription-active-add-btn">
             <div>
-              <button onClick={addComment}>Отправить</button>
+              <button onClick={addComment}>Send</button>
               <CloseIcon
                 className="modal-description-close-icon"
                 onClick={() => {
@@ -153,9 +153,9 @@ const Comment = ({
 };
 const mapStateToProps = ({
   loginReducer: { token },
-  getDataReducer: { roleProfileInBoard, valueDisplay, activData },
+  getDataReducer: { roleProfileInBoard, valueDisplay, activData, cardFull },
 }) => {
-  return { token, roleProfileInBoard, valueDisplay, activData };
+  return { token, roleProfileInBoard, valueDisplay, activData, cardFull };
 };
 
 const mapDispatchToProps = (dispatch) => {

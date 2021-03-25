@@ -11,23 +11,24 @@ const DescriptionBlock = ({
   valueDisplay,
   recentActivity,
   activData,
+  cardFull
 }) => {
   const [descriptionTask, setDescriptionTask] = useState("");
   const [descriptionState, setDescriptionState] = useState(false);
 
-  const item = valueDisplay.valueDisp.cards.filter(
+  const item = cardFull.cards.filter(
     (e) => e.card_item_id == dataToModal.card_id
   )[0];
   const description = item.card_body.filter(
     (e) => dataToModal.id == e.id_task
   )[0];
 
-  // Данные описания Task
+  // Task description data
   const onChangeDescriptionTask = (e) => {
     setDescriptionTask(e.target.value);
   };
 
-  // Добавление данных на сервер
+  // Adding data to the server
   const addDescriptionToTask = () => {
     let now = new Date();
     socket.emit("addDescriptionToTask", {
@@ -138,9 +139,9 @@ const DescriptionBlock = ({
 
 const mapStateToProps = ({
   loginReducer: { token },
-  getDataReducer: { card, valueDisplay, activData },
+  getDataReducer: { card, valueDisplay, activData, cardFull },
 }) => {
-  return { token, card, valueDisplay, activData };
+  return { token, card, valueDisplay, activData, cardFull };
 };
 
 const mapDispatchToProps = (dispatch) => {

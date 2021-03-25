@@ -47,15 +47,15 @@ const ModalAddBoard = ({
           card_item_id: card_item_id_one,
         },
         {
-          card_name: "During",
+          card_name: "Small tasks",
           card_body: [],
           card_item_id: card_item_id_two,
         },
         {
-          card_name: "Done",
+          card_name: "Important tasks",
           card_body: [],
           card_item_id: card_item_id_three,
-        },
+        }
       ],
     };
     socket.emit("board", { dataForSend, id: id.slice(id.length - 9) });

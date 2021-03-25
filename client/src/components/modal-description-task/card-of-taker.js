@@ -34,6 +34,15 @@ const CardOfTaker = ({
     });
   };
 
+  const completedTask = (boolState) => {
+    socket.emit("completedTask", {
+      id_board: dataToModal.board_id,
+      id_card: dataToModal.card_id,
+      id_task: dataToModal.id,
+      complet: boolState,
+    });
+  };
+
   // Last Activity: Took the task
 
   useEffect(() => {
@@ -49,12 +58,36 @@ const CardOfTaker = ({
   const statusProfile = (status) => {
     return status == "Senior" ? 3 : status == "Middle" ? 2 : 1;
   };
-  if (name.nameOfTaker == email) {
+  if (name.state && name.nameOfTaker == email) {
+    return (
+      <div className="panel-of-control-task">
+        <h1>Задание завершено</h1>
+      </div>
+    );
+  } else if (name.state && name.nameOfTaker !== email) {
+    return (
+      <div className="panel-of-control-task">
+        <h1>Задание завершил {name.nameOfTaker}</h1>
+      </div>
+    );
+  } else if (name.nameOfTaker == email) {
     return (
       <div className="panel-of-control-task">
         <h1>Задание закреплено за вами</h1>
-        <button>Выполенено</button>
-        <button>Отменить</button>
+        <button
+          onClick={() => {
+            completedTask(true);
+          }}
+        >
+          Выполенено
+        </button>
+        <button
+          onClick={() => {
+            completedTask(false);
+          }}
+        >
+          Отменить
+        </button>
       </div>
     );
   } else if (name.nameOfTaker.length > 0) {

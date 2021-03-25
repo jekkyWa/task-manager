@@ -2,7 +2,7 @@ import React from "react";
 import { connect } from "react-redux";
 import { modalShow, saveDataToModal } from "../../action/action-login";
 
-import { Link, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 
 const MyTask = ({ cardFull, email, modalShow, saveDataToModal }) => {
   let { name } = useParams();

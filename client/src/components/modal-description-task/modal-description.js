@@ -16,16 +16,17 @@ import DescriptionBlock from "./description-block";
 import { availCheck } from "../hooks/availability-check.hook";
 import CardOfTaker from "./card-of-taker";
 import Comment from "./comment";
+import SettingsIcon from "@material-ui/icons/Settings";
 
 // -----------------------------------------------------
 
 const ModalDescription = ({
   show,
-  cardFull,
   dataToModal,
   email,
   socket,
   card,
+  cardFull,
   saveActivityCard,
   roleProfileInBoard,
   saveFullCard,
@@ -33,7 +34,7 @@ const ModalDescription = ({
   displaySelection,
   modalShow,
 }) => {
-  // добавление описания к заданию
+  // Adding a description of the task
   useEffect(() => {
     if (socket) {
       socket.on("newDescriptionTask", (value) => {
@@ -49,9 +50,9 @@ const ModalDescription = ({
           const newItem = {
             ...valueDisplay.valueDisp,
             cards: [
-              ...valueDisplay.valueDisp.cards.slice(0, index),
+              ...cardFull.cards.slice(0, index),
               item,
-              ...valueDisplay.valueDisp.cards.slice(index + 1),
+              ...cardFull.cards.slice(index + 1),
             ],
           };
           saveFullCard(newItem);
@@ -74,7 +75,7 @@ const ModalDescription = ({
     }
   }, [socket, valueDisplay, dataToModal]);
 
-  // закрпеление задание за пользователем
+  // Propulation Task for the user
   useEffect(() => {
     if (socket) {
       socket.on("newUserToDo", (value) => {
@@ -90,9 +91,9 @@ const ModalDescription = ({
           const newItem = {
             ...valueDisplay.valueDisp,
             cards: [
-              ...valueDisplay.valueDisp.cards.slice(0, index),
+              ...cardFull.cards.slice(0, index),
               item,
-              ...valueDisplay.valueDisp.cards.slice(index + 1),
+              ...cardFull.cards.slice(index + 1),
             ],
           };
           saveFullCard(newItem);
@@ -115,7 +116,7 @@ const ModalDescription = ({
     }
   }, [socket, valueDisplay, dataToModal]);
 
-  // Добавеление комментария
+  // Additional comment
   useEffect(() => {
     if (socket) {
       socket.on("newComment", (value) => {
@@ -131,9 +132,9 @@ const ModalDescription = ({
           const newItem = {
             ...valueDisplay.valueDisp,
             cards: [
-              ...valueDisplay.valueDisp.cards.slice(0, index),
+              ...cardFull.cards.slice(0, index),
               item,
-              ...valueDisplay.valueDisp.cards.slice(index + 1),
+              ...cardFull.cards.slice(index + 1),
             ],
           };
           saveFullCard(newItem);
@@ -156,6 +157,49 @@ const ModalDescription = ({
     }
   }, [socket, valueDisplay, dataToModal]);
 
+  // Update status in the database If the tasks are executed
+  useEffect(() => {
+    if (socket) {
+      socket.on("updateStateComplit", (value) => {
+        if (dataToModal) {
+          console.log(dataToModal);
+          const item = value.cards.filter(
+            (e) => e.card_item_id == dataToModal.card_id
+          )[0];
+          console.log(item);
+          saveActivityCard({ ...availCheck(item, card, roleProfileInBoard) });
+          const index = valueDisplay.valueDisp.cards.findIndex(
+            (e) => e.card_item_id == item.card_item_id
+          );
+
+          const newItem = {
+            ...valueDisplay.valueDisp,
+            cards: [
+              ...cardFull.cards.slice(0, index),
+              item,
+              ...cardFull.cards.slice(index + 1),
+            ],
+          };
+          saveFullCard(newItem);
+          if (!valueDisplay.stateFilter) {
+            displaySelection({ valueDisp: newItem, stateFilter: false });
+          } else {
+            displaySelection({
+              valueDisp: availCheck(
+                item,
+                valueDisplay.valueDisp,
+                roleProfileInBoard
+              ),
+              stateFilter: true,
+            });
+          }
+        }
+      });
+      // After the data come to stop further sending
+      return () => socket.off("updateStateComplit");
+    }
+  }, [socket, valueDisplay, dataToModal]);
+
   return (
     <Modal
       dialogClassName="modal-50w"
@@ -174,30 +218,27 @@ const ModalDescription = ({
               <h2>{dataToModal.name}</h2>
             </div>
           </div>
-          <p>В колонке {dataToModal.column}</p>
+          <p>In a collumn "{dataToModal.column}"</p>
           <div className="modal-description-add-description">
             <div>
               <ReorderIcon />
             </div>
             <div>
-              <h2>Описание</h2>
+              <h2>Description</h2>
             </div>
           </div>
-          {/* Отображение описания по ролям */}
           <DescriptionBlock
             dataToModal={dataToModal}
             email={email}
             socket={socket}
           />
-          {/* Отображение состояния задания */}
-
           <div>
             <div className="take-task">
               <div>
                 <CheckBoxOutlinedIcon />
               </div>
               <div>
-                <h2>Взять задание</h2>
+                <h2>Take a task</h2>
               </div>
             </div>
             <CardOfTaker
@@ -206,16 +247,30 @@ const ModalDescription = ({
               socket={socket}
             />
           </div>
+          <div className="modal-description-add-description">
+            <div>
+              <SettingsIcon />
+            </div>
+            <div>
+              <h2>Настройки</h2>
+            </div>
+          </div>
+          <div>
+            <button>Переместить</button>
+            <button>Добавить чек-лист</button>
+            <button>Изменить роли</button>
+          </div>
+
           <div className="modal-description-actions-block">
             <div className="modal-description-actions">
               <div>
                 <FormatListBulletedIcon />
               </div>
               <div>
-                <h2>Дейстия</h2>
+                <h2>Comments</h2>
               </div>
             </div>
-            <button>Показать подробнее</button>
+            <button>Показать детали</button>
           </div>
           <Comment dataToModal={dataToModal} email={email} socket={socket} />
           <div></div>
