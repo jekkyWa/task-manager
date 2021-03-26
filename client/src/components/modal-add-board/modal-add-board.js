@@ -42,17 +42,17 @@ const ModalAddBoard = ({
       board_id: id.slice(id.length - 9),
       cards: [
         {
-          card_name: "Need to do",
+          card_name: "Must be done first",
           card_body: [],
           card_item_id: card_item_id_one,
         },
         {
-          card_name: "Small tasks",
+          card_name: "Need to do",
           card_body: [],
           card_item_id: card_item_id_two,
         },
         {
-          card_name: "Important tasks",
+          card_name: "During",
           card_body: [],
           card_item_id: card_item_id_three,
         }

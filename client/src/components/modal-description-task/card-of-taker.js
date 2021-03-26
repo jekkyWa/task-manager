@@ -34,6 +34,7 @@ const CardOfTaker = ({
     });
   };
 
+  // Task is ready
   const completedTask = (boolState) => {
     socket.emit("completedTask", {
       id_board: dataToModal.board_id,
@@ -43,8 +44,16 @@ const CardOfTaker = ({
     });
   };
 
-  // Last Activity: Took the task
+  // Reset task
+  const refuseAssignment = () => {
+    socket.emit("refuseAssignment", {
+      id_board: dataToModal.board_id,
+      id_card: dataToModal.card_id,
+      id_task: dataToModal.id,
+    });
+  };
 
+  // Last Activity: Took the task
   useEffect(() => {
     if (socket) {
       socket.on("taskTake", (value) => {
@@ -61,37 +70,37 @@ const CardOfTaker = ({
   if (name.state && name.nameOfTaker == email) {
     return (
       <div className="panel-of-control-task">
-        <h1>Задание завершено</h1>
+        <h1>You have completed the task</h1>
       </div>
     );
   } else if (name.state && name.nameOfTaker !== email) {
     return (
       <div className="panel-of-control-task">
-        <h1>Задание завершил {name.nameOfTaker}</h1>
+        <h1>The task is completed by the user: {name.nameOfTaker}</h1>
       </div>
     );
   } else if (name.nameOfTaker == email) {
     return (
       <div className="panel-of-control-task">
-        <h1>Задание закреплено за вами</h1>
+        <h1>The task is assigned to you</h1>
         <button
           onClick={() => {
             completedTask(true);
           }}
         >
-          Выполенено
+          Complete the task
         </button>
         <button
           onClick={() => {
-            completedTask(false);
+            refuseAssignment();
           }}
         >
-          Отменить
+          Refuse to task
         </button>
       </div>
     );
   } else if (name.nameOfTaker.length > 0) {
-    return <div>Задание взял {name.nameOfTaker}</div>;
+    return <div>The task is cried with the user: {name.nameOfTaker}</div>;
   } else if (
     !(
       name.role.findIndex((e) => e.role !== roleProfileInBoard.role) == -1 &&
@@ -101,11 +110,11 @@ const CardOfTaker = ({
     ) ||
     roleProfileInBoard.role == "Product manager"
   ) {
-    return <div>Вы не можете взять это задание</div>;
+    return <div>You do not have the right to take this task</div>;
   } else {
     return (
       <div className="take-task-btn">
-        <button onClick={addNameOfTaker}>Взять задание</button>
+        <button onClick={addNameOfTaker}>Take up execution</button>
       </div>
     );
   }

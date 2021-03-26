@@ -164,7 +164,7 @@
   margin-top: 11px;
 }
 
-.comment-main-block{
+.comment-main-block {
   display: flex;
   flex-direction: column-reverse;
 }
@@ -204,16 +204,27 @@
   display: flex;
 }
 
-.panel-of-control-task{
-  >h1{
-    font-size:20px;
-    margin-top:10px;
+.panel-of-control-task {
+  > h1 {
+    font-size: 20px;
+    margin-top: 10px;
   }
-  >button{
+  > button {
     margin-right: 10px;
     margin-top: 10px;
     border-radius: 2px;
-    border:1px solid black;
+    border: 1px solid black;
     padding: 5px;
+    margin-bottom: 20px;
+  }
+}
+
+.buttons-settings {
+  display: flex;
+  justify-content: space-between;
+  button {
+    margin: 10px 0px 10px 0px;
+    border: none;
+    padding: 5px 10px 5px 10px;
   }
 }

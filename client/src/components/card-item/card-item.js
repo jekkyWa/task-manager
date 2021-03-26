@@ -201,7 +201,7 @@ const CardItem = ({
               </p>
             </div>
           );
-        } 
+        }
         return (
           <div
             className="task-item"
@@ -222,15 +222,15 @@ const CardItem = ({
               {element.title}({label})
             </p>
             <div className="item-block-icon-state">
-              <div className={element.comment.length > 0 ? "" : "hidden"}>
-                <ChatBubbleOutlineOutlinedIcon fontSize="small" />{" "}
-                <span>{element.comment.length}</span>
-              </div>
-              <div className="hidden">
-                <CheckCircleOutlineOutlinedIcon />
+              <div className={!element.nameOfTaker ? "hidden" : ""}>
+                <CheckCircleOutlineOutlinedIcon fontSize="small" />
               </div>
               <div className={element.description ? "" : "hidden"}>
                 <DescriptionOutlinedIcon fontSize="small" />
+              </div>
+              <div className={element.comment.length > 0 ? "" : "hidden"}>
+                <ChatBubbleOutlineOutlinedIcon fontSize="small" />{" "}
+                <span>{element.comment.length}</span>
               </div>
             </div>
           </div>

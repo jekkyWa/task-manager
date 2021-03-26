@@ -34,6 +34,7 @@ const CardPage = ({
   displaySelection,
   activData,
   cardFull,
+  card,
 }) => {
   let { name, id } = useParams();
   const [loading, setLoading] = useState(true);

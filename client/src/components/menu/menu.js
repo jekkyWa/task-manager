@@ -60,7 +60,7 @@ const Menu = ({ onHide, card, cardFull, displaySelection, activData }) => {
           <div>
             <DoneOutlineIcon />
           </div>
-          <h1> Выполненные задания</h1>
+          <h1>Completed tasks</h1>
         </div>
         <div
           className="menu-item"

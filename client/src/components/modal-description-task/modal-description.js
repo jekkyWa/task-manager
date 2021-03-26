@@ -16,7 +16,7 @@ import DescriptionBlock from "./description-block";
 import { availCheck } from "../hooks/availability-check.hook";
 import CardOfTaker from "./card-of-taker";
 import Comment from "./comment";
-import SettingsIcon from "@material-ui/icons/Settings";
+import Setting from "./setting";
 
 // -----------------------------------------------------
 
@@ -34,6 +34,8 @@ const ModalDescription = ({
   displaySelection,
   modalShow,
 }) => {
+  const [idDel, setIdDel] = useState("");
+
   // Adding a description of the task
   useEffect(() => {
     if (socket) {
@@ -120,6 +122,7 @@ const ModalDescription = ({
   useEffect(() => {
     if (socket) {
       socket.on("newComment", (value) => {
+        console.log(value);
         if (dataToModal) {
           const item = value.cards.filter(
             (e) => e.card_item_id == dataToModal.card_id
@@ -154,6 +157,47 @@ const ModalDescription = ({
       });
 
       return () => socket.off("newComment");
+    }
+  }, [socket, valueDisplay, dataToModal]);
+
+  // Refusal of the task
+  useEffect(() => {
+    if (socket) {
+      socket.on("getRefuseAssignment", (value) => {
+        if (dataToModal) {
+          const item = value.cards.filter(
+            (e) => e.card_item_id == dataToModal.card_id
+          )[0];
+          saveActivityCard({ ...availCheck(item, card, roleProfileInBoard) });
+          const index = valueDisplay.valueDisp.cards.findIndex(
+            (e) => e.card_item_id == item.card_item_id
+          );
+
+          const newItem = {
+            ...valueDisplay.valueDisp,
+            cards: [
+              ...cardFull.cards.slice(0, index),
+              item,
+              ...cardFull.cards.slice(index + 1),
+            ],
+          };
+          saveFullCard(newItem);
+          if (!valueDisplay.stateFilter) {
+            displaySelection({ valueDisp: newItem, stateFilter: false });
+          } else {
+            displaySelection({
+              valueDisp: availCheck(
+                item,
+                valueDisplay.valueDisp,
+                roleProfileInBoard
+              ),
+              stateFilter: true,
+            });
+          }
+        }
+      });
+
+      return () => socket.off("getRefuseAssignment");
     }
   }, [socket, valueDisplay, dataToModal]);
 
@@ -200,84 +244,134 @@ const ModalDescription = ({
     }
   }, [socket, valueDisplay, dataToModal]);
 
-  return (
-    <Modal
-      dialogClassName="modal-50w"
-      show={show}
-      onHide={() => {
-        modalShow(false);
-      }}
-    >
-      <Modal.Body>
-        <div className="modal-description-body">
-          <div className="modal-description-header-block-one">
-            <div>
-              <ListAltIcon />
-            </div>
-            <div>
-              <h2>{dataToModal.name}</h2>
-            </div>
-          </div>
-          <p>In a collumn "{dataToModal.column}"</p>
-          <div className="modal-description-add-description">
-            <div>
-              <ReorderIcon />
-            </div>
-            <div>
-              <h2>Description</h2>
-            </div>
-          </div>
-          <DescriptionBlock
-            dataToModal={dataToModal}
-            email={email}
-            socket={socket}
-          />
-          <div>
-            <div className="take-task">
+  // Delete task
+  useEffect(() => {
+    if (socket) {
+      socket.on("getDataAfterDelete", (value) => {
+        if (dataToModal) {
+          setIdDel(value.id);
+          saveActivityCard({
+            ...availCheck(
+              value.body,
+              valueDisplay.valueDisp,
+              roleProfileInBoard
+            ),
+          });
+          const index = valueDisplay.valueDisp.cards.findIndex(
+            (e) => e.card_item_id == value.body.card_item_id
+          );
+          const newItem = {
+            ...valueDisplay.valueDisp,
+            cards: [
+              ...cardFull.cards.slice(0, index),
+              value.body,
+              ...cardFull.cards.slice(index + 1),
+            ],
+          };
+          saveFullCard(newItem);
+          if (!valueDisplay.stateFilter) {
+            displaySelection({ valueDisp: newItem, stateFilter: false });
+          } else {
+            displaySelection({
+              valueDisp: availCheck(
+                value.body,
+                valueDisplay.valueDisp,
+                roleProfileInBoard
+              ),
+              stateFilter: true,
+            });
+          }
+        }
+      });
+      // After the data come to stop further sending
+      return () => socket.off("getDataAfterDelete");
+    }
+  }, [socket, valueDisplay, dataToModal]);
+
+  if (dataToModal.id == idDel) {
+    return (
+      <Modal
+        dialogClassName="modal-50w"
+        show={show}
+        onHide={() => {
+          modalShow(false);
+        }}
+      >
+        <Modal.Body>Пользователь удалил это задание</Modal.Body>
+      </Modal>
+    );
+  } else {
+    return (
+      <Modal
+        dialogClassName="modal-50w"
+        show={show}
+        onHide={() => {
+          modalShow(false);
+        }}
+      >
+        <Modal.Body>
+          <div className="modal-description-body">
+            <div className="modal-description-header-block-one">
               <div>
-                <CheckBoxOutlinedIcon />
+                <ListAltIcon />
+              </div>
+              <div
+                onClick={() => {
+                  console.log(dataToModal);
+                }}
+              >
+                <h2>{dataToModal.name}</h2>
+              </div>
+            </div>
+            <p>In a collumn "{dataToModal.column}"</p>
+            <div className="modal-description-add-description">
+              <div>
+                <ReorderIcon />
               </div>
               <div>
-                <h2>Take a task</h2>
+                <h2>Description</h2>
               </div>
             </div>
-            <CardOfTaker
+            <DescriptionBlock
               dataToModal={dataToModal}
               email={email}
               socket={socket}
             />
-          </div>
-          <div className="modal-description-add-description">
             <div>
-              <SettingsIcon />
-            </div>
-            <div>
-              <h2>Настройки</h2>
-            </div>
-          </div>
-          <div>
-            <button>Переместить</button>
-            <button>Добавить чек-лист</button>
-            <button>Изменить роли</button>
-          </div>
-
-          <div className="modal-description-actions-block">
-            <div className="modal-description-actions">
-              <div>
-                <FormatListBulletedIcon />
+              <div className="take-task">
+                <div>
+                  <CheckBoxOutlinedIcon />
+                </div>
+                <div>
+                  <h2>Take a task</h2>
+                </div>
               </div>
-              <div>
-                <h2>Comments</h2>
-              </div>
+              <CardOfTaker
+                dataToModal={dataToModal}
+                email={email}
+                socket={socket}
+              />
             </div>
-            <button>Показать детали</button>
+            {/* Setting */}
+            <Setting dataToModal={dataToModal} email={email} socket={socket} />
+            <div className="modal-description-actions-block">
+              <div className="modal-description-actions">
+                <div>
+                  <FormatListBulletedIcon />
+                </div>
+                <div>
+                  <h2>Comments</h2>
+                </div>
+              </div>
+              <button>Показать детали</button>
+            </div>
+            <Comment dataToModal={dataToModal} email={email} socket={socket} />
+            <div></div>
           </div>
-          <Comment dataToModal={dataToModal} email={email} socket={socket} />
-          <div></div>
-        </div>
-      </Modal.Body>
-    </Modal>
-  );
+        </Modal.Body>
+      </Modal>
+    );
+  }
 };
 
 const mapStateToProps = ({
