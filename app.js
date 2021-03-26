@@ -70,6 +70,36 @@ io.on("connection", (socket) => {
     console.log("A user left chatroom: " + id);
   });
 
+  // Delete task
+  socket.on("deleteTask", async ({ id_board, id_card, id_task }) => {
+    const value = await Cards.find({ card_id: id_board });
+
+    const filterItem = value[0].cards.filter((e) => e.card_item_id === id_card);
+
+    const indexItem = filterItem[0].card_body.findIndex((e) => {
+      return e.id_task == id_task;
+    });
+
+    const newItem = {
+      ...filterItem[0],
+      card_body: [
+        ...filterItem[0].card_body.slice(0, indexItem),
+        ...filterItem[0].card_body.slice(indexItem + 1),
+      ],
+    };
+
+    value[0].cards = value[0].cards.map((e) => {
+      return e.card_item_id === newItem.card_item_id ? newItem : e;
+    });
+
+    const originalValue = await Cards.find({ card_id: id_board });
+
+    io.in(id_board).emit("getDataAfterDelete", { body: newItem, id: id_task });
+
+    await Cards.updateOne(originalValue[0], value[0]);
+  });
+
+  // Completion of the task
   socket.on(
     "completedTask",
     async ({ id_board, id_card, id_task, complet }) => {
@@ -107,6 +137,43 @@ io.on("connection", (socket) => {
       await Cards.updateOne(originalValue[0], value[0]);
     }
   );
+
+  // Refuse to task
+  socket.on("refuseAssignment", async ({ id_board, id_card, id_task }) => {
+    // Поиск нужного элемента в БД
+    const value = await Cards.find({ card_id: id_board });
+    // Ищем нужную карточку
+    const filterCardItem = value[0].cards.filter(
+      (e) => e.card_item_id == id_card
+    )[0];
+    // Ищем нужный Task
+    const filterItem = filterCardItem.card_body.filter(
+      (e) => e.id_task == id_task
+    );
+    // Обновляем элемент
+    const newItem = {
+      ...filterItem[0],
+      nameOfTaker: "",
+    };
+    // Находим нужный индекс task
+    const index = filterCardItem.card_body.findIndex(
+      (e) => e.id_task == id_task
+    );
+    // Обновляем card_body
+    filterCardItem.card_body[index] = newItem;
+    // Находим index карточки
+    const indexCard = value[0].cards.findIndex(
+      (e) => e.card_item_id == id_card
+    );
+    // Конечное обновление элемента БД
+    value[0].cards[indexCard] = filterCardItem;
+    // Оригинальный элемент без изменений
+    const originalValue = await Cards.find({ card_id: id_board });
+
+    io.emit("getRefuseAssignment", value[0]);
+
+    await Cards.updateOne(originalValue[0], value[0]);
+  });
 
   // Adding a comment
   socket.on(
@@ -245,7 +312,6 @@ io.on("connection", (socket) => {
       ...filterItem[0],
       card_body: [...filterItem[0].card_body, task],
     };
-    console.log(newItem);
 
     value[0].cards = value[0].cards.map((e) => {
       return e.card_item_id === newItem.card_item_id ? newItem : e;
