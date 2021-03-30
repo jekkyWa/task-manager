@@ -8,6 +8,9 @@ import { useHttp } from "../hooks/http.hook";
 import Loading from "../loading/loading";
 import io from "socket.io-client";
 import { saveSocket } from "../../action/action-login";
+import image_1 from "../../images/image_1.png";
+import image_2 from "../../images/card-back.svg";
+import image_3 from "../../images/hero.png";
 
 const MainPage = ({ token, saveDataIdentification, saveSocket }) => {
   const phone = "192.168.43.127:5000";
@@ -61,9 +64,49 @@ const MainPage = ({ token, saveDataIdentification, saveSocket }) => {
   return (
     <div className="main-page">
       <Header />
-      <div className="container">
-        <SideBar />
-        
+      <div className="container boards-page">
+        <div>
+          <SideBar />
+        </div>
+        <div className="boards-body main-page-body">
+          <h1>
+            <span className="name-proj-logo">NieTask</span> - Applications
+            required to monitor the tasks and to facilitate project management.
+          </h1>
+          <h2>
+            Work in a team, manage projects and output productivity To the new
+            level by your own unique way with Nietask.
+          </h2>
+          <img src={image_1} />
+          <h3>On cards there is everything you need</h3>
+          <p>
+            Nietask cards will help to effectively organize work: Track the
+            tasks, as well as manage them and share information with Command
+            participants.To see all available features - lists tasks, date of
+            execution, comments on tasks and not only, open Any card.
+          </p>
+          <img className="card-image" src={image_2} />
+          <h1>
+            This is not just a job.This coordination of action in the team.
+          </h1>
+          <h2>
+            Include with boards, columns and cards, and then go to more complex
+            functions.
+          </h2>
+          <img className="card-image" src={image_3} />
+          <h1>
+            NieTask is a project created exclusively for educational purposes.
+          </h1>
+          <div>
+            <button>Original</button>
+          </div>
+          <h1>
+            If you have not started your work in Nietask, what do you expect?
+          </h1>
+          <div>
+            <button>Start work</button>
+          </div>
+        </div>
       </div>
     </div>
   );

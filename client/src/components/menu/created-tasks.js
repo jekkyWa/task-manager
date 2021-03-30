@@ -40,14 +40,22 @@ const CreatedTasks = ({ cardFull, email, modalShow, saveDataToModal }) => {
         }}
       >
         <h2 className="my-task-item-title">{e.title}</h2>
-        <p className="my-task-item-name-add">Для ролей:{arrRole}</p>
+        <p className="my-task-item-name-add">Role: {arrRole}</p>
       </div>
     );
   });
 
+  if (label.length == 0) {
+    return (
+      <div className="my-task">
+        <h1>You have not created a single task</h1>
+      </div>
+    );
+  }
+
   return (
     <div className="my-task">
-      <h1>Созданные задания на этой доске</h1>
+      <h1>Created tasks on this board</h1>
       {label}
     </div>
   );

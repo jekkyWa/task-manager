@@ -81,6 +81,27 @@ const recentActivity = (activData) => {
   };
 };
 
+const roleForNewTask = (saveRole) => {
+  return {
+    type: "ROLE_FOR_NEW_TASK",
+    saveRole,
+  };
+};
+
+const modalRoleShow = (roleShow) => {
+  return {
+    type: "MODAL_ROLE_SHOW",
+    roleShow,
+  };
+};
+
+const modalRoleChange = (changeRole) => {
+  return {
+    type: "MODAL_ROLE_CHANGE",
+    changeRole,
+  };
+};
+
 export {
   fetchLogin,
   saveDataIdentification,
@@ -92,5 +113,8 @@ export {
   saveDataToModal,
   modalShow,
   displaySelection,
-  recentActivity
+  recentActivity,
+  roleForNewTask,
+  modalRoleShow,
+  modalRoleChange,
 };

@@ -1,0 +1,26 @@
+.modal-role-change {
+  > input {
+    width: 100%;
+    padding: 5px;
+  }
+  .header-modal-role-change {
+    display: flex;
+    justify-content: space-between;
+  }
+  .select-modal-role-change {
+    display: flex;
+    flex-direction: column;
+    > select {
+      margin-top: 5px;
+      padding: 6px;
+    }
+  }
+  .modal-role-change-btn{
+      padding: 5px 10px 5px 10px;
+      margin-top: 5px;
+      margin-right: 5px;
+      border: none;
+      background-color: rgb(34, 105, 34);
+      color:white
+  }
+}

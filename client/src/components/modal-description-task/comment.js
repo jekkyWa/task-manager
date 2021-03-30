@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import CloseIcon from "@material-ui/icons/Close";
-import AttachFileIcon from "@material-ui/icons/AttachFile";
 import { connect } from "react-redux";
 import { recentActivity } from "../../action/action-login";
 import dateFormat from "dateformat";
@@ -90,19 +89,48 @@ const Comment = ({
     return status == "Senior" ? 3 : status == "Middle" ? 2 : 1;
   };
   if (
-    !(
-      commentToPage.role.findIndex((e) => e.role !== roleProfileInBoard.role) ==
-        -1 &&
+    (commentToPage.role.findIndex((e) => e.role !== roleProfileInBoard.role) ==
+      -1 &&
       commentToPage.role.findIndex(
         (e) => statusProfile(e.level) <= statusProfile(roleProfileInBoard.level)
-      ) !== -1
-    ) ||
+      ) !== -1) ||
     roleProfileInBoard.role == "Product manager"
   ) {
     return (
       <React.Fragment>
         <div className="modal-description-comment">
-          Вы не можете оставлять комментарии
+          <div className="icon-profile-comment">
+            <p>{email[0].toUpperCase()}</p>
+          </div>
+          <div
+            className={
+              !commentState ? "modal-description-add-comment-btn" : "hidden"
+            }
+            onClick={() => {
+              setCommentState(true);
+            }}
+          >
+            <p>Write a comment ...</p>
+          </div>
+          <div
+            className={!commentState ? "hidden" : "modal-decription-active-add"}
+          >
+            <input
+              placeholder="Write a comment ..."
+              onChange={onHandlerComment}
+            />
+            <div className="modal-decription-active-add-btn">
+              <div>
+                <button onClick={addComment}>Send</button>
+                <CloseIcon
+                  className="modal-description-close-icon"
+                  onClick={() => {
+                    setCommentState(false);
+                  }}
+                />
+              </div>
+            </div>
+          </div>
         </div>
         <div className="comment-main-block">{label}</div>
       </React.Fragment>
@@ -111,41 +139,7 @@ const Comment = ({
   return (
     <React.Fragment>
       <div className="modal-description-comment">
-        <div className="icon-profile-comment">
-          <p>{email[0].toUpperCase()}</p>
-        </div>
-        <div
-          className={
-            !commentState ? "modal-description-add-comment-btn" : "hidden"
-          }
-          onClick={() => {
-            setCommentState(true);
-          }}
-        >
-          <p>Write a comment ...</p>
-        </div>
-        <div
-          className={!commentState ? "hidden" : "modal-decription-active-add"}
-        >
-          <input
-            placeholder="Write a comment ..."
-            onChange={onHandlerComment}
-          />
-          <div className="modal-decription-active-add-btn">
-            <div>
-              <button onClick={addComment}>Send</button>
-              <CloseIcon
-                className="modal-description-close-icon"
-                onClick={() => {
-                  setCommentState(false);
-                }}
-              />
-            </div>
-            <div>
-              <AttachFileIcon fontSize="small" className="clip" />
-            </div>
-          </div>
-        </div>
+        <h1>You can not leave comments</h1>
       </div>
       <div className="comment-main-block">{label}</div>
     </React.Fragment>

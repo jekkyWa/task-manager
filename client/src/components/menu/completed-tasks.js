@@ -86,6 +86,7 @@ const CompletedTasks = ({ cardFull, modalShow, saveDataToModal }) => {
       </ul>
       <div className={roleForComplite !== "Select" ? "" : "hidden"}>
         <p
+        className="to-return"
           onClick={() => {
             setRoleForComplite("Select");
           }}

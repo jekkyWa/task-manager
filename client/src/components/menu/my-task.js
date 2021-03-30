@@ -42,10 +42,17 @@ const MyTask = ({ cardFull, email, modalShow, saveDataToModal }) => {
       </div>
     );
   });
+  if (label.length == 0) {
+    return (
+      <div className="my-task">
+        <h1>You have not yet taken any tasks</h1>
+      </div>
+    );
+  }
 
   return (
     <div className="my-task">
-      <h1>Взятые задания в этой доске</h1>
+      <h1>Top assignments in this board</h1>
       {label}
     </div>
   );

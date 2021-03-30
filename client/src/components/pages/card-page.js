@@ -20,6 +20,8 @@ import Menu from "../menu/menu";
 import { availCheck } from "../hooks/availability-check.hook";
 import dateFormat from "dateformat";
 import CardItem from "../card-item/card-item";
+import ModalAddRole from "../modal-add-role/modal-add-role";
+import ModalChangeRole from "../modal-change-role/modal-change-role";
 
 const CardPage = ({
   saveActivityCard,
@@ -38,7 +40,7 @@ const CardPage = ({
 }) => {
   let { name, id } = useParams();
   const [loading, setLoading] = useState(true);
-  const [inputAddCard, setInputAddCard] = useState(" ");
+  const [inputAddCard, setInputAddCard] = useState("");
   const [stateList, setStateList] = useState(false);
   const [stateMenu, setStateMenu] = useState(false);
   const ref = useRef(null);
@@ -87,6 +89,47 @@ const CardPage = ({
   //   document.addEventListener("mousedown", handleClickOutside);
   //   return () => document.removeEventListener("mousedown", handleClickOutside);
   // });
+
+  useEffect(() => {
+    if (socket) {
+      socket.on("getChangeRole", (value) => {
+        console.log(value);
+        if (dataToModal) {
+          const item = value.cards.filter(
+            (e) => e.card_item_id == dataToModal.card_id
+          )[0];
+          saveActivityCard({ ...availCheck(item, card, roleProfileInBoard) });
+          const index = valueDisplay.valueDisp.cards.findIndex(
+            (e) => e.card_item_id == item.card_item_id
+          );
+
+          const newItem = {
+            ...valueDisplay.valueDisp,
+            cards: [
+              ...cardFull.cards.slice(0, index),
+              item,
+              ...cardFull.cards.slice(index + 1),
+            ],
+          };
+          saveFullCard(newItem);
+          if (!valueDisplay.stateFilter) {
+            displaySelection({ valueDisp: newItem, stateFilter: false });
+          } else {
+            displaySelection({
+              valueDisp: availCheck(
+                item,
+                valueDisplay.valueDisp,
+                roleProfileInBoard
+              ),
+              stateFilter: true,
+            });
+          }
+        }
+      });
+
+      return () => socket.off("getChangeRole");
+    }
+  }, [socket, valueDisplay, dataToModal]);
 
   // Getting data when the page is first loaded
   useEffect(() => {
@@ -200,35 +243,52 @@ const CardPage = ({
   // main
   return (
     <div className={`${color} card-page`}>
-      <ModalDescription show={show} dataToModal={dataToModal} />
+      <ModalDescription show={show}  />
+      <ModalAddRole />
+      <ModalChangeRole dataToModal={dataToModal} />
       <div className="main-header-card-page">
         <Header color={color} />
       </div>
       <div className="header-card-page">
         <div className="header-card-page-block-one">
           <div className="name-command-card-page">
-            <h1> {id.slice(0, id.length - 9)}</h1>
+            <h1>
+              Team name:{" "}
+              <span className="selected-text">
+                {id.slice(0, id.length - 9)}
+              </span>
+            </h1>
           </div>
           <div className="name-board-card-page">
             <h1> {name_Board}</h1>
           </div>
           <div className="name-command-card-page">
-            <h1>{`${roleProfileInBoard.role}(${roleProfileInBoard.level})`}</h1>
+            <h1>
+              Role:{" "}
+              <span className="selected-text">{roleProfileInBoard.role}</span>
+            </h1>
           </div>
+          <div className="name-command-card-page">
+            <h1>
+              Level:{" "}
+              <span className="selected-text">{roleProfileInBoard.level}</span>
+            </h1>
+          </div>
+
           <div className="name-command-card-page">
             <h1
               className={
                 valueDisplay.stateFilter ? "text-display-state" : "hidden"
               }
             >
-              Available
+              Visibility: <span className="selected-text">Available</span>
             </h1>
             <h1
               className={
                 !valueDisplay.stateFilter ? "text-display-state" : "hidden"
               }
             >
-              All
+              Visibility: <span className="selected-text">All</span>
             </h1>
           </div>
         </div>
@@ -243,7 +303,7 @@ const CardPage = ({
         >
           <p>
             <MenuIcon fontSize="small" />
-            Menu
+            <spana className="menu-txt">Menu</spana>
           </p>
         </div>
       </div>
@@ -273,8 +333,8 @@ const CardPage = ({
             }}
           >
             <p>
-              <AddIcon />
-              Add another card
+              <AddIcon fontSize="small" />
+              <span className="menu-txt">Add another card</span>
             </p>
           </div>
         </div>

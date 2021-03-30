@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { Modal } from "react-bootstrap";
 import {
   saveActivityCard,
@@ -35,6 +35,48 @@ const ModalDescription = ({
   modalShow,
 }) => {
   const [idDel, setIdDel] = useState("");
+
+  // Change name
+  useEffect(() => {
+    if (socket) {
+      socket.on("getRenameData", (value) => {
+        console.log(value);
+        if (dataToModal) {
+          const item = value.cards.filter(
+            (e) => e.card_item_id == dataToModal.card_id
+          )[0];
+          saveActivityCard({ ...availCheck(item, card, roleProfileInBoard) });
+          const index = valueDisplay.valueDisp.cards.findIndex(
+            (e) => e.card_item_id == item.card_item_id
+          );
+
+          const newItem = {
+            ...valueDisplay.valueDisp,
+            cards: [
+              ...cardFull.cards.slice(0, index),
+              item,
+              ...cardFull.cards.slice(index + 1),
+            ],
+          };
+          saveFullCard(newItem);
+          if (!valueDisplay.stateFilter) {
+            displaySelection({ valueDisp: newItem, stateFilter: false });
+          } else {
+            displaySelection({
+              valueDisp: availCheck(
+                item,
+                valueDisplay.valueDisp,
+                roleProfileInBoard
+              ),
+              stateFilter: true,
+            });
+          }
+        }
+      });
+
+      return () => socket.off("getRenameData");
+    }
+  }, [socket, valueDisplay, dataToModal]);
 
   // Adding a description of the task
   useEffect(() => {
@@ -385,6 +427,7 @@ const mapStateToProps = ({
     cardFull,
     roleProfileInBoard,
     valueDisplay,
+    dataToModal,
   },
 }) => {
   return {
@@ -397,6 +440,7 @@ const mapStateToProps = ({
     roleProfileInBoard,
     cardFull,
     valueDisplay,
+    dataToModal,
   };
 };
 

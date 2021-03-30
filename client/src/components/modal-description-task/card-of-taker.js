@@ -67,7 +67,13 @@ const CardOfTaker = ({
   const statusProfile = (status) => {
     return status == "Senior" ? 3 : status == "Middle" ? 2 : 1;
   };
-  if (name.state && name.nameOfTaker == email) {
+  if (name.name_add == email) {
+    return (
+      <div className="panel-of-control-task">
+        <h1>You have added this task</h1>
+      </div>
+    );
+  } else if (name.state && name.nameOfTaker == email) {
     return (
       <div className="panel-of-control-task">
         <h1>You have completed the task</h1>
@@ -100,7 +106,11 @@ const CardOfTaker = ({
       </div>
     );
   } else if (name.nameOfTaker.length > 0) {
-    return <div>The task is cried with the user: {name.nameOfTaker}</div>;
+    return (
+      <div className="panel-of-control-task">
+        <h1>The task is cried with the user: {name.nameOfTaker}</h1>
+      </div>
+    );
   } else if (
     !(
       name.role.findIndex((e) => e.role !== roleProfileInBoard.role) == -1 &&
@@ -110,7 +120,11 @@ const CardOfTaker = ({
     ) ||
     roleProfileInBoard.role == "Product manager"
   ) {
-    return <div>You do not have the right to take this task</div>;
+    return (
+      <div className="panel-of-control-task">
+        <h1>You do not have the right to take this task</h1>
+      </div>
+    );
   } else {
     return (
       <div className="take-task-btn">

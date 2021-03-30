@@ -8,7 +8,7 @@ import CheckBoxOutlinedIcon from "@material-ui/icons/CheckBoxOutlined";
 import FavoriteBorderOutlinedIcon from "@material-ui/icons/FavoriteBorderOutlined";
 import PeopleOutlineOutlinedIcon from "@material-ui/icons/PeopleOutlineOutlined";
 import SettingsIcon from "@material-ui/icons/Settings";
-import ModalCreateProject from "../modal";
+import ModalCreateProject from "../modal-create-project";
 import { connect } from "react-redux";
 import "./side-bar.scss";
 import { Link } from "react-router-dom";

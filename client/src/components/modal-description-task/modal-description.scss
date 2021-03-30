@@ -10,6 +10,7 @@
 
 .modal-50w {
   min-width: 50% !important;
+  background-color: #ebecf0;
 }
 
 .modal-description-body {
@@ -37,6 +38,7 @@
   p {
     color: #595858;
     font-weight: 300;
+    margin-top: 5px;
   }
   .modal-description-header-block-one {
     display: flex;
@@ -126,6 +128,13 @@
   .modal-description-comment {
     margin-top: 20px;
     display: flex;
+    h1 {
+      font-size: 16px;
+      margin-top: 5px;
+      margin-bottom: 5px;
+      color: #595858;
+      font-weight: 300;
+    }
     .modal-description-add-comment-btn {
       background-color: rgb(234, 236, 240);
       border-radius: 5px;
@@ -186,16 +195,19 @@
     > p {
       font-weight: 500;
       font-size: 14px;
-      margin-top: 10px;
       margin-left: 5px;
+      margin-top: 20px;
     }
   }
   .comment-text {
     margin-left: 5px;
     background-color: rgb(234, 236, 240);
     border-radius: 5px;
+    word-wrap: break-word;
+    min-width: 100px;
+    margin-top: -20px;
     > p {
-      padding: 5px;
+      padding: 8px 15px 8px 15px;
       font-weight: 600;
     }
   }
@@ -206,8 +218,11 @@
 
 .panel-of-control-task {
   > h1 {
-    font-size: 20px;
+    font-size: 16px;
     margin-top: 10px;
+    margin-bottom: 20px;
+    color: #595858;
+    font-weight: 300;
   }
   > button {
     margin-right: 10px;
@@ -221,10 +236,29 @@
 
 .buttons-settings {
   display: flex;
+  flex-direction: column;
   justify-content: space-between;
+  .save-btn {
+    @extend %styleBtnSave;
+  }
+  h1 {
+    font-size: 17px;
+    margin-top: 5px;
+    font-weight: 400;
+  }
+  input {
+    width: 50%;
+    padding: 2px;
+  }
   button {
     margin: 10px 0px 10px 0px;
     border: none;
     padding: 5px 10px 5px 10px;
+    background-color: rgb(234, 236, 240);
+    border-radius: 2px;
+  }
+  .delete-task {
+    background-color: rgb(207, 81, 61);
+    color: white;
   }
 }

@@ -136,7 +136,7 @@ const ModalCreateProject = ({
   const { nameProject, description, date } = formCreateProject;
 
   return (
-    <Modal show={show} onHide={onHide} size="xl">
+    <Modal show={show} onHide={onHide} dialogClassName="modal-50w">
       <Modal.Header closeButton>
         <Modal.Title id="example-custom-modal-styling-title">
           <h1 className="title-modal">Create a project(board)</h1>

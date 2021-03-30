@@ -12,7 +12,10 @@ const getDataReducer = (state, action) => {
       dataToModal: {},
       valueDisplay: { valueDisp: {}, stateFilter: true },
       show: false,
+      roleShow: false,
+      changeRole: false,
       activData: [],
+      saveRole: [],
     };
   }
   switch (action.type) {
@@ -69,6 +72,21 @@ const getDataReducer = (state, action) => {
       return {
         ...state.getDataReducer,
         activData: action.activData,
+      };
+    case "ROLE_FOR_NEW_TASK":
+      return {
+        ...state.getDataReducer,
+        saveRole: action.saveRole,
+      };
+    case "MODAL_ROLE_SHOW":
+      return {
+        ...state.getDataReducer,
+        roleShow: action.roleShow,
+      };
+    case "MODAL_ROLE_CHANGE":
+      return {
+        ...state.getDataReducer,
+        changeRole: action.changeRole,
       };
     default:
       return state.getDataReducer;
