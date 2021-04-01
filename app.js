@@ -69,6 +69,183 @@ io.on("connection", (socket) => {
     socket.leave(id);
     console.log("A user left chatroom: " + id);
   });
+  // Remove subtask
+  socket.on(
+    "deleteCheckListItem",
+    async ({ id_board, id_card, id_task, id_check_list_item }) => {
+      // Поиск нужного элемента в БД
+      const value = await Cards.find({ card_id: id_board });
+      // Ищем нужную карточку
+      const filterCardItem = value[0].cards.filter(
+        (e) => e.card_item_id == id_card
+      )[0];
+      // Ищем нужный Task
+      const filterItem = filterCardItem.card_body.filter(
+        (e) => e.id_task == id_task
+      );
+
+      const indexListItem = filterItem[0].check_letter.list.findIndex(
+        (e) => e.id_check_list_item == id_check_list_item
+      );
+
+      // Обновляем элемент
+      const newItem = {
+        ...filterItem[0],
+        check_letter: {
+          list: [
+            ...filterItem[0].check_letter.list.slice(0, indexListItem),
+            ...filterItem[0].check_letter.list.slice(indexListItem + 1),
+          ],
+          availability: filterItem[0].check_letter.availability,
+        },
+      };
+      // Находим нужный индекс task
+      const index = filterCardItem.card_body.findIndex(
+        (e) => e.id_task == id_task
+      );
+      // Обновляем card_body
+      filterCardItem.card_body[index] = newItem;
+      // Находим index карточки
+      const indexCard = value[0].cards.findIndex(
+        (e) => e.card_item_id == id_card
+      );
+      // Конечное обновление элемента БД
+      value[0].cards[indexCard] = filterCardItem;
+      // Оригинальный элемент без изменений
+      const originalValue = await Cards.find({ card_id: id_board });
+
+      io.emit("getDataAfterDeleteCheckListItem", value[0]);
+
+      await Cards.updateOne(originalValue[0], value[0]);
+    }
+  );
+
+  // Change the status of the leaf check element
+  socket.on(
+    "changeStatusListItem",
+    async ({ id_board, id_card, id_task, id_check_list_item, statusBool }) => {
+      // Поиск нужного элемента в БД
+      const value = await Cards.find({ card_id: id_board });
+      // Ищем нужную карточку
+      const filterCardItem = value[0].cards.filter(
+        (e) => e.card_item_id == id_card
+      )[0];
+      // Ищем нужный Task
+      const filterItem = filterCardItem.card_body.filter(
+        (e) => e.id_task == id_task
+      );
+      // Поиск нужного элемента чек-листа
+      const indexListItem = filterItem[0].check_letter.list.findIndex(
+        (e) => e.id_check_list_item == id_check_list_item
+      );
+
+      filterItem[0].check_letter.list[indexListItem] = {
+        ...filterItem[0].check_letter.list[indexListItem],
+        status: statusBool,
+      };
+      // Находим нужный индекс task
+      const index = filterCardItem.card_body.findIndex(
+        (e) => e.id_task == id_task
+      );
+      // Обновляем card_body
+      filterCardItem.card_body[index] = filterItem[0];
+      // Находим index карточки
+      const indexCard = value[0].cards.findIndex(
+        (e) => e.card_item_id == id_card
+      );
+      // Конечное обновление элемента БД
+      value[0].cards[indexCard] = filterCardItem;
+      // Оригинальный элемент без изменений
+      const originalValue = await Cards.find({ card_id: id_board });
+
+      io.emit("getChangeStatusListItem", value[0]);
+
+      await Cards.updateOne(originalValue[0], value[0]);
+    }
+  );
+
+  // Add Check List item
+  socket.on(
+    "addCheckListItem",
+    async ({ id_board, id_card, id_task, data }) => {
+      // Поиск нужного элемента в БД
+      const value = await Cards.find({ card_id: id_board });
+      // Ищем нужную карточку
+      const filterCardItem = value[0].cards.filter(
+        (e) => e.card_item_id == id_card
+      )[0];
+      // Ищем нужный Task
+      const filterItem = filterCardItem.card_body.filter(
+        (e) => e.id_task == id_task
+      );
+      // Обновляем элемент
+      const newItem = {
+        ...filterItem[0],
+        check_letter: {
+          list: [...filterItem[0].check_letter.list, data],
+          availability: filterItem[0].check_letter.availability,
+        },
+      };
+      // Находим нужный индекс task
+      const index = filterCardItem.card_body.findIndex(
+        (e) => e.id_task == id_task
+      );
+      // Обновляем card_body
+      filterCardItem.card_body[index] = newItem;
+      // Находим index карточки
+      const indexCard = value[0].cards.findIndex(
+        (e) => e.card_item_id == id_card
+      );
+      // Конечное обновление элемента БД
+      value[0].cards[indexCard] = filterCardItem;
+      // Оригинальный элемент без изменений
+      const originalValue = await Cards.find({ card_id: id_board });
+
+      io.emit("getCheckListItem", value[0]);
+
+      await Cards.updateOne(originalValue[0], value[0]);
+    }
+  );
+
+  // Add Check List
+  socket.on(
+    "addCheckList",
+    async ({ id_board, id_card, id_task, dataBool }) => {
+      // Поиск нужного элемента в БД
+      const value = await Cards.find({ card_id: id_board });
+      // Ищем нужную карточку
+      const filterCardItem = value[0].cards.filter(
+        (e) => e.card_item_id == id_card
+      )[0];
+      // Ищем нужный Task
+      const filterItem = filterCardItem.card_body.filter(
+        (e) => e.id_task == id_task
+      );
+      // Обновляем элемент
+      const newItem = {
+        ...filterItem[0],
+        check_letter: { list: [], availability: dataBool },
+      };
+      // Находим нужный индекс task
+      const index = filterCardItem.card_body.findIndex(
+        (e) => e.id_task == id_task
+      );
+      // Обновляем card_body
+      filterCardItem.card_body[index] = newItem;
+      // Находим index карточки
+      const indexCard = value[0].cards.findIndex(
+        (e) => e.card_item_id == id_card
+      );
+      // Конечное обновление элемента БД
+      value[0].cards[indexCard] = filterCardItem;
+      // Оригинальный элемент без изменений
+      const originalValue = await Cards.find({ card_id: id_board });
+
+      io.emit("getCheckList", value[0]);
+
+      await Cards.updateOne(originalValue[0], value[0]);
+    }
+  );
 
   // Change roles for task
   socket.on("changeRole", async ({ id_board, id_card, id_task, data }) => {
@@ -107,7 +284,7 @@ io.on("connection", (socket) => {
     await Cards.updateOne(originalValue[0], value[0]);
   });
 
-  //  Переместить задание
+  //  Rename the task
   socket.on("rename", async ({ id_board, id_card, id_task, data }) => {
     // Поиск нужного элемента в БД
     const value = await Cards.find({ card_id: id_board });
