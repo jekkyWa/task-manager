@@ -9,8 +9,82 @@
 }
 
 .modal-50w {
-  min-width: 50% !important;
+  min-width: 60% !important;
   background-color: #ebecf0;
+}
+
+.measure-role{
+  display: flex;
+  flex-direction: column;
+  width: 50% ;
+}
+
+.radio-block {
+  display: flex;
+  justify-content: space-between;
+  h3 {
+    font-size: 16px;
+    margin-left: 5px;
+    cursor: pointer;
+  }
+  .radio-item-list {
+    display: flex;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    cursor: pointer;
+
+    .complite-text {
+      text-decoration: line-through;
+    }
+  }
+}
+.check-list {
+  display: flex;
+  justify-content: space-between;
+  .check-list-one {
+    display: flex;
+    margin-top: 15px;
+  }
+  .check-list-two {
+    margin-top: 15px;
+    button {
+      background-color: rgb(234, 236, 240);
+      border: none;
+      padding: 2px 10px 2px 10px;
+      font-weight: 400;
+      font-size: 14px;
+      border-radius: 5px;
+      &:hover {
+        background-color: rgb(207, 209, 212);
+        transition: 0.4s all;
+      }
+    }
+  }
+}
+
+.progress-bar-check-list {
+  display: flex;
+  margin-top: 5px;
+  > h1 {
+    font-size: 12px;
+    margin-right: 10px;
+  }
+  > progress {
+    width: 100%;
+  }
+}
+
+.add-check-list-item-btn {
+  background-color: rgb(234, 236, 240);
+  border: none;
+  padding: 2px 10px 2px 10px;
+  font-weight: 400;
+  font-size: 14px;
+  border-radius: 5px;
+  &:hover {
+    background-color: rgb(207, 209, 212);
+    transition: 0.4s all;
+  }
 }
 
 .modal-description-body {

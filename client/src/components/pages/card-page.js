@@ -21,7 +21,6 @@ import { availCheck } from "../hooks/availability-check.hook";
 import dateFormat from "dateformat";
 import CardItem from "../card-item/card-item";
 import ModalAddRole from "../modal-add-role/modal-add-role";
-import ModalChangeRole from "../modal-change-role/modal-change-role";
 
 const CardPage = ({
   saveActivityCard,
@@ -243,9 +242,8 @@ const CardPage = ({
   // main
   return (
     <div className={`${color} card-page`}>
-      <ModalDescription show={show}  />
+      <ModalDescription show={show} />
       <ModalAddRole />
-      <ModalChangeRole dataToModal={dataToModal} />
       <div className="main-header-card-page">
         <Header color={color} />
       </div>

@@ -6,6 +6,7 @@ import {
   modalShow,
   modalRoleChange,
 } from "../../action/action-login";
+import { roleDependencies } from "../role";
 import { connect } from "react-redux";
 
 const Setting = ({
@@ -15,6 +16,7 @@ const Setting = ({
   modalShow,
   modalRoleChange,
   cardFull,
+  roleProfileInBoard,
 }) => {
   const item = cardFull.cards.filter(
     (e) => e.card_item_id == dataToModal.card_id
@@ -24,6 +26,8 @@ const Setting = ({
   const [showCard, setShowCard] = useState(false);
 
   const [renameBody, setRenameBody] = useState("");
+
+  const [showChangeRole, setShowChangeRole] = useState(false);
 
   const renameHandler = (e) => {
     setRenameBody(e.target.value);
@@ -47,6 +51,61 @@ const Setting = ({
     });
   };
 
+  const addList = async (dataBool) => {
+    await socket.emit("addCheckList", {
+      id_board: dataToModal.board_id,
+      id_card: dataToModal.card_id,
+      id_task: dataToModal.id,
+      dataBool,
+    });
+  };
+
+  const [roleHandler, setRoleHandler] = useState("");
+  const [dataRole, setDataRole] = useState({
+    role: "Back-end developer",
+    level: "Junior",
+  });
+
+  const changeRoleFunc = async () => {
+    const arrRole = roleHandler.split(", ");
+    const newItem = arrRole.map((e, i) => {
+      const id = e.lastIndexOf("-");
+      return (e = {
+        role: e.slice(0, id).trim(),
+        level: e.slice(id + 1).trim(),
+      });
+    });
+    console.log(newItem);
+    await socket.emit("changeRole", {
+      id_board: dataToModal.board_id,
+      id_card: dataToModal.card_id,
+      id_task: dataToModal.id,
+      data: newItem,
+    });
+    modalRoleChange(false);
+    modalShow(true);
+  };
+
+  // Adding a role in the form
+  const addRole = () => {
+    setRoleHandler(
+      (prev) =>
+        `${prev.length !== 0 ? prev + ", " : prev} ${dataRole.role}-${
+          dataRole.level
+        }`
+    );
+  };
+
+  // Processing form data, block for adding roles and levels
+  const inputRoleHandler = (e) => {
+    setRoleHandler(e.target.value);
+  };
+
+  // Processing role data and levels
+  const roleAndLvlHandler = (e) => {
+    setDataRole({ ...dataRole, [e.target.name]: e.target.value });
+  };
+
   if (setting.name_add == email) {
     return (
       <React.Fragment>
@@ -60,8 +119,14 @@ const Setting = ({
         </div>
         <div className="buttons-settings">
           <div>
-            <h1>Добавить чек-лист:</h1>
-            <button onClick={() => {}}>Добавить</button>
+            <h1>Add Check List:</h1>
+            <button
+              onClick={() => {
+                addList(true);
+              }}
+            >
+              Add
+            </button>
           </div>
           <div>
             <h1>Rename the selected task:</h1>
@@ -96,12 +161,34 @@ const Setting = ({
           <div>
             <h1>Change the roles to perform this task:</h1>
             <button
+              className={showChangeRole ? "hidden" : ""}
               onClick={() => {
-                modalShow(false);
-                modalRoleChange(true);
+                setShowChangeRole(true);
               }}
             >
               Change role
+            </button>
+          </div>
+          <div className={!showChangeRole ? "hidden" : ""}>
+            <input
+              placeholder="List participants in role-level format separated by commas"
+              value={roleHandler}
+              onChange={inputRoleHandler}
+            />
+            <div className="measure-role">
+              {roleDependencies(roleProfileInBoard, roleAndLvlHandler)}
+            </div>
+            <button className="modal-role-change-btn" onClick={addRole}>
+              Add role to form
+            </button>
+            <button
+              className="modal-role-change-btn"
+              onClick={() => {
+                changeRoleFunc();
+                setShowChangeRole(false);
+              }}
+            >
+              Save and close
             </button>
           </div>
           <div>

@@ -54,6 +54,7 @@ const CardItem = ({
           comment: [],
           nameOfTaker: "",
           state: false,
+          check_letter: { list: [], availability: false },
         },
       };
       socket.emit("addTask", {
@@ -150,9 +151,8 @@ const CardItem = ({
               modalShow(true);
             }}
           >
-            <p>
-              {element.title}({label})
-            </p>
+            <p>Title: {element.title}</p>
+              <p>Role: {label}</p>
             <div className="item-block-icon-state">
               <div className={!element.nameOfTaker ? "hidden" : ""}>
                 <CheckCircleOutlineOutlinedIcon fontSize="small" />

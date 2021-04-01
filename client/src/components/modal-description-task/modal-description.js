@@ -7,7 +7,6 @@ import {
   displaySelection,
 } from "../../action/action-login";
 import { connect } from "react-redux";
-import ListAltIcon from "@material-ui/icons/ListAlt";
 import ReorderIcon from "@material-ui/icons/Reorder";
 import FormatListBulletedIcon from "@material-ui/icons/FormatListBulleted";
 import CheckBoxOutlinedIcon from "@material-ui/icons/CheckBoxOutlined";
@@ -17,6 +16,8 @@ import { availCheck } from "../hooks/availability-check.hook";
 import CardOfTaker from "./card-of-taker";
 import Comment from "./comment";
 import Setting from "./setting";
+import CheckList from "./check-list";
+import HeaderModalDescription from "./header-modal-description";
 
 // -----------------------------------------------------
 
@@ -202,6 +203,174 @@ const ModalDescription = ({
     }
   }, [socket, valueDisplay, dataToModal]);
 
+  // Get a check list
+  useEffect(() => {
+    if (socket) {
+      socket.on("getCheckList", (value) => {
+        if (dataToModal) {
+          console.log(value);
+          const item = value.cards.filter(
+            (e) => e.card_item_id == dataToModal.card_id
+          )[0];
+          saveActivityCard({ ...availCheck(item, card, roleProfileInBoard) });
+          const index = valueDisplay.valueDisp.cards.findIndex(
+            (e) => e.card_item_id == item.card_item_id
+          );
+
+          const newItem = {
+            ...valueDisplay.valueDisp,
+            cards: [
+              ...cardFull.cards.slice(0, index),
+              item,
+              ...cardFull.cards.slice(index + 1),
+            ],
+          };
+          saveFullCard(newItem);
+          if (!valueDisplay.stateFilter) {
+            displaySelection({ valueDisp: newItem, stateFilter: false });
+          } else {
+            displaySelection({
+              valueDisp: availCheck(
+                item,
+                valueDisplay.valueDisp,
+                roleProfileInBoard
+              ),
+              stateFilter: true,
+            });
+          }
+        }
+      });
+
+      return () => socket.off("getCheckList");
+    }
+  }, [socket, valueDisplay, dataToModal]);
+
+  // Get a check list item
+  useEffect(() => {
+    if (socket) {
+      socket.on("getCheckListItem", (value) => {
+        if (dataToModal) {
+          console.log(value);
+          const item = value.cards.filter(
+            (e) => e.card_item_id == dataToModal.card_id
+          )[0];
+          saveActivityCard({ ...availCheck(item, card, roleProfileInBoard) });
+          const index = valueDisplay.valueDisp.cards.findIndex(
+            (e) => e.card_item_id == item.card_item_id
+          );
+
+          const newItem = {
+            ...valueDisplay.valueDisp,
+            cards: [
+              ...cardFull.cards.slice(0, index),
+              item,
+              ...cardFull.cards.slice(index + 1),
+            ],
+          };
+          saveFullCard(newItem);
+          if (!valueDisplay.stateFilter) {
+            displaySelection({ valueDisp: newItem, stateFilter: false });
+          } else {
+            displaySelection({
+              valueDisp: availCheck(
+                item,
+                valueDisplay.valueDisp,
+                roleProfileInBoard
+              ),
+              stateFilter: true,
+            });
+          }
+        }
+      });
+
+      return () => socket.off("getCheckListItem");
+    }
+  }, [socket, valueDisplay, dataToModal]);
+
+  // Get a check list item with new status
+  useEffect(() => {
+    if (socket) {
+      socket.on("getChangeStatusListItem", (value) => {
+        if (dataToModal) {
+          console.log(value);
+          const item = value.cards.filter(
+            (e) => e.card_item_id == dataToModal.card_id
+          )[0];
+          saveActivityCard({ ...availCheck(item, card, roleProfileInBoard) });
+          const index = valueDisplay.valueDisp.cards.findIndex(
+            (e) => e.card_item_id == item.card_item_id
+          );
+
+          const newItem = {
+            ...valueDisplay.valueDisp,
+            cards: [
+              ...cardFull.cards.slice(0, index),
+              item,
+              ...cardFull.cards.slice(index + 1),
+            ],
+          };
+          saveFullCard(newItem);
+          if (!valueDisplay.stateFilter) {
+            displaySelection({ valueDisp: newItem, stateFilter: false });
+          } else {
+            displaySelection({
+              valueDisp: availCheck(
+                item,
+                valueDisplay.valueDisp,
+                roleProfileInBoard
+              ),
+              stateFilter: true,
+            });
+          }
+        }
+      });
+
+      return () => socket.off("getChangeStatusListItem");
+    }
+  }, [socket, valueDisplay, dataToModal]);
+
+  // Remove subtask
+  useEffect(() => {
+    if (socket) {
+      socket.on("getDataAfterDeleteCheckListItem", (value) => {
+        if (dataToModal) {
+          console.log(value);
+          const item = value.cards.filter(
+            (e) => e.card_item_id == dataToModal.card_id
+          )[0];
+          saveActivityCard({ ...availCheck(item, card, roleProfileInBoard) });
+          const index = valueDisplay.valueDisp.cards.findIndex(
+            (e) => e.card_item_id == item.card_item_id
+          );
+
+          const newItem = {
+            ...valueDisplay.valueDisp,
+            cards: [
+              ...cardFull.cards.slice(0, index),
+              item,
+              ...cardFull.cards.slice(index + 1),
+            ],
+          };
+          saveFullCard(newItem);
+          if (!valueDisplay.stateFilter) {
+            displaySelection({ valueDisp: newItem, stateFilter: false });
+          } else {
+            displaySelection({
+              valueDisp: availCheck(
+                item,
+                valueDisplay.valueDisp,
+                roleProfileInBoard
+              ),
+              stateFilter: true,
+            });
+          }
+        }
+      });
+
+      return () => socket.off("getDataAfterDeleteCheckListItem");
+    }
+  }, [socket, valueDisplay, dataToModal]);
+
   // Refusal of the task
   useEffect(() => {
     if (socket) {
@@ -353,19 +522,11 @@ const ModalDescription = ({
       >
         <Modal.Body>
           <div className="modal-description-body">
-            <div className="modal-description-header-block-one">
-              <div>
-                <ListAltIcon />
-              </div>
-              <div
-                onClick={() => {
-                  console.log(dataToModal);
-                }}
-              >
-                <h2>{dataToModal.name}</h2>
-              </div>
-            </div>
-            <p>In a collumn "{dataToModal.column}"</p>
+            <HeaderModalDescription
+              dataToModal={dataToModal}
+              email={email}
+              socket={socket}
+            />
             <div className="modal-description-add-description">
               <div>
                 <ReorderIcon />
@@ -375,6 +536,11 @@ const ModalDescription = ({
               </div>
             </div>
             <DescriptionBlock
+              dataToModal={dataToModal}
+              email={email}
+              socket={socket}
+            />
+            <CheckList
               dataToModal={dataToModal}
               email={email}
               socket={socket}
@@ -394,8 +560,15 @@ const ModalDescription = ({
                 socket={socket}
               />
             </div>
-            {/* Setting */}
-            <Setting dataToModal={dataToModal} email={email} socket={socket} />
+            {/* Setting block */}
+            <div>
+              <Setting
+                dataToModal={dataToModal}
+                email={email}
+                socket={socket}
+              />
+            </div>
+            {/* Setting block */}
             <div className="modal-description-actions-block">
               <div className="modal-description-actions">
                 <div>
