@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo } from "react";
+import React, { useState, useEffect } from "react";
 import Header from "../header";
 import ModalAddBoard from "../modal-add-board/modal-add-board";
 import SideBar from "../sideBar/side-bar";
@@ -7,6 +7,7 @@ import { connect } from "react-redux";
 import { saveDataCards, saveRole } from "../../action/action-login";
 import { Link, useParams } from "react-router-dom";
 import Loading from "../loading/loading";
+import { useHistory } from "react-router-dom";
 
 const BoardPage = ({
   saveDataCards,
@@ -16,7 +17,9 @@ const BoardPage = ({
   email,
   saveRole,
   roleProfileInBoard,
+  stateDelete,
 }) => {
+  const history = useHistory();
   const [modalShow, setModalShow] = useState(false);
   let { id } = useParams();
   const [loading, setLoading] = useState(true);
@@ -54,6 +57,22 @@ const BoardPage = ({
     }
   }, [id, socket]);
 
+  // обновление всех элементов при удалении пользователя
+  useEffect(() => {
+    if (socket) {
+      socket.on("getDataAfterDeleteUser", (value) => {
+        if (
+          value.board.addedUsers.findIndex((e) => e.email == email) == -1 &&
+          email !== value.board.creator &&
+          id.slice(id.length - 9) == value.board.board_id
+        ) {
+          history.push("/page");
+        }
+      });
+      return () => socket.off("getDataAfterDeleteUser");
+    }
+  }, [socket]);
+
   const label = boards.map((e) => {
     return (
       <Link
@@ -72,6 +91,10 @@ const BoardPage = ({
         <Loading />
       </div>
     );
+  }
+
+  if (stateDelete) {
+    return <div>Вас удалили из команды</div>;
   }
 
   return (
@@ -103,10 +126,25 @@ const BoardPage = ({
 };
 
 const mapStateToProps = ({
-  getDataReducer: { boards, socket, rooms, email, roleProfileInBoard },
+  getDataReducer: {
+    boards,
+    socket,
+    rooms,
+    email,
+    roleProfileInBoard,
+    stateDelete,
+  },
   loginReducer: { token },
 }) => {
-  return { token, boards, socket, rooms, email, roleProfileInBoard };
+  return {
+    token,
+    boards,
+    socket,
+    rooms,
+    email,
+    roleProfileInBoard,
+    stateDelete,
+  };
 };
 
 const mapDispatchToProps = (dispatch) => {

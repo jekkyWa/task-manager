@@ -4,10 +4,7 @@ import { connect } from "react-redux";
 
 const HeaderModalDescription = ({
   dataToModal,
-  email,
-  socket,
   cardFull,
-  activData,
 }) => {
   const item = cardFull.cards.filter(
     (e) => e.card_item_id == dataToModal.card_id

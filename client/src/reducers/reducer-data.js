@@ -16,6 +16,8 @@ const getDataReducer = (state, action) => {
       changeRole: false,
       activData: [],
       saveRole: [],
+      boardActive: {},
+      stateDelete: false,
     };
   }
   switch (action.type) {
@@ -87,6 +89,16 @@ const getDataReducer = (state, action) => {
       return {
         ...state.getDataReducer,
         changeRole: action.changeRole,
+      };
+    case "SAVE_ACTIVE_BOARD":
+      return {
+        ...state.getDataReducer,
+        boardActive: action.boardActive,
+      };
+    case "CHECK_DELETE_USER":
+      return {
+        ...state.getDataReducer,
+        stateDelete: action.stateDelete,
       };
     default:
       return state.getDataReducer;

@@ -102,6 +102,20 @@ const modalRoleChange = (changeRole) => {
   };
 };
 
+const saveActiveBoard = (boardActive) => {
+  return {
+    type: "SAVE_ACTIVE_BOARD",
+    boardActive,
+  };
+};
+
+const checkDeleteUser = (stateDelete) => {
+  return {
+    type: "CHECK_DELETE_USER",
+    stateDelete,
+  };
+};
+
 export {
   fetchLogin,
   saveDataIdentification,
@@ -117,4 +131,6 @@ export {
   roleForNewTask,
   modalRoleShow,
   modalRoleChange,
+  saveActiveBoard,
+  checkDeleteUser,
 };

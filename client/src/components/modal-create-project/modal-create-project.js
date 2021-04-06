@@ -10,7 +10,7 @@ const ModalCreateProject = ({
   onHide,
   show,
   token,
-  rooms,
+  email,
   saveDataIdentification,
 }) => {
   const [addedUsers, setAddedUsers] = useState([]);
@@ -42,6 +42,7 @@ const ModalCreateProject = ({
       let objForSend = {
         ...formCreateProject,
         addedUsers: cleanAddedUsers,
+        creator: email,
       };
       await request("/api/createBoard", "POST", objForSend, {
         Authorization: `Bearer ${token}`,
@@ -212,9 +213,9 @@ const ModalCreateProject = ({
 
 const mapStateToProps = ({
   loginReducer: { token },
-  getDataReducer: { rooms },
+  getDataReducer: { rooms, email },
 }) => {
-  return { token, rooms };
+  return { token, rooms, email };
 };
 
 const mapDispatchToProps = (dispatch) => {

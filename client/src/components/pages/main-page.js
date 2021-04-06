@@ -4,41 +4,15 @@ import Header from "../header";
 import "./pages.scss";
 import { connect } from "react-redux";
 import { saveDataIdentification } from "../../action/action-login";
-import { useHttp } from "../hooks/http.hook";
 import Loading from "../loading/loading";
-import io from "socket.io-client";
-import { saveSocket } from "../../action/action-login";
 import image_1 from "../../images/image_1.png";
 import image_2 from "../../images/card-back.svg";
 import image_3 from "../../images/hero.png";
+import { useHttp } from "../hooks/http.hook";
+import { Link } from "react-router-dom";
 
 const MainPage = ({ token, saveDataIdentification, saveSocket }) => {
-  const phone = "192.168.43.127:5000";
-  const local = "http://localhost:5000";
   const { request, loading } = useHttp();
-  const setupSocket = () => {
-    const newSocket = io(local, {
-      query: {
-        token,
-      },
-    });
-    console.log(newSocket);
-    newSocket.on("disconnect", () => {
-      saveSocket(null);
-      setTimeout(setupSocket, 3000);
-      console.log("disconnecnt");
-    });
-
-    newSocket.on("connect", () => {
-      console.log("succes");
-    });
-
-    saveSocket(newSocket);
-  };
-
-  useEffect(() => {
-    setupSocket();
-  }, []);
 
   const getData = async () => {
     try {
@@ -98,13 +72,17 @@ const MainPage = ({ token, saveDataIdentification, saveSocket }) => {
             NieTask is a project created exclusively for educational purposes.
           </h1>
           <div>
-            <button>Original</button>
+            <a href="https://trello.com/ru">
+              <button>Original</button>
+            </a>
           </div>
           <h1>
             If you have not started your work in Nietask, what do you expect?
           </h1>
           <div>
-            <button>Start work</button>
+            <Link to="/begin">
+              <button>Start work</button>
+            </Link>
           </div>
         </div>
       </div>
@@ -121,9 +99,6 @@ const mapStateToProps = ({
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    saveSocket: (socket) => {
-      dispatch(saveSocket(socket));
-    },
     saveDataIdentification: (email, name, rooms) => {
       dispatch(saveDataIdentification(email, name, rooms));
     },

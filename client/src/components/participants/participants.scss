@@ -1,0 +1,140 @@
+@import "../../templates.scss";
+
+.participants-page {
+  display: flex;
+}
+
+.participants {
+  margin-top: 30px;
+  padding: 20px 20px 0px 30px;
+  width: 100%;
+  .add-user-email-partic {
+    > p {
+      margin: 8px 0px 2px 0px;
+      font-weight: 200;
+    }
+    > input {
+      width: 100%;
+      padding: 3px;
+    }
+  }
+  .add-user-role-partic {
+    > p {
+      margin: 8px 0px 2px 0px;
+      font-weight: 200;
+    }
+    > select {
+      width: 100%;
+      padding: 5px;
+    }
+  }
+
+  > h1 {
+    font-size: 16px;
+    font-weight: 700;
+  }
+  > h2 {
+    font-size: 16px;
+    font-weight: 300;
+  }
+  .add-user-partic {
+    margin-top: 10px;
+    width: 200px;
+    border: none;
+    padding: 7px;
+    font-size: 14px;
+    font-weight: 200;
+    background-color: rgb(223, 223, 223);
+    margin-bottom: 10px;
+  }
+  .add-user-partic-active {
+    display: flex;
+    justify-content: space-between;
+    > button {
+      margin-top: 10px;
+      width: 30%;
+      border: none;
+      padding: 7px;
+      font-size: 14px;
+      font-weight: 200;
+      background-color: rgb(223, 223, 223);
+      margin-bottom: 10px;
+    }
+    .close-icon-partic {
+      margin-top: 8px;
+      cursor: pointer;
+    }
+  }
+}
+
+.user-block-partic {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  margin-top: 30px;
+  margin-bottom: 20px;
+  .user-item-partic {
+    display: flex;
+    .info-user-partic {
+      > p {
+        margin: 0px;
+        font-size: 14px;
+      }
+      .setting-icon-partic {
+        margin-left: 5px;
+        cursor: pointer;
+      }
+    }
+    .user-profile-icon-partic {
+      @extend %styleProfileIcon;
+      align-self: center;
+      margin-right: 10px;
+    }
+  }
+  .actions-with-users {
+    display: flex;
+    .delete-user-partic {
+      background-color: rgb(207, 81, 61);
+      color: white;
+    }
+    > button {
+      align-self: center;
+      width: 115px;
+      font-size: 14px;
+      font-weight: 200;
+      margin: 3px;
+      border: none;
+      padding: 5px;
+      background-color: rgb(223, 223, 223);
+      border-radius: 2px;
+    }
+  }
+}
+
+.arrow-icon-partic {
+  border: none;
+  margin: 1px;
+  margin-left: 2px;
+  width: 35px;
+  padding: 0px;
+  cursor: pointer;
+}
+
+.select-partic {
+  > select {
+    font-size: 14px;
+    font-weight: 200;
+    padding: 1px;
+    border: 1px solid black;
+  }
+}
+
+.panel-icon-partic {
+  margin-left: 5px;
+  border: 1px solid black;
+  height: 24px !important;
+  width: 24px !important;
+  margin-bottom: 3px;
+  padding: 4px;
+  cursor: pointer;
+}

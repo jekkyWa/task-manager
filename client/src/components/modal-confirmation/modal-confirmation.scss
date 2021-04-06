@@ -1,0 +1,29 @@
+.modal-40w {
+  min-width: 40%;
+}
+
+.modal-confirmation {
+  > h1 {
+    font-size: 18px;
+    font-weight: 400;
+    margin-bottom: 20px;
+  }
+  .modal-confirmation-btns {
+    display: flex;
+    justify-content: space-between;
+    > button {
+      width: 48%;
+      border: none;
+      padding: 7px;
+      font-weight: 300;
+    }
+    .delete-modal-confirmation {
+      background-color: rgb(207, 81, 61);
+      color: white;
+    }
+    .close-modal-confirmation{
+      background-color: rgb(116, 116, 116);
+      color:white;
+    }
+  }
+}

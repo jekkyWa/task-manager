@@ -7,13 +7,13 @@ import TimelineIcon from "@material-ui/icons/Timeline";
 import CheckBoxOutlinedIcon from "@material-ui/icons/CheckBoxOutlined";
 import FavoriteBorderOutlinedIcon from "@material-ui/icons/FavoriteBorderOutlined";
 import PeopleOutlineOutlinedIcon from "@material-ui/icons/PeopleOutlineOutlined";
-import SettingsIcon from "@material-ui/icons/Settings";
 import ModalCreateProject from "../modal-create-project";
+import DeleteOutlineOutlinedIcon from "@material-ui/icons/DeleteOutlineOutlined";
 import { connect } from "react-redux";
 import "./side-bar.scss";
 import { Link } from "react-router-dom";
 
-const SideBar = ({ rooms, name }) => {
+const SideBar = ({ rooms, email }) => {
   const [modalShow, setModalShow] = useState(false);
   const [arrId, setArrId] = useState([]);
 
@@ -28,48 +28,9 @@ const SideBar = ({ rooms, name }) => {
     }
   };
 
-  const labelActive = rooms.active.map((e) => {
-    return (
-      <React.Fragment key={e.board_id}>
-        <div
-          className="sidebar-block-two-item-work-place"
-          onClick={() => {
-            menuState(e.board_id);
-          }}
-        >
-          <SupervisorAccountIcon className="test" />
-          <h2>{`${name}: ${e.name_Project}`}</h2>
-          <ExpandMoreIcon className="test" />
-        </div>
-        <div
-          className={`retractable-block ${
-            arrId.indexOf(e.board_id) == -1 ? "hidden" : ""
-          }`}
-        >
-          <div className="retractable-block-item">
-            <DashboardIcon fontSize="small" />
-            <h1>
-              <Link to={`/boards/${e.name_Project + e.board_id}`}>Boards</Link>
-            </h1>
-          </div>
-          <div className="retractable-block-item">
-            <FavoriteBorderOutlinedIcon fontSize="small" />
-            <h1>Important events</h1>
-          </div>
-          <div className="retractable-block-item">
-            <PeopleOutlineOutlinedIcon fontSize="small" />
-            <h1>Participants</h1>
-          </div>
-          <div className="retractable-block-item">
-            <SettingsIcon fontSize="small" />
-            <h1>Settings</h1>
-          </div>
-        </div>
-      </React.Fragment>
-    );
-  });
+  const commonLabel = rooms.active.concat(rooms.passive);
 
-  const labelPassive = rooms.passive.map((e) => {
+  const label = commonLabel.map((e) => {
     return (
       <React.Fragment key={e.board_id}>
         <div
@@ -79,7 +40,12 @@ const SideBar = ({ rooms, name }) => {
           }}
         >
           <SupervisorAccountIcon className="test" />
-          <h2>{`${name}: ${e.name_Project}`}</h2>
+          <h2>
+            <span className={email == e.creator ? "my-command" : ""}>
+              {e.creator}
+            </span>
+            : {e.name_Project}
+          </h2>
           <ExpandMoreIcon className="test" />
         </div>
         <div
@@ -99,11 +65,15 @@ const SideBar = ({ rooms, name }) => {
           </div>
           <div className="retractable-block-item">
             <PeopleOutlineOutlinedIcon fontSize="small" />
-            <h1>Participants</h1>
+            <h1>
+              <Link to={`/boards/${e.name_Project + e.board_id}/participants`}>
+                Participants
+              </Link>
+            </h1>
           </div>
           <div className="retractable-block-item">
-            <SettingsIcon fontSize="small" />
-            <h1>Settings</h1>
+            <DeleteOutlineOutlinedIcon fontSize="small" />
+            <h1>Delete</h1>
           </div>
         </div>
       </React.Fragment>
@@ -148,18 +118,15 @@ const SideBar = ({ rooms, name }) => {
               />
             </div>
           </div>
-          <p>Active:</p>
-          {labelActive}
-          <p>Passive:</p>
-          {labelPassive}
+          {label}
         </div>
       </nav>
     </div>
   );
 };
 
-const mapStateToProps = ({ getDataReducer: { rooms, name } }) => {
-  return { rooms, name };
+const mapStateToProps = ({ getDataReducer: { rooms, email } }) => {
+  return { rooms, email };
 };
 
 export default connect(mapStateToProps, null)(SideBar);

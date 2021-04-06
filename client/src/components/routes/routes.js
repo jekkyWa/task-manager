@@ -6,6 +6,7 @@ import Page from "../pages/main-page";
 import BeginningOfWorkPage from "../pages/beginning-of-work-page";
 import BoardPage from "../pages/boards-page";
 import CardPage from "../pages/card-page";
+import Participants from "../participants/participants";
 
 const useRoutes = (isAuthenticated) => {
   if (isAuthenticated) {
@@ -19,6 +20,9 @@ const useRoutes = (isAuthenticated) => {
         </Route>
         <Route path="/boards/:id" exact>
           <BoardPage />
+        </Route>
+        <Route path="/boards/:id/participants" exact>
+          <Participants />
         </Route>
         <Route path="/boards/:id/:name" exact>
           <CardPage />

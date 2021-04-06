@@ -21,6 +21,7 @@ import { availCheck } from "../hooks/availability-check.hook";
 import dateFormat from "dateformat";
 import CardItem from "../card-item/card-item";
 import ModalAddRole from "../modal-add-role/modal-add-role";
+import { useHistory } from "react-router-dom";
 
 const CardPage = ({
   saveActivityCard,
@@ -42,20 +43,7 @@ const CardPage = ({
   const [inputAddCard, setInputAddCard] = useState("");
   const [stateList, setStateList] = useState(false);
   const [stateMenu, setStateMenu] = useState(false);
-  const ref = useRef(null);
-
-  // Отслеживаем по какому элементу нажал пользователь, если вне одного из элемента с необходимым id
-  // обновляются формы
-
-  const handleClickOutside = (e) => {
-    // if (e.target.id !== "click-outside-check" && e.which == 1) {
-    //   setArrInput([]);
-    //   setStateList(false);
-    //   setHandlerTitleCard([{ id: "", title: "" }]);
-    //   setInputAddCard("");
-    //   setVisiableBlock([]);
-    // }
-  };
+  const history = useHistory();
 
   // Processing the form data for adding a new card
   const handlerInputAddCard = (e) => {
@@ -83,11 +71,6 @@ const CardPage = ({
       levelBack: roleProfileInBoard.level,
     });
   };
-
-  // useEffect(() => {
-  //   document.addEventListener("mousedown", handleClickOutside);
-  //   return () => document.removeEventListener("mousedown", handleClickOutside);
-  // });
 
   useEffect(() => {
     if (socket) {
@@ -229,6 +212,22 @@ const CardPage = ({
     }
   }, [socket, activData]);
 
+  // обновление всех элементов при удалении пользователя
+  useEffect(() => {
+    if (socket) {
+      socket.on("getDataAfterDeleteUser", (value) => {
+        if (
+          value.board.addedUsers.findIndex((e) => e.email == email) == -1 &&
+          email !== value.board.creator &&
+          id.slice(0, id.length - 9) == value.board.board_id
+        ) {
+          history.push("/page");
+        }
+      });
+      return () => socket.off("getDataAfterDeleteUser");
+    }
+  }, [socket]);
+
   if (loading) {
     return (
       <div className="loading">
@@ -252,9 +251,7 @@ const CardPage = ({
           <div className="name-command-card-page">
             <h1>
               Team name:{" "}
-              <span className="selected-text">
-                {id.slice(0, id.length - 9)}
-              </span>
+              <span className="selected-text">{id.slice(id.length - 9)}</span>
             </h1>
           </div>
           <div className="name-board-card-page">
@@ -307,15 +304,6 @@ const CardPage = ({
       </div>
       <div className="card-body">
         <CardItem />
-        {/* <div className="card-item">
-          <p>Done</p>
-          <div className="arr-task">
-            <div className="task-item task-item">
-              <p>test</p>
-            </div>
-            В данный момент команда не выполнила ни одного задания
-          </div>
-        </div> */}
         <div
           className={`${
             roleProfileInBoard.level == "Senior" ||
