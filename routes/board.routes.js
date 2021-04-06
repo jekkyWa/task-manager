@@ -8,7 +8,7 @@ const shortid = require("shortid");
 
 router.post("/createBoard", auth, async (req, res) => {
   try {
-    const { nameProject, description, date, addedUsers } = req.body;
+    const { nameProject, description, date, addedUsers, creator } = req.body;
 
     let id = shortid.generate();
 
@@ -18,6 +18,7 @@ router.post("/createBoard", auth, async (req, res) => {
       date,
       addedUsers,
       board_id: id,
+      creator,
     });
 
     const check = await User.find(
