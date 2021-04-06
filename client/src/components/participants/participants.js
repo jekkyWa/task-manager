@@ -59,11 +59,30 @@ const Participants = ({ socket, saveActiveBoard, email, boardActive }) => {
   useEffect(() => {
     if (socket) {
       socket.on("getNewUsers", (value) => {
-        console.log(value);
         saveActiveBoard(value);
       });
       // After the data come to stop further sending
       return () => socket.off("getNewUsers");
+    }
+  }, [socket, boardActive]);
+
+  useEffect(() => {
+    if (socket) {
+      socket.on("getUpdateRoleInCommand", (value) => {
+        saveActiveBoard(value.board);
+      });
+      // After the data come to stop further sending
+      return () => socket.off("getUpdateRoleInCommand");
+    }
+  }, [socket, boardActive]);
+
+  useEffect(() => {
+    if (socket) {
+      socket.on("getUpdateLevelInCommand", (value) => {
+        saveActiveBoard(value.board);
+      });
+      // After the data come to stop further sending
+      return () => socket.off("getUpdateLevelInCommand");
     }
   }, [socket, boardActive]);
 
@@ -119,6 +138,16 @@ const Participants = ({ socket, saveActiveBoard, email, boardActive }) => {
         data: dataSelectUpdateRole,
       });
     };
+    const updateUserLevel = async (value) => {
+      const levelArr = ["Junior", "Middle", "Senior"];
+      const index = levelArr.indexOf(e.level);
+      socket.emit("updateLevelInCommand", {
+        id: id.slice(id.length - 9),
+        email: e.email,
+        movement: value,
+        currentState: index,
+      });
+    };
     return (
       <div key={i} className="user-block-partic">
         <div className="user-item-partic">
@@ -151,11 +180,6 @@ const Participants = ({ socket, saveActiveBoard, email, boardActive }) => {
                 <option>Marketing specialist</option>
                 <option>Product manager</option>
               </select>
-              <DoneIcon
-                onClick={updateUserRole}
-                className="panel-icon-partic"
-                fontSize="small"
-              />
               <CloseIcon
                 className="panel-icon-partic"
                 onClick={() => {
@@ -163,11 +187,29 @@ const Participants = ({ socket, saveActiveBoard, email, boardActive }) => {
                 }}
                 fontSize="small"
               />
+              <DoneIcon
+                onClick={() => {
+                  updateUserRole();
+                  setSelectRoleState(false);
+                }}
+                className="panel-icon-partic"
+                fontSize="small"
+              />
             </div>
             <p>
               Level: {e.level}
-              <ExpandLessIcon fontSize="small" />
-              <ExpandMoreIcon fontSize="small" />
+              <ExpandLessIcon
+                fontSize="small"
+                onClick={() => {
+                  updateUserLevel("up");
+                }}
+              />
+              <ExpandMoreIcon
+                fontSize="small"
+                onClick={() => {
+                  updateUserLevel("down");
+                }}
+              />
             </p>
           </div>
         </div>
