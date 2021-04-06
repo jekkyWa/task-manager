@@ -4,6 +4,7 @@ const mongoose = require("mongoose");
 const cors = require("cors");
 const Cards = require("./models/Cards");
 const Board = require("./models/Board");
+const User = require("./models/User");
 
 mongoose.connect(config.get("mongoUri"), {
   useNewUrlParser: true,
@@ -56,6 +57,8 @@ io.on("connection", (socket) => {
     console.log("Disconnected: " + socket.id);
   });
 
+  // Подключение к комнате с board
+
   socket.on("joinroom", async ({ id }) => {
     console.log("join room");
     socket.join(id);
@@ -65,10 +68,75 @@ io.on("connection", (socket) => {
     socket.emit("getBoard", { filterCards });
   });
 
+  // подключение к комнате с участниками
+
+  socket.on("joinParticipants", async ({ id }) => {
+    console.log("Join Participants");
+    socket.join(id + "partic");
+    const value = await Board.find({ board_id: id });
+    socket.emit("getRightBoard", value[0]);
+  });
+
   socket.on("leaveRoom", ({ id }) => {
     socket.leave(id);
     console.log("A user left chatroom: " + id);
   });
+
+  // -------- Participants
+
+  // Adding a new User to Board
+  socket.on("addAdditionalUser", async ({ board_id, data }) => {
+    const value = await Board.find({ board_id });
+    value[0].addedUsers = [...value[0].addedUsers, data];
+    const orgiginalValue = await Board.find({ board_id });
+
+    await Board.updateOne(orgiginalValue[0], value[0]);
+
+    await User.updateOne(
+      { email: data.email },
+      { $push: { passive_rooms: board_id } }
+    );
+    io.in(board_id + "partic").emit("getNewUsers", value[0]);
+  });
+
+  // Delete User in Board
+  socket.on("deleteUser", async ({ id, email }) => {
+    const board = await Board.find({ board_id: id });
+    const indexBoard = board[0].addedUsers.findIndex((e) => e.email == email);
+    board[0].addedUsers = [
+      ...board[0].addedUsers.slice(0, indexBoard),
+      ...board[0].addedUsers.slice(indexBoard + 1),
+    ];
+    const boardOriginal = await Board.find({ board_id: id });
+
+    const user = await User.find({ email });
+    const indexUser = user[0].passive_rooms.indexOf(id);
+
+    user[0].passive_rooms = [
+      ...user[0].passive_rooms.slice(0, indexUser),
+      ...user[0].passive_rooms.slice(indexUser + 1),
+    ];
+    const userOriginal = await User.find({ email });
+
+    await Board.updateOne(boardOriginal[0], board[0]);
+    await User.updateOne(userOriginal[0], user[0]);
+
+    io.emit("getDataAfterDeleteUser", { board: board[0], user: user[0] });
+  });
+
+  // Update the role of user in Command
+  socket.on("updateRoleInCommand", async ({ id, email, data }) => {
+    const board = await Board.find({ board_id: id });
+    let boardOriginal = JSON.parse(JSON.stringify(board));
+    const indexBoard = board[0].addedUsers.findIndex((e) => e.email == email);
+    board[0].addedUsers[indexBoard].role = data;
+    await Board.updateOne(boardOriginal[0], board[0]);
+
+    // io.emit("getUpdateRoleInCommand", { board: board[0], user: user[0] });
+  });
+
+  // --------- Cards
+
   // Remove subtask
   socket.on(
     "deleteCheckListItem",
