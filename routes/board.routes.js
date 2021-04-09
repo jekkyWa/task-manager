@@ -46,10 +46,10 @@ router.post("/createBoard", auth, async (req, res) => {
       active_rooms: [...value[0].active_rooms, id],
     });
 
-    await User.updateMany(
-      { email: { $in: addedUsers.map((e) => e.email) } },
-      { $addToSet: { passive_rooms: [id] } }
-    );
+    // await User.updateMany(
+    //   { email: { $in: addedUsers.map((e) => e.email) } },
+    //   { $addToSet: { passive_rooms: [id] } }
+    // );
 
     res.status(201).json({ message: "Доска создана" });
   } catch (e) {

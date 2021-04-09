@@ -6,6 +6,9 @@ const Cards = require("./models/Cards");
 const Board = require("./models/Board");
 const User = require("./models/User");
 
+// Key-meaning (email - socket)
+let _users = {};
+
 mongoose.connect(config.get("mongoUri"), {
   useNewUrlParser: true,
   useUnifiedTopology: true,
@@ -53,6 +56,10 @@ const io = require("socket.io")(server, {
 io.on("connection", (socket) => {
   console.log("Connected: " + socket.id);
 
+  socket.on("setUserId", (email) => {
+    _users[email] = socket.id;
+  });
+
   socket.on("disconnect", () => {
     console.log("Disconnected: " + socket.id);
   });
@@ -64,7 +71,6 @@ io.on("connection", (socket) => {
     socket.join(id);
     const value = await Board.find({ board_id: id });
     const filterCards = await Cards.find({ card_id: value[0].board_item });
-
     socket.emit("getBoard", { filterCards });
   });
 
@@ -80,6 +86,20 @@ io.on("connection", (socket) => {
   socket.on("leaveRoom", ({ id }) => {
     socket.leave(id);
     console.log("A user left chatroom: " + id);
+  });
+
+  // Notifications
+
+  socket.on("sendNotification", async ({ data, message }) => {
+    for (let i = 0; i < data.length; i++) {
+      await User.updateOne(
+        { email: data[i].email },
+        { $push: { notifications: message } }
+      );
+      if (_users[data[i].email]) {
+        socket.to(_users[data[i].email]).emit("getNotification", message);
+      }
+    }
   });
 
   // -------- Participants
@@ -118,10 +138,23 @@ io.on("connection", (socket) => {
     ];
     const userOriginal = await User.find({ email });
 
+    const filterRoomsActive = await Board.find({
+      board_id: user[0].active_rooms,
+    });
+
+    const filterRoomsPassive = await Board.find({
+      board_id: user[0].passive_rooms,
+    });
+
     await Board.updateOne(boardOriginal[0], board[0]);
     await User.updateOne(userOriginal[0], user[0]);
 
-    io.emit("getDataAfterDeleteUser", { board: board[0], user: user[0] });
+    io.emit("getDataAfterDeleteUser", {
+      board: board[0],
+      user: user[0],
+      active: filterRoomsActive,
+      passive: filterRoomsPassive,
+    });
   });
 
   // Update the role of user in Command

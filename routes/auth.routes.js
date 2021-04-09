@@ -44,6 +44,7 @@ router.post(
         name,
         active_rooms: [],
         passive_rooms: [],
+        notifications: [],
       });
       await user.save();
       res.status(201).json({ message: "Пользователь создан" });
@@ -74,7 +75,7 @@ router.post(
         });
       }
       const { email, password } = req.body;
-      console.log(email)
+      console.log(email);
       const user = await User.findOne({ email });
 
       if (!user) {
