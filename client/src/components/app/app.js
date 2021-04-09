@@ -1,25 +1,13 @@
 import React, { useEffect } from "react";
 import { connect } from "react-redux";
 import { useAuth } from "../hooks/auth.hook";
-import {
-  fetchLogin,
-  saveActiveBoard,
-  saveSocket,
-} from "../../action/action-login";
+import { fetchLogin, saveSocket } from "../../action/action-login";
 import "./app.css";
 import useRoutes from "../routes/routes";
 import { BrowserRouter as Router, withRouter } from "react-router-dom";
 import io from "socket.io-client";
 
-const App = ({
-  fetchLogin,
-  saveSocket,
-  socket,
-  saveActiveBoard,
-  checkDeleteUser,
-  email,
-  boardActive,
-}) => {
+const App = ({ fetchLogin, saveSocket, socket, email }) => {
   const { login, logout, token, userId } = useAuth();
   const isAuthenticated = !!token;
   useEffect(() => {
@@ -29,28 +17,38 @@ const App = ({
   const phone = "192.168.43.127:5000";
   const local = "http://localhost:5000";
   const setupSocket = () => {
-    const newSocket = io(local, {
-      query: {
-        token,
-      },
-    });
-    console.log(newSocket);
-    newSocket.on("disconnect", () => {
-      saveSocket(null);
-      setTimeout(setupSocket, 3000);
-      console.log("disconnecnt");
-    });
+    if (email !== "email") {
+      const newSocket = io(local, {
+        query: {
+          token,
+        },
+      });
 
-    newSocket.on("connect", () => {
-      console.log("succes");
-    });
+      newSocket.on("disconnect", () => {
+        saveSocket(null);
+        setTimeout(setupSocket, 3000);
+      });
 
-    saveSocket(newSocket);
+      newSocket.on("connect", () => {
+        newSocket.emit("setUserId", email);
+        console.log("succes");
+      });
+      saveSocket(newSocket);
+    }
   };
 
   useEffect(() => {
     setupSocket();
-  }, []);
+  }, [email, isAuthenticated]);
+
+  useEffect(() => {
+    if (socket) {
+      socket.on("getNotification", (value) => {
+        console.log(value);
+      });
+      return () => socket.off("getNotification");
+    }
+  }, [socket]);
 
   const routes = useRoutes(isAuthenticated);
 
@@ -58,9 +56,9 @@ const App = ({
 };
 
 const mapStateToProps = ({
-  getDataReducer: { socket, email, boardActive },
+  getDataReducer: { boardActive, email, socket },
 }) => {
-  return { socket, email, boardActive };
+  return { boardActive, email, socket };
 };
 
 const mapDispatchToProps = (dispatch) => {

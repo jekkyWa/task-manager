@@ -48,6 +48,7 @@
   display: flex;
   .begin-body {
     margin: 0 auto;
+    margin-top: 50px;
   }
   .begin-container {
     margin-left: 60px;
@@ -132,7 +133,7 @@
     justify-content: flex-start;
     flex-wrap: wrap;
     align-content: flex-start;
-    margin-top: 40px;
+    margin-top: 80px;
     padding: 10px;
     .board {
       flex-basis: 175px;
@@ -184,6 +185,7 @@
   .header-card-page {
     display: flex;
     justify-content: space-between;
+    margin-top:42px;
     .header-card-page-block-two {
       display: flex;
       padding: 5px;

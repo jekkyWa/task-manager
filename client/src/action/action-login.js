@@ -116,6 +116,41 @@ const checkDeleteUser = (stateDelete) => {
   };
 };
 
+const saveNotifications = (notification) => {
+  return {
+    type: "SAVE_NOTIFICATIONS",
+    notification,
+  };
+};
+
+const showNotifications = (showNotification) => {
+  return {
+    type: "SHOW_NOTIFICATIONS",
+    showNotification,
+  };
+};
+
+const showBoards = (showBoard) => {
+  return {
+    type: "SHOW_BOARDS",
+    showBoard,
+  };
+};
+
+const showUserBlock = (showUser) => {
+  return {
+    type: "SHOW_USER_BLOCK",
+    showUser,
+  };
+};
+
+const showSearchBlock = (showSearch) => {
+  return {
+    type: "SHOW_SEARCH_BLOCK",
+    showSearch,
+  };
+};
+
 export {
   fetchLogin,
   saveDataIdentification,
@@ -133,4 +168,9 @@ export {
   modalRoleChange,
   saveActiveBoard,
   checkDeleteUser,
+  saveNotifications,
+  showNotifications,
+  showBoards,
+  showUserBlock,
+  showSearchBlock,
 };

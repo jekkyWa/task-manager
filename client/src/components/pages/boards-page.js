@@ -17,7 +17,6 @@ const BoardPage = ({
   email,
   saveRole,
   roleProfileInBoard,
-  stateDelete,
 }) => {
   const history = useHistory();
   const [modalShow, setModalShow] = useState(false);
@@ -91,10 +90,6 @@ const BoardPage = ({
         <Loading />
       </div>
     );
-  }
-
-  if (stateDelete) {
-    return <div>Вас удалили из команды</div>;
   }
 
   return (

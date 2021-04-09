@@ -1,10 +1,36 @@
-import React from "react";
+import React, { useEffect } from "react";
 import Header from "../header";
 import SideBar from "../sideBar/side-bar";
 import CheckBoxOutlinedIcon from "@material-ui/icons/CheckBoxOutlined";
-import "./pages.scss"
+import "./pages.scss";
+import { connect } from "react-redux";
+import { saveDataIdentification } from "../../action/action-login";
 
-const BeginningOfWorkPage = () => {
+const BeginningOfWorkPage = ({
+  email,
+  name,
+  token,
+  saveDataIdentification,
+  socket,
+}) => {
+  useEffect(() => {
+    if (socket) {
+      socket.on("getDataAfterDeleteUser", (value) => {
+        if (
+          value.board.addedUsers.findIndex((e) => e.email == email) == -1 &&
+          email !== value.board.creator
+        ) {
+          const rooms = {
+            active: value.active,
+            passive: value.passive,
+          };
+          console.log(rooms);
+          saveDataIdentification(email, name, rooms);
+        }
+      });
+      return () => socket.off("getDataAfterDeleteUser");
+    }
+  }, [socket]);
   return (
     <div>
       <Header />
@@ -64,4 +90,22 @@ const BeginningOfWorkPage = () => {
   );
 };
 
-export default BeginningOfWorkPage;
+const mapStateToProps = ({
+  getDataReducer: { name, socket, email },
+  loginReducer: { token },
+}) => {
+  return { token, email, name, socket };
+};
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    saveDataIdentification: (email, name, rooms) => {
+      dispatch(saveDataIdentification(email, name, rooms));
+    },
+  };
+};
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(BeginningOfWorkPage);

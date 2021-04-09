@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import SideBar from "../sideBar/side-bar";
 import Header from "../header";
 import "./pages.scss";
@@ -11,7 +11,7 @@ import image_3 from "../../images/hero.png";
 import { useHttp } from "../hooks/http.hook";
 import { Link } from "react-router-dom";
 
-const MainPage = ({ token, saveDataIdentification, saveSocket }) => {
+const MainPage = ({ email, name, token, saveDataIdentification, socket }) => {
   const { request, loading } = useHttp();
 
   const getData = async () => {
@@ -26,6 +26,25 @@ const MainPage = ({ token, saveDataIdentification, saveSocket }) => {
   useEffect(() => {
     getData();
   }, []);
+
+  useEffect(() => {
+    if (socket) {
+      socket.on("getDataAfterDeleteUser", (value) => {
+        if (
+          value.board.addedUsers.findIndex((e) => e.email == email) == -1 &&
+          email !== value.board.creator
+        ) {
+          const rooms = {
+            active: value.active,
+            passive: value.passive,
+          };
+          console.log(rooms);
+          saveDataIdentification(email, name, rooms);
+        }
+      });
+      return () => socket.off("getDataAfterDeleteUser");
+    }
+  }, [socket]);
 
   if (loading) {
     return (
@@ -91,10 +110,10 @@ const MainPage = ({ token, saveDataIdentification, saveSocket }) => {
 };
 
 const mapStateToProps = ({
-  getDataReducer: { name },
+  getDataReducer: { name, socket, email },
   loginReducer: { token },
 }) => {
-  return { token, name };
+  return { token, email, name, socket };
 };
 
 const mapDispatchToProps = (dispatch) => {

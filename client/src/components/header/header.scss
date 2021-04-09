@@ -11,7 +11,9 @@
   display: flex;
   padding-left: 5px;
   justify-content: space-between;
-
+  position: fixed;
+  width: 100%;
+  margin-bottom: 100px;
   .menu-header {
     display: flex;
     .header-item {
@@ -71,6 +73,11 @@
       @extend %styleProfileIcon;
     }
   }
+}
+
+.number-of-natifications {
+  vertical-align: -2px;
+  margin-right: 5px;
 }
 
 @media screen and (max-width: 800px) {

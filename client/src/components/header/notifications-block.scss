@@ -1,0 +1,79 @@
+.notifications-block {
+  position: fixed;
+  width: 432px;
+  will-change: top, left;
+  top: 44px;
+  right: 0px;
+  background-color: white;
+  color: #172b4d;
+  line-height: 20px;
+  font-weight: 400;
+  background-color: #fff;
+  border-radius: 3px;
+  box-shadow: 0 8px 16px -4px rgb(9 30 66 / 25%), 0 0 0 1px rgb(9 30 66 / 8%);
+  box-sizing: border-box;
+  outline: 0;
+  overflow: hidden;
+  .header-notifications {
+    >.close-notifications{
+        cursor: pointer;
+    }
+    display: flex;
+    justify-content: space-between;
+    border-bottom: 1px solid rgb(226, 226, 226);
+    padding: 10px;
+    margin: 0px 10px 0px 10px;
+    > p {
+      margin: 0 auto;
+      font-size: 16px;
+    }
+  }
+  .body-notifications-empty {
+    > .img-body-notifications {
+      text-align: center;
+      margin-top: 15px;
+      padding: 10px;
+      > h1 {
+        font-size: 20px;
+        margin-top: 15px;
+        margin-bottom: 30px;
+      }
+    }
+  }
+  .body-notifications-item {
+    .notifications-item-body-end {
+      border-bottom: none !important;
+      margin-bottom: 10px !important;
+    }
+    .notifications-item-body {
+      border-bottom: 1px solid rgb(204, 204, 204);
+      padding: 5px;
+      margin: 10px 10px 0px 10px;
+      > h1 {
+        font-size: 16px;
+        font-weight: 300;
+        padding: 7px;
+      }
+      > .btns-notifications-item-body {
+        display: flex;
+        justify-content: flex-end;
+        > button {
+          margin-left: 5px;
+          border: none;
+          font-size: 16px;
+          font-weight: 300;
+          padding: 3px 10px 3px 10px;
+          width: 70px;
+        }
+        .join {
+          background-color: rgb(90, 172, 68);
+          color: white;
+        }
+        .refuse {
+          background-color: rgb(207, 81, 61);
+          color: white;
+        }
+      }
+    }
+  }
+}

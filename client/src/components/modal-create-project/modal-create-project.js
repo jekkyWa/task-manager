@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { Modal } from "react-bootstrap";
 import "./modal-create-project.scss";
 import { saveDataIdentification } from "../../action/action-login";
@@ -12,6 +12,7 @@ const ModalCreateProject = ({
   token,
   email,
   saveDataIdentification,
+  socket,
 }) => {
   const [addedUsers, setAddedUsers] = useState([]);
 
@@ -51,6 +52,15 @@ const ModalCreateProject = ({
         Authorization: `Bearer ${token}`,
       });
       saveDataIdentification(data.email, data.name, data.rooms);
+      // Отправка уведомлений пользователям
+      await socket.emit("sendNotification", {
+        data: cleanAddedUsers,
+        message: {
+          title: `User ${email} invites you to the team ${formCreateProject.nameProject}`,
+          type: "AddingToCommand",
+          from: email,
+        },
+      });
     } catch (e) {
       console.error(e);
     }
@@ -213,9 +223,9 @@ const ModalCreateProject = ({
 
 const mapStateToProps = ({
   loginReducer: { token },
-  getDataReducer: { rooms, email },
+  getDataReducer: { rooms, email, socket },
 }) => {
-  return { token, rooms, email };
+  return { token, rooms, email, socket };
 };
 
 const mapDispatchToProps = (dispatch) => {

@@ -18,6 +18,32 @@ const getDataReducer = (state, action) => {
       saveRole: [],
       boardActive: {},
       stateDelete: false,
+      notifications: [
+        {
+          title: "adding to the new command 1",
+          type: "AddingToCommand",
+          from: "1",
+        },
+        {
+          title: "adding to the new command 2",
+          type: "AddingToCommand",
+          from: "2",
+        },
+        {
+          title: "adding to the new command 3",
+          type: "AddingToCommand",
+          from: "3",
+        },
+        {
+          title: "adding to the new command 4",
+          type: "AddingToCommand",
+          from: "4",
+        },
+      ],
+      showNotification: false,
+      showBoard: false,
+      showUser: false,
+      showSearch: false,
     };
   }
   switch (action.type) {
@@ -100,6 +126,36 @@ const getDataReducer = (state, action) => {
         ...state.getDataReducer,
         stateDelete: action.stateDelete,
       };
+    case "SAVE_NOTIFICATIONS":
+      return {
+        ...state.getDataReducer,
+        notifications: action.notifications,
+      };
+    case "SHOW_NOTIFICATIONS": {
+      return {
+        ...state.getDataReducer,
+        showNotification: action.showNotification,
+      };
+    }
+    case "SHOW_BOARDS": {
+      return {
+        ...state.getDataReducer,
+        showBoard: action.showBoard,
+      };
+    }
+    case "SHOW_USER_BLOCK": {
+      return {
+        ...state.getDataReducer,
+        showUser: action.showUser,
+      };
+    }
+    case "SHOW_SEARCH_BLOCK": {
+      return {
+        ...state.getDataReducer,
+        showSearch: action.showSearch,
+      };
+    }
+
     default:
       return state.getDataReducer;
   }

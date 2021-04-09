@@ -67,7 +67,7 @@ const Comment = ({
           console.log(item);
         }}
         key={i}
-        className={"comment-item"}
+        className="comment-item"
       >
         <div className="icon-profile-comment">
           <p> {e.сommentatorsEmail[0]}</p>

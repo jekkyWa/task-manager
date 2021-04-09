@@ -1,0 +1,43 @@
+.boards-block {
+  position: fixed;
+  width: 350px;
+  will-change: top, left;
+  top: 44px;
+  left: 0px;
+  background-color: white;
+  color: #172b4d;
+  line-height: 20px;
+  font-weight: 400;
+  background-color: #fff;
+  border-radius: 3px;
+  box-shadow: 0 8px 16px -4px rgb(9 30 66 / 25%), 0 0 0 1px rgb(9 30 66 / 8%);
+  box-sizing: border-box;
+  outline: 0;
+  overflow: hidden;
+  .boards-block-header {
+    padding: 10px;
+    display: flex;
+    justify-content: space-between;
+    .close-boards-block{
+        cursor: pointer;
+    }
+    > input {
+      width: 85%;
+      padding: 5px;
+    }
+    .boards-block-header-close {
+      align-self: center;
+    }
+  }
+  .boards-block-body {
+    padding: 10px;
+    .named-boards-block {
+      margin-bottom: 20px;
+      display: flex;
+      justify-content: space-between;
+      > h1 {
+        font-size: 18px;
+      }
+    }
+  }
+}
