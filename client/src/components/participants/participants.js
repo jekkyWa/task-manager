@@ -13,6 +13,7 @@ import ExpandLessIcon from "@material-ui/icons/ExpandLess";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import SettingsIcon from "@material-ui/icons/Settings";
 import DoneIcon from "@material-ui/icons/Done";
+import shortid from "shortid";
 
 const Participants = ({ socket, saveActiveBoard, email, boardActive }) => {
   const history = useHistory();
@@ -50,9 +51,20 @@ const Participants = ({ socket, saveActiveBoard, email, boardActive }) => {
   };
 
   const addNewUserToBoard = () => {
+    const id_notification = shortid.generate();
     socket.emit("addAdditionalUser", {
       board_id: id.slice(id.length - 10),
-      data: { email: emailState, ...roleState },
+      data: { email: emailState, ...roleState, memberStatus: false },
+      message: {
+        title: `User ${email} invites you to the team ${id.slice(
+          0,
+          id.length - id.length - 10
+        )}`,
+        type: "AddingToCommand",
+        from: email,
+        id_notification,
+        id_board: id.slice(id.length - 10),
+      },
     });
   };
 
@@ -227,8 +239,8 @@ const Participants = ({ socket, saveActiveBoard, email, boardActive }) => {
               />
             </p>
             <p>
-              Статус:
-              {e.memberStatus ? " Подвтержден" : " В ожидании подтверждения"}
+              Status:
+              {e.memberStatus ? " Substrate" : " Waiting for confirmation"}
             </p>
           </div>
         </div>

@@ -209,7 +209,7 @@ io.on("connection", (socket) => {
   // -------- Participants
 
   // Adding a new User to Board
-  socket.on("addAdditionalUser", async ({ board_id, data }) => {
+  socket.on("addAdditionalUser", async ({ board_id, data, message }) => {
     const value = await Board.find({ board_id });
     value[0].addedUsers = [...value[0].addedUsers, data];
     const orgiginalValue = await Board.find({ board_id });
@@ -218,7 +218,7 @@ io.on("connection", (socket) => {
 
     await User.updateOne(
       { email: data.email },
-      { $push: { passive_rooms: board_id } }
+      { $push: { notifications: message } }
     );
     io.in(board_id + "partic").emit("getNewUsers", value[0]);
   });
