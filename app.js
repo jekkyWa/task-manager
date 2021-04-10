@@ -33,6 +33,8 @@ app.use("/api/getData", require("./routes/data.routes"));
 
 app.use("/api/", require("./routes/board.routes"));
 
+app.use("/api/notificationsGet", require("./routes/notifications-get.routes"));
+
 // app.use("/api/", require("./routes/task.routes"));
 
 // app.use("/api/", require("./routes/data-boards.routes"));
@@ -64,10 +66,16 @@ io.on("connection", (socket) => {
     console.log("Disconnected: " + socket.id);
   });
 
+  // Подключение к команте с notifications
+  socket.on("joinNotification", async ({ email }) => {
+    const value = await User.find({ email: email });
+    socket.emit("getNotifications", value[0].notifications);
+  });
+
   // Подключение к комнате с board
 
   socket.on("joinroom", async ({ id }) => {
-    console.log("join room");
+    console.log("join room to the boards " + id);
     socket.join(id);
     const value = await Board.find({ board_id: id });
     const filterCards = await Cards.find({ card_id: value[0].board_item });
@@ -77,7 +85,7 @@ io.on("connection", (socket) => {
   // подключение к комнате с участниками
 
   socket.on("joinParticipants", async ({ id }) => {
-    console.log("Join Participants");
+    console.log("Join Participants " + id + "partic");
     socket.join(id + "partic");
     const value = await Board.find({ board_id: id });
     socket.emit("getRightBoard", value[0]);
@@ -97,10 +105,106 @@ io.on("connection", (socket) => {
         { $push: { notifications: message } }
       );
       if (_users[data[i].email]) {
-        socket.to(_users[data[i].email]).emit("getNotification", message);
+        socket.to(_users[data[i].email]).emit("getNotification", [message]);
       }
     }
   });
+
+  // Отказ от участия в комманде
+  socket.on(
+    "refuseOffer",
+    async ({ id_notification, id_board, email, message }) => {
+      console.log(id_notification, id_board, email, message);
+      // Нужен: id доски, id уведомления, сообщение, добавить запись в БД
+      const user = await User.find({ email });
+      const board = await Board.find({ board_id: id_board });
+
+      let boardOriginal = JSON.parse(JSON.stringify(board));
+      let userOriginal = JSON.parse(JSON.stringify(user));
+
+      let indexNotification = user[0].notifications.findIndex(
+        (e) => e.id_notification == id_notification
+      );
+      console.log(indexNotification);
+
+      user[0].notifications = [
+        ...user[0].notifications.slice(0, indexNotification),
+        ...user[0].notifications.slice(indexNotification + 1),
+      ];
+
+      board[0].boards_activity = [...board[0].boards_activity, message];
+      let indexBoard = board[0].addedUsers.findIndex((e) => e.email == email);
+
+      board[0].addedUsers = [
+        ...board[0].addedUsers.slice(0, indexBoard),
+        ...board[0].addedUsers.slice(indexBoard + 1),
+      ];
+
+      await User.updateOne(userOriginal[0], user[0]);
+      await Board.updateOne(boardOriginal[0], board[0]);
+
+      console.log(user[0].notifications.length);
+      console.log(_users[email]);
+
+      socket.to(id_board + "partic").emit("getBoardWithNewUser", board[0]);
+      io.in(_users[email]).emit(
+        "getAfterRefuseNotification",
+        user[0].notifications
+      );
+    }
+  );
+
+  // Согласиться участвовать в команде
+  socket.on(
+    "acceptOffer",
+    async ({ id_notification, id_board, email, message }) => {
+      // Нужен: id доски, id уведомления, сообщение
+      const user = await User.find({ email });
+      const board = await Board.find({ board_id: id_board });
+
+      let boardOriginal = JSON.parse(JSON.stringify(board));
+      let userOriginal = JSON.parse(JSON.stringify(user));
+
+      let indexNofication = user[0].notifications.findIndex(
+        (e) => e.id_notification == id_notification
+      );
+      user[0].notifications = [
+        ...user[0].notifications.slice(0, indexNofication),
+        ...user[0].notifications.slice(indexNofication + 1),
+      ];
+
+      user[0].passive_rooms = [...user[0].passive_rooms, id_board];
+
+      board[0].boards_activity = [...board[0].boards_activity, message];
+
+      let indexUser = board[0].addedUsers.findIndex((e) => e.email == email);
+
+      board[0].addedUsers[indexUser] = {
+        ...board[0].addedUsers[indexUser],
+        memberStatus: true,
+      };
+
+      await User.updateOne(userOriginal[0], user[0]);
+      await Board.updateOne(boardOriginal[0], board[0]);
+
+      const filterRoomsActive = await Board.find({
+        board_id: user[0].active_rooms,
+      });
+
+      const filterRoomsPassive = await Board.find({
+        board_id: user[0].passive_rooms,
+      });
+
+      socket.to(id_board + "partic").emit("getBoardWithNewUser", board[0]);
+      io.in(_users[email]).emit("getAfterAcceptNotification", {
+        user: user[0],
+        rooms: {
+          active: [...filterRoomsActive],
+          passive: [...filterRoomsPassive],
+        },
+      });
+    }
+  );
 
   // -------- Participants
 

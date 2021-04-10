@@ -7,6 +7,7 @@ const shema = new Schema({
   date: { type: String },
   addedUsers: [],
   board_item: [],
+  boards_activity: [],
   creator: { type: String },
 });
 

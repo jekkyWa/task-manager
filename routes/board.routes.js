@@ -8,16 +8,21 @@ const shortid = require("shortid");
 
 router.post("/createBoard", auth, async (req, res) => {
   try {
-    const { nameProject, description, date, addedUsers, creator } = req.body;
-
-    let id = shortid.generate();
+    const {
+      addedUsers,
+      creator,
+      date,
+      description,
+      id_board,
+      nameProject,
+    } = req.body;
 
     const board = new Board({
       name_Project: nameProject,
       description,
       date,
       addedUsers,
-      board_id: id,
+      board_id: id_board,
       creator,
     });
 
@@ -43,7 +48,7 @@ router.post("/createBoard", auth, async (req, res) => {
 
     await User.updateOne(value[0], {
       ...value,
-      active_rooms: [...value[0].active_rooms, id],
+      active_rooms: [...value[0].active_rooms, id_board],
     });
 
     // await User.updateMany(
