@@ -1,6 +1,6 @@
-import React from "react";
+import React, { useEffect } from "react";
 import "./header.scss";
-import { Link, useHistory } from "react-router-dom";
+import { Link } from "react-router-dom";
 import HomeOutlinedIcon from "@material-ui/icons/HomeOutlined";
 import DashboardIcon from "@material-ui/icons/Dashboard";
 import NotificationsNoneOutlinedIcon from "@material-ui/icons/NotificationsNoneOutlined";
@@ -11,14 +11,15 @@ import {
   showBoards,
   showUserBlock,
   showSearchBlock,
+  saveNotifications,
 } from "../../action/action-login";
 import BoardsBlock from "./boards";
 import SearchBlock from "./search";
 import UserBlock from "./user";
+import { useHttp } from "../hooks/http.hook";
 
 const Header = ({
   email,
-  logout,
   color,
   notifications,
   showNotifications,
@@ -28,15 +29,28 @@ const Header = ({
   showUser,
   showSearch,
   showUserBlock,
-  showSearchBlock,
+  socket,
+  saveNotifications,
 }) => {
-  const history = useHistory();
+  useEffect(() => {
+    if (socket) {
+      socket.emit("joinNotification", { email: email });
+    }
+  }, [email, socket]);
 
-  const logoutHandler = (event) => {
-    event.preventDefault();
-    logout();
-    history.push("/login");
-  };
+  useEffect(() => {
+    if (socket) {
+      socket.on("getNotifications", (value) => {
+        if (value) {
+          saveNotifications(value);
+        }
+      });
+
+      return () => socket.off("getNotifications");
+    }
+  }, [socket, notifications]);
+
+  
 
   return (
     <div>
@@ -87,7 +101,11 @@ const Header = ({
             }}
           >
             <NotificationsNoneOutlinedIcon />
-            <span className="number-of-natifications">
+            <span
+              className={
+                notifications.length == 0 ? "hidden" : "number-of-natifications"
+              }
+            >
               {notifications.length}
             </span>
           </div>
@@ -128,6 +146,7 @@ const mapStateToProps = ({
     showBoard,
     showUser,
     showSearch,
+    socket,
   },
   loginReducer: { logout },
 }) => {
@@ -140,6 +159,7 @@ const mapStateToProps = ({
     showBoard,
     showUser,
     showSearch,
+    socket,
   };
 };
 
@@ -156,6 +176,9 @@ const mapDispatchToProps = (dispatch) => {
     },
     showSearchBlock: (showSearch) => {
       dispatch(showSearchBlock(showSearch));
+    },
+    saveNotifications: (notifications) => {
+      dispatch(saveNotifications(notifications));
     },
   };
 };

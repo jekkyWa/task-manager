@@ -25,7 +25,7 @@ const BoardPage = ({
 
   useEffect(() => {
     const index = rooms.passive.findIndex((e) => {
-      return e.board_id == id.slice(id.length - 9);
+      return e.board_id == id.slice(id.length - 10);
     });
     if (index !== -1) {
       const profileIndex = rooms.passive[index].addedUsers.findIndex(
@@ -43,7 +43,7 @@ const BoardPage = ({
 
   useEffect(() => {
     if (socket) {
-      socket.emit("joinroom", { id: id.slice(id.length - 9) });
+      socket.emit("joinroom", { id: id.slice(id.length - 10) });
     }
   }, [id, socket]);
 
@@ -63,7 +63,7 @@ const BoardPage = ({
         if (
           value.board.addedUsers.findIndex((e) => e.email == email) == -1 &&
           email !== value.board.creator &&
-          id.slice(id.length - 9) == value.board.board_id
+          id.slice(id.length - 10) == value.board.board_id
         ) {
           history.push("/page");
         }

@@ -219,7 +219,7 @@ const CardPage = ({
         if (
           value.board.addedUsers.findIndex((e) => e.email == email) == -1 &&
           email !== value.board.creator &&
-          id.slice(0, id.length - 9) == value.board.board_id
+          id.slice(0, id.length - 10) == value.board.board_id
         ) {
           history.push("/page");
         }
@@ -251,7 +251,7 @@ const CardPage = ({
           <div className="name-command-card-page">
             <h1>
               Team name:{" "}
-              <span className="selected-text">{id.slice(id.length - 9)}</span>
+              <span className="selected-text">{id.slice(id.length - 10)}</span>
             </h1>
           </div>
           <div className="name-board-card-page">

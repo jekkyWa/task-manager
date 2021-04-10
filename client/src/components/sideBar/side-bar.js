@@ -30,9 +30,9 @@ const SideBar = ({ rooms, email }) => {
 
   const commonLabel = rooms.active.concat(rooms.passive);
 
-  const label = commonLabel.map((e) => {
+  const label = commonLabel.map((e, i) => {
     return (
-      <React.Fragment key={e.board_id}>
+      <React.Fragment key={i}>
         <div
           className="sidebar-block-two-item-work-place"
           onClick={() => {

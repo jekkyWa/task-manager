@@ -33,18 +33,23 @@ const ModalCreateProject = ({
 
   const createBord = async () => {
     try {
+      const id_notification = shortid.generate();
+      let id_board = shortid.generate();
       let cleanAddedUsers = addedUsers.map((e) => {
         return {
           email: e.emailOfUserToAdd,
           role: e.roleOfUserToAdd,
           level: e.levelOfUserToAdd,
+          memberStatus: false,
         };
       });
       let objForSend = {
         ...formCreateProject,
         addedUsers: cleanAddedUsers,
+        id_board,
         creator: email,
       };
+      console.log(objForSend);
       await request("/api/createBoard", "POST", objForSend, {
         Authorization: `Bearer ${token}`,
       });
@@ -59,6 +64,8 @@ const ModalCreateProject = ({
           title: `User ${email} invites you to the team ${formCreateProject.nameProject}`,
           type: "AddingToCommand",
           from: email,
+          id_notification,
+          id_board,
         },
       });
     } catch (e) {

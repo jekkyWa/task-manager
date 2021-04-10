@@ -1,8 +1,17 @@
 import React from "react";
 import "./user.scss";
 import CloseIcon from "@material-ui/icons/Close";
+import { connect } from "react-redux";
+import { Link, useHistory } from "react-router-dom";
 
-const UserBlock = () => {
+const UserBlock = ({ logout }) => {
+  const history = useHistory();
+
+  const logoutHandler = (event) => {
+    event.preventDefault();
+    logout();
+    history.push("/login");
+  };
   return (
     <div className="user-block">
       <div className="header-user-block">
@@ -24,10 +33,16 @@ const UserBlock = () => {
         <h1>Сменить имя</h1>
         <h1>Сменить пароль</h1>
         <h1>Удалить аккаунт</h1>
-        <h1>Выйти</h1>
+        <h1 onClick={logoutHandler}>Выйти</h1>
       </div>
     </div>
   );
 };
 
-export default UserBlock;
+const mapStateToProps = ({ loginReducer: { logout } }) => {
+  return {
+    logout,
+  };
+};
+
+export default connect(mapStateToProps, null)(UserBlock);

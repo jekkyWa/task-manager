@@ -116,10 +116,10 @@ const checkDeleteUser = (stateDelete) => {
   };
 };
 
-const saveNotifications = (notification) => {
+const saveNotifications = (notifications) => {
   return {
     type: "SAVE_NOTIFICATIONS",
-    notification,
+    notifications,
   };
 };
 

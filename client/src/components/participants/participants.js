@@ -51,7 +51,7 @@ const Participants = ({ socket, saveActiveBoard, email, boardActive }) => {
 
   const addNewUserToBoard = () => {
     socket.emit("addAdditionalUser", {
-      board_id: id.slice(id.length - 9),
+      board_id: id.slice(id.length - 10),
       data: { email: emailState, ...roleState },
     });
   };
@@ -63,6 +63,17 @@ const Participants = ({ socket, saveActiveBoard, email, boardActive }) => {
       });
       // After the data come to stop further sending
       return () => socket.off("getNewUsers");
+    }
+  }, [socket, boardActive]);
+
+  useEffect(() => {
+    if (socket) {
+      socket.on("getBoardWithNewUser", (value) => {
+        console.log("partic value", value);
+        saveActiveBoard(value);
+      });
+      // After the data come to stop further sending
+      return () => socket.off("getBoardWithNewUser");
     }
   }, [socket, boardActive]);
 
@@ -88,7 +99,7 @@ const Participants = ({ socket, saveActiveBoard, email, boardActive }) => {
 
   useEffect(() => {
     if (socket) {
-      socket.emit("joinParticipants", { id: id.slice(id.length - 9) });
+      socket.emit("joinParticipants", { id: id.slice(id.length - 10) });
     }
   }, [id, socket]);
 
@@ -108,7 +119,7 @@ const Participants = ({ socket, saveActiveBoard, email, boardActive }) => {
         if (
           value.board.addedUsers.findIndex((e) => e.email == email) == -1 &&
           email !== value.board.creator &&
-          id.slice(id.length - 9) == value.board.board_id
+          id.slice(id.length - 10) == value.board.board_id
         ) {
           history.push("/page");
         } else {
@@ -127,13 +138,17 @@ const Participants = ({ socket, saveActiveBoard, email, boardActive }) => {
     );
   }
 
+  const labelActivity = boardActive.boards_activity.map((e, i) => {
+    return <div key={i}>{e}</div>;
+  });
+
   const label = boardActive.addedUsers.map((e, i) => {
     const addSelectForm = () => {
       setSelectRoleState(e.email);
     };
     const updateUserRole = async () => {
       socket.emit("updateRoleInCommand", {
-        id: id.slice(id.length - 9),
+        id: id.slice(id.length - 10),
         email: e.email,
         data: dataSelectUpdateRole,
       });
@@ -142,7 +157,7 @@ const Participants = ({ socket, saveActiveBoard, email, boardActive }) => {
       const levelArr = ["Junior", "Middle", "Senior"];
       const index = levelArr.indexOf(e.level);
       socket.emit("updateLevelInCommand", {
-        id: id.slice(id.length - 9),
+        id: id.slice(id.length - 10),
         email: e.email,
         movement: value,
         currentState: index,
@@ -211,6 +226,10 @@ const Participants = ({ socket, saveActiveBoard, email, boardActive }) => {
                 }}
               />
             </p>
+            <p>
+              Статус:
+              {e.memberStatus ? " Подвтержден" : " В ожидании подтверждения"}
+            </p>
           </div>
         </div>
         <div
@@ -222,7 +241,10 @@ const Participants = ({ socket, saveActiveBoard, email, boardActive }) => {
             className="delete-user-partic"
             onClick={() => {
               setModalShow(true);
-              setDataForDelete({ id: id.slice(id.length - 9), email: e.email });
+              setDataForDelete({
+                id: id.slice(id.length - 10),
+                email: e.email,
+              });
             }}
           >
             Delete the user
@@ -245,7 +267,7 @@ const Participants = ({ socket, saveActiveBoard, email, boardActive }) => {
             onHide={() => setModalShow(false)}
             dataForDelete={dataForDelete}
           />
-          <h1>Command: {id.slice(0, id.length - id.length - 9)}</h1>
+          <h1>Command: {id.slice(0, id.length - id.length - 10)}</h1>
           <h2>Team organizer: {boardActive.creator}</h2>
           <div>{label}</div>
           <div className={boardActive.addedUsers.length == 0 ? "" : "hidden"}>
@@ -310,6 +332,7 @@ const Participants = ({ socket, saveActiveBoard, email, boardActive }) => {
             </div>
           </div>
         </div>
+        <div className="activity-boards-participants">{labelActivity}</div>
       </div>
     </div>
   );

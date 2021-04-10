@@ -18,28 +18,7 @@ const getDataReducer = (state, action) => {
       saveRole: [],
       boardActive: {},
       stateDelete: false,
-      notifications: [
-        {
-          title: "adding to the new command 1",
-          type: "AddingToCommand",
-          from: "1",
-        },
-        {
-          title: "adding to the new command 2",
-          type: "AddingToCommand",
-          from: "2",
-        },
-        {
-          title: "adding to the new command 3",
-          type: "AddingToCommand",
-          from: "3",
-        },
-        {
-          title: "adding to the new command 4",
-          type: "AddingToCommand",
-          from: "4",
-        },
-      ],
+      notifications: [],
       showNotification: false,
       showBoard: false,
       showUser: false,

@@ -8,14 +8,7 @@ import CloseIcon from "@material-ui/icons/Close";
 import { useHttp } from "../hooks/http.hook";
 import shortid from "shortid";
 
-const ModalAddBoard = ({
-  show,
-  onHide,
-  token,
-  saveDataCards,
-  socket,
-  boards,
-}) => {
+const ModalAddBoard = ({ show, onHide, saveDataCards, socket, boards }) => {
   let { id } = useParams();
   let [backColor, setBackColor] = useState("blue-one");
   let [disable, setDisable] = useState(true);
@@ -28,7 +21,6 @@ const ModalAddBoard = ({
     else setDisable(true);
     setFormAddedBoard(e.target.value);
   };
-  const [test, setTest] = useState(false);
 
   const sendInfoBoard = async () => {
     let card_id = shortid.generate();
@@ -39,7 +31,7 @@ const ModalAddBoard = ({
       name_Board: formAddedBoard,
       color: backColor,
       card_id,
-      board_id: id.slice(id.length - 9),
+      board_id: id.slice(id.length - 10),
       cards: [
         {
           card_name: "Must be done first",
@@ -55,10 +47,10 @@ const ModalAddBoard = ({
           card_name: "During",
           card_body: [],
           card_item_id: card_item_id_three,
-        }
+        },
       ],
     };
-    socket.emit("board", { dataForSend, id: id.slice(id.length - 9) });
+    socket.emit("board", { dataForSend, id: id.slice(id.length - 10) });
   };
 
   useEffect(() => {
@@ -95,7 +87,7 @@ const ModalAddBoard = ({
             </div>
           </div>
           <div className="name-room-board">
-            <p>{id.slice(0, id.length - 9)}</p>
+            <p>{id.slice(0, id.length - 10)}</p>
           </div>
         </div>
         <div className="color-body">
