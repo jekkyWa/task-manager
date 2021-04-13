@@ -4,6 +4,7 @@ import CloseIcon from "@material-ui/icons/Close";
 import AddIcon from "@material-ui/icons/Add";
 import { showBoards } from "../../action/action-login";
 import { connect } from "react-redux";
+import StarOutlineRoundedIcon from "@material-ui/icons/StarOutlineRounded";
 
 const BoardsBlock = ({ showBoards }) => {
   return (
@@ -24,6 +25,27 @@ const BoardsBlock = ({ showBoards }) => {
         <div className="named-boards-block">
           <h1>Отмеченные доски</h1>
           <AddIcon fontSize="small" />
+        </div>
+        <div className="item-board-block-header">
+          <div className="box"></div>
+          <div className="item-board-block-header-text">
+            <h1>1</h1>
+            <StarOutlineRoundedIcon className="star-item-board-block" />
+          </div>
+        </div>
+        <div className="item-board-block-header">
+          <div className="box"></div>
+          <div className="item-board-block-header-text">
+            <h1>1</h1>
+            <StarOutlineRoundedIcon className="star-item-board-block" />
+          </div>
+        </div>
+        <div className="item-board-block-header">
+          <div className="box"></div>
+          <div className="item-board-block-header-text">
+            <h1>1</h1>
+            <StarOutlineRoundedIcon className="star-item-board-block" />
+          </div>
         </div>
         <div className="named-boards-block">
           <h1>11</h1>

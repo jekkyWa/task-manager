@@ -17,6 +17,7 @@ import BoardsBlock from "./boards";
 import SearchBlock from "./search";
 import UserBlock from "./user";
 import { useHttp } from "../hooks/http.hook";
+import WbSunnyIcon from "@material-ui/icons/WbSunny";
 
 const Header = ({
   email,
@@ -49,8 +50,6 @@ const Header = ({
       return () => socket.off("getNotifications");
     }
   }, [socket, notifications]);
-
-  
 
   return (
     <div>

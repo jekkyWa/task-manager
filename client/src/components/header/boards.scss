@@ -4,6 +4,7 @@
   will-change: top, left;
   top: 44px;
   left: 0px;
+  z-index: 99999;
   background-color: white;
   color: #172b4d;
   line-height: 20px;
@@ -18,8 +19,8 @@
     padding: 10px;
     display: flex;
     justify-content: space-between;
-    .close-boards-block{
-        cursor: pointer;
+    .close-boards-block {
+      cursor: pointer;
     }
     > input {
       width: 85%;
@@ -38,6 +39,36 @@
       > h1 {
         font-size: 18px;
       }
+    }
+  }
+}
+
+.item-board-block-header {
+  width: 100%;
+  display: flex;
+  margin-bottom: 5px;
+  .box {
+    width: 50px;
+    height: 45px;
+    background-color: black;
+    border-top-left-radius: 5px;
+    border-bottom-left-radius: 5px;
+  }
+  .item-board-block-header-text {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    background-color: rgb(206, 206, 206);
+    border-top-right-radius: 5px;
+    border-bottom-right-radius: 5px;
+    > h1 {
+      font-size: 18px;
+      margin-left: 20px;
+      margin-top: 10px;
+    }
+    .star-item-board-block{
+      margin-top: 10px;
+      margin-right: 5px;
     }
   }
 }

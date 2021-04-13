@@ -115,7 +115,7 @@ io.on("connection", (socket) => {
     console.log(cardsActive);
 
     socket.emit("getDataMainPageBoard", {
-      marks,
+      marks: marks,
       cards: { active: cardsActive, passive: cardsPassive },
     });
   });

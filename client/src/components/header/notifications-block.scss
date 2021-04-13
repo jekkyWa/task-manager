@@ -1,5 +1,6 @@
 .notifications-block {
   position: fixed;
+  z-index: 99999;
   width: 432px;
   will-change: top, left;
   top: 44px;

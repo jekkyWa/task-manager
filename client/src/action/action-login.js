@@ -165,10 +165,10 @@ const saveImportantEvents = (importantEvents) => {
   };
 };
 
-const saveDataForBoardsPage = (dataForBoardsPage) => {
+const saveDataForBoardsPage = (allDataForBoardsPage) => {
   return {
     type: "SAVE_DATA_FOR_BOARDS_PAGE",
-    dataForBoardsPage,
+    allDataForBoardsPage,
   };
 };
 

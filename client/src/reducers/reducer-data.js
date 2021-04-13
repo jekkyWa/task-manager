@@ -25,7 +25,7 @@ const getDataReducer = (state, action) => {
       showSearch: false,
       marksBoard: [],
       importantEvents: { board: [], card: [] },
-      allDataForBoardsPage: { marks: [], boards: [], cards: [] },
+      allDataForBoardsPage: { cards: [], marks: [] },
     };
   }
   switch (action.type) {

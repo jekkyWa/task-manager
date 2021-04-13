@@ -1,0 +1,43 @@
+.mark-header-boards-main-page {
+  display: flex;
+  > h1 {
+    font-size: 18px;
+    margin-left: 10px;
+    margin-top: 1px;
+  }
+}
+
+.boards-main-page-header {
+  margin-left: 11px;
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  margin-top: 10px;
+  .btn-block-boards-main-page {
+    display: flex;
+    flex-wrap: wrap;
+    > div {
+      width: 165px;
+      margin-left: 10px;
+      background-color: #e6e6e6;
+      text-align: center;
+      padding: 3px 2px 6px 2px;
+      border-radius: 3px;
+      cursor: pointer;
+      > span {
+        margin-left: 5px;
+        vertical-align: -1px;
+        font-weight: 300;
+      }
+    }
+  }
+  .logo-team-boards-main-page {
+    display: flex;
+    margin-top: 5px;
+  }
+  h1 {
+    font-size: 18px;
+    margin-left: 10px;
+    margin-top: 1px;
+  }
+}
