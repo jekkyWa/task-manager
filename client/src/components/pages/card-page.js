@@ -131,6 +131,7 @@ const CardPage = ({
         recentActivity(value.original[0].recentActivity);
         setLoading(false);
       });
+      return () => socket.emit("leaveRoomCard", { id: name });
     }
   }, [name, socket]);
 

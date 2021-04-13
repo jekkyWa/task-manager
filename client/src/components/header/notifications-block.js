@@ -8,7 +8,6 @@ import {
   saveNotifications,
   saveDataIdentification,
 } from "../../action/action-login";
-import { useHttp } from "../hooks/http.hook";
 
 const NotificationsBlock = ({
   notifications,

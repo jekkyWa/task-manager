@@ -54,7 +54,7 @@ const Participants = ({ socket, saveActiveBoard, email, boardActive }) => {
     const id_notification = shortid.generate();
     socket.emit("addAdditionalUser", {
       board_id: id.slice(id.length - 10),
-      data: { email: emailState, ...roleState, memberStatus: false },
+      data: { email: emailState, ...roleState, memberStatus: false, marks: [] },
       message: {
         title: `User ${email} invites you to the team ${id.slice(
           0,
@@ -113,6 +113,8 @@ const Participants = ({ socket, saveActiveBoard, email, boardActive }) => {
     if (socket) {
       socket.emit("joinParticipants", { id: id.slice(id.length - 10) });
     }
+    return () =>
+      socket.emit("leaveParticipants", { id: id.slice(id.length - 10) });
   }, [id, socket]);
 
   useEffect(() => {

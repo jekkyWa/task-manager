@@ -23,6 +23,7 @@ const getDataReducer = (state, action) => {
       showBoard: false,
       showUser: false,
       showSearch: false,
+      marksBoard: [],
     };
   }
   switch (action.type) {
@@ -132,6 +133,12 @@ const getDataReducer = (state, action) => {
       return {
         ...state.getDataReducer,
         showSearch: action.showSearch,
+      };
+    }
+    case "MARK_BOARD": {
+      return {
+        ...state.getDataReducer,
+        marksBoard: action.marksBoard,
       };
     }
 

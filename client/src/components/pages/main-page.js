@@ -61,7 +61,7 @@ const MainPage = ({ email, name, token, saveDataIdentification, socket }) => {
         <div>
           <SideBar />
         </div>
-        <div className="boards-body main-page-body">
+        <div className=" main-page-body">
           <h1>
             <span className="name-proj-logo">NieTask</span> - Applications
             required to monitor the tasks and to facilitate project management.

@@ -4,6 +4,10 @@ body {
   height: 100%;
 }
 
+a{
+  text-decoration: none !important;
+}
+
 /* полоса прокрутки (скроллбар) */
 ::-webkit-scrollbar {
   width: 5px; /* ширина для вертикального скролла */

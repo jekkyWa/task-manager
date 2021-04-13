@@ -151,6 +151,13 @@ const showSearchBlock = (showSearch) => {
   };
 };
 
+const markBoard = (marksBoard) => {
+  return {
+    type: "MARK_BOARD",
+    marksBoard,
+  };
+};
+
 export {
   fetchLogin,
   saveDataIdentification,
@@ -173,4 +180,5 @@ export {
   showBoards,
   showUserBlock,
   showSearchBlock,
+  markBoard,
 };

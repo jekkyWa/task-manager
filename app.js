@@ -33,7 +33,7 @@ app.use("/api/getData", require("./routes/data.routes"));
 
 app.use("/api/", require("./routes/board.routes"));
 
-app.use("/api/notificationsGet", require("./routes/notifications-get.routes"));
+app.use("/api/addMark", require("./routes/mark-board"));
 
 // app.use("/api/", require("./routes/task.routes"));
 
@@ -60,32 +60,41 @@ io.on("connection", (socket) => {
 
   socket.on("setUserId", (email) => {
     _users[email] = socket.id;
+    console.log(_users);
   });
 
   socket.on("disconnect", () => {
     console.log("Disconnected: " + socket.id);
+    console.log(socket.rooms.size);
   });
 
   // Подключение к команте с notifications
   socket.on("joinNotification", async ({ email }) => {
+    console.log(socket.rooms.size);
     const value = await User.find({ email: email });
     socket.emit("getNotifications", value[0].notifications);
   });
 
   // Подключение к комнате с board
 
-  socket.on("joinroom", async ({ id }) => {
+  socket.on("joinroom", async ({ id, email }) => {
     console.log("join room to the boards " + id);
+    console.log(socket.rooms.size);
     socket.join(id);
     const value = await Board.find({ board_id: id });
+    const indexValue = value[0].addedUsers.findIndex((e) => e.email == email);
     const filterCards = await Cards.find({ card_id: value[0].board_item });
-    socket.emit("getBoard", { filterCards });
+    const marksCards = await Cards.find({
+      card_id: value[0].addedUsers[indexValue].marks,
+    });
+    socket.emit("getBoard", { filterCards, marksCards });
   });
 
   // подключение к комнате с участниками
 
   socket.on("joinParticipants", async ({ id }) => {
     console.log("Join Participants " + id + "partic");
+    console.log(socket.rooms.size);
     socket.join(id + "partic");
     const value = await Board.find({ board_id: id });
     socket.emit("getRightBoard", value[0]);
@@ -93,7 +102,17 @@ io.on("connection", (socket) => {
 
   socket.on("leaveRoom", ({ id }) => {
     socket.leave(id);
-    console.log("A user left chatroom: " + id);
+    console.log("A user left board room: " + id);
+  });
+
+  socket.on("leaveRoomCard", ({ id }) => {
+    socket.leave(id);
+    console.log("A user left card room: " + id);
+  });
+
+  socket.on("leaveParticipants", ({ id }) => {
+    socket.leave(id + "partic");
+    console.log("A user left participants room : " + id + "partic");
   });
 
   // Notifications
@@ -110,7 +129,7 @@ io.on("connection", (socket) => {
     }
   });
 
-  // Отказ от участия в комманде
+  // Отказ от участия в команде
   socket.on(
     "refuseOffer",
     async ({ id_notification, id_board, email, message }) => {

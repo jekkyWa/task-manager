@@ -41,11 +41,21 @@ const ModalCreateProject = ({
           role: e.roleOfUserToAdd,
           level: e.levelOfUserToAdd,
           memberStatus: false,
+          marks: [],
         };
       });
       let objForSend = {
         ...formCreateProject,
-        addedUsers: cleanAddedUsers,
+        addedUsers: [
+          {
+            email: email,
+            role: "Product manager",
+            level: "god",
+            memberStatus: true,
+            marks: [],
+          },
+          ...cleanAddedUsers,
+        ],
         id_board,
         creator: email,
       };

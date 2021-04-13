@@ -27,7 +27,9 @@ const App = ({
 
   const phone = "192.168.43.127:5000";
   const local = "http://localhost:5000";
-  const setupSocket = () => {
+  const setupSocket = () => {};
+
+  useEffect(() => {
     if (email !== "email") {
       const newSocket = io(local, {
         query: {
@@ -37,7 +39,6 @@ const App = ({
 
       newSocket.on("disconnect", () => {
         saveSocket(null);
-        setTimeout(setupSocket, 3000);
       });
 
       newSocket.on("connect", () => {
@@ -45,11 +46,8 @@ const App = ({
         console.log("succes");
       });
       saveSocket(newSocket);
+      return () => newSocket.disconnect();
     }
-  };
-
-  useEffect(() => {
-    setupSocket();
   }, [email, isAuthenticated]);
 
   // перенести в header
@@ -60,7 +58,7 @@ const App = ({
       socket.on("getNotification", (value) => {
         if (value) {
           console.log(value);
-          saveNotifications([...notifications,value[0]]);
+          saveNotifications([...notifications, value[0]]);
         }
       });
       return () => socket.off("getNotification");
