@@ -8,6 +8,7 @@ import {
   saveNotifications,
   saveDataIdentification,
 } from "../../action/action-login";
+import dateFormat from "dateformat";
 
 const NotificationsBlock = ({
   notifications,
@@ -20,7 +21,6 @@ const NotificationsBlock = ({
   useEffect(() => {
     if (socket) {
       socket.on("getAfterRefuseNotification", (value) => {
-        console.log(value);
         saveNotifications(value);
       });
 
@@ -42,19 +42,23 @@ const NotificationsBlock = ({
   const label = notifications.map((e, i) => {
     // Нужен: id доски, id уведомления, сообщение, добавить запись в БД
     const refuse = async () => {
+      let now = new Date();
       await socket.emit("refuseOffer", {
         id_notification: e.id_notification,
         id_board: e.id_board,
         email: email,
         message: `The user ${email} refused to participate in the team`,
+        date: dateFormat(now, "dd-mm-yyyy, hh:MM:ss "),
       });
     };
     const accept = async () => {
+      let now = new Date();
       socket.emit("acceptOffer", {
         id_notification: e.id_notification,
         id_board: e.id_board,
         email: email,
         message: `The user ${email} took a request to participate in the team`,
+        date: dateFormat(now, "dd-mm-yyyy, hh:MM:ss "),
       });
     };
     if (e.type == "AddingToCommand") {

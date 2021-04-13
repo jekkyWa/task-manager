@@ -153,7 +153,7 @@ const Participants = ({ socket, saveActiveBoard, email, boardActive }) => {
   }
 
   const labelActivity = boardActive.boards_activity.map((e, i) => {
-    return <div key={i}>{e}</div>;
+    return <div key={i}>{e.message}</div>;
   });
 
   const label = boardActive.addedUsers.map((e, i) => {

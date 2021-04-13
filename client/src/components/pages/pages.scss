@@ -145,13 +145,15 @@
     }
     &:hover {
       color: white;
-      transition: .5s all;
+      transition: 0.5s all;
     }
   }
   .main-link-boards {
     height: 65px;
-    color: black;
+    color: white;
     z-index: 9999999;
+    font-size: 18px;
+    font-weight: 700;
   }
   .main-body-boards {
     margin-top: 10px !important;
@@ -181,12 +183,12 @@
     align-content: flex-start;
     padding: 10px;
     .board {
-      z-index: 1;
-      flex-basis: 175px;
+      z-index: 0;
+      flex-basis: 190px;
       height: 100px;
       background-color: rgb(241, 241, 241);
       margin: 5px;
-      border-radius: 5px;
+      border-radius: 2px;
       padding: 5px;
       position: relative;
       cursor: pointer;

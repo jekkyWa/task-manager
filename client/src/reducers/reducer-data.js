@@ -24,6 +24,8 @@ const getDataReducer = (state, action) => {
       showUser: false,
       showSearch: false,
       marksBoard: [],
+      importantEvents: { board: [], card: [] },
+      allDataForBoardsPage: { marks: [], boards: [], cards: [] },
     };
   }
   switch (action.type) {
@@ -139,6 +141,19 @@ const getDataReducer = (state, action) => {
       return {
         ...state.getDataReducer,
         marksBoard: action.marksBoard,
+      };
+    }
+    case "SAVE_IMPORTANT_EVENTS": {
+      return {
+        ...state.getDataReducer,
+        importantEvents: action.importantEvents,
+      };
+    }
+
+    case "SAVE_DATA_FOR_BOARDS_PAGE": {
+      return {
+        ...state.getDataReducer,
+        allDataForBoardsPage: action.allDataForBoardsPage,
       };
     }
 

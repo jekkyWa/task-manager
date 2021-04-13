@@ -1,0 +1,53 @@
+.submeni-important-events {
+  display: flex;
+  .card-name-important-events {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    .left-text-important-events {
+      display: flex;
+      > h1 {
+        font-size: 18px;
+        margin-left: 10px;
+        margin-top: 1px;
+      }
+    }
+  }
+}
+
+.board-activity-important-events {
+  > h1 {
+    font-size: 16px;
+    margin-left: 30px;
+    margin-top: 10px;
+    font-weight: 300;
+  }
+  > h2 {
+    font-size: 14px;
+    margin-left: 30px;
+    margin-bottom: 20px;
+    font-weight: 300;
+    color: rgb(88, 88, 88);
+  }
+}
+
+.card-activity-important-events {
+  > h1 {
+    font-size: 16px;
+    margin-left: 30px;
+    margin-top: 10px;
+    font-weight: 700;
+  }
+  > h2 {
+    font-size: 16px;
+    margin-left: 30px;
+    font-weight: 300;
+  }
+  > h3 {
+    font-size: 14px;
+    margin-left: 30px;
+    margin-bottom: 20px;
+    font-weight: 300;
+    color: rgb(88, 88, 88);
+  }
+}

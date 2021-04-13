@@ -75,6 +75,51 @@ io.on("connection", (socket) => {
     socket.emit("getNotifications", value[0].notifications);
   });
 
+  // получение всех досок
+  socket.on("joinMainPageBoard", async ({ email }) => {
+    const value = await User.find({ email: email });
+    const command = value[0].active_rooms.concat(value[0].passive_rooms);
+
+    const boards = await Board.find({ board_id: command });
+    const marksId = boards
+      .map((e, i) => {
+        const index = e.addedUsers.findIndex((e) => e.email == email);
+        return (e = e.addedUsers[index].marks);
+      })
+      .flat();
+
+    const marks = await Cards.find({ card_id: marksId });
+    // активные карточки
+    const boardsActive = await Board.find({ board_id: value[0].active_rooms });
+    const cardsActive = boardsActive.map((e) => {
+      return (e = { items: e.board_item, name: e.name_Project });
+    });
+    for (let i = 0; i < cardsActive.length; i++) {
+      cardsActive[i].items = await Cards.find({
+        card_id: cardsActive[i].items,
+      });
+    }
+    // пассивные карточки
+    const boardsPassive = await Board.find({
+      board_id: value[0].passive_rooms,
+    });
+    const cardsPassive = boardsPassive.map((e) => {
+      return (e = { items: e.board_item, name: e.name_Project });
+    });
+    for (let i = 0; i < cardsPassive.length; i++) {
+      cardsPassive[i].items = await Cards.find({
+        card_id: cardsPassive[i].items,
+      });
+    }
+
+    console.log(cardsActive);
+
+    socket.emit("getDataMainPageBoard", {
+      marks,
+      cards: { active: cardsActive, passive: cardsPassive },
+    });
+  });
+
   // Подключение к комнате с board
 
   socket.on("joinroom", async ({ id, email }) => {
@@ -98,6 +143,20 @@ io.on("connection", (socket) => {
     socket.join(id + "partic");
     const value = await Board.find({ board_id: id });
     socket.emit("getRightBoard", value[0]);
+  });
+
+  socket.on("joinImportantEvents", async ({ id }) => {
+    console.log("Join Important Events " + id + "partic");
+    console.log(socket.rooms.size);
+    socket.join(id + "important");
+    const board = await Board.find({ board_id: id });
+    const card = await Cards.find({ card_id: board[0].board_item });
+    socket.emit("getBoardForImportantEvents", { board: board, card: card });
+  });
+
+  socket.on("leaveImportantEvents", ({ id }) => {
+    socket.leave(id + "important");
+    console.log("A user left important events room: " + id);
   });
 
   socket.on("leaveRoom", ({ id }) => {
@@ -132,7 +191,7 @@ io.on("connection", (socket) => {
   // Отказ от участия в команде
   socket.on(
     "refuseOffer",
-    async ({ id_notification, id_board, email, message }) => {
+    async ({ id_notification, id_board, email, message, date }) => {
       console.log(id_notification, id_board, email, message);
       // Нужен: id доски, id уведомления, сообщение, добавить запись в БД
       const user = await User.find({ email });
@@ -151,7 +210,10 @@ io.on("connection", (socket) => {
         ...user[0].notifications.slice(indexNotification + 1),
       ];
 
-      board[0].boards_activity = [...board[0].boards_activity, message];
+      board[0].boards_activity = [
+        ...board[0].boards_activity,
+        { message, date },
+      ];
       let indexBoard = board[0].addedUsers.findIndex((e) => e.email == email);
 
       board[0].addedUsers = [
@@ -176,7 +238,7 @@ io.on("connection", (socket) => {
   // Согласиться участвовать в команде
   socket.on(
     "acceptOffer",
-    async ({ id_notification, id_board, email, message }) => {
+    async ({ id_notification, id_board, email, message, date }) => {
       // Нужен: id доски, id уведомления, сообщение
       const user = await User.find({ email });
       const board = await Board.find({ board_id: id_board });
@@ -194,7 +256,10 @@ io.on("connection", (socket) => {
 
       user[0].passive_rooms = [...user[0].passive_rooms, id_board];
 
-      board[0].boards_activity = [...board[0].boards_activity, message];
+      board[0].boards_activity = [
+        ...board[0].boards_activity,
+        { message, date },
+      ];
 
       let indexUser = board[0].addedUsers.findIndex((e) => e.email == email);
 

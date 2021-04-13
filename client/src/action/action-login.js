@@ -158,6 +158,20 @@ const markBoard = (marksBoard) => {
   };
 };
 
+const saveImportantEvents = (importantEvents) => {
+  return {
+    type: "SAVE_IMPORTANT_EVENTS",
+    importantEvents,
+  };
+};
+
+const saveDataForBoardsPage = (dataForBoardsPage) => {
+  return {
+    type: "SAVE_DATA_FOR_BOARDS_PAGE",
+    dataForBoardsPage,
+  };
+};
+
 export {
   fetchLogin,
   saveDataIdentification,
@@ -181,4 +195,6 @@ export {
   showUserBlock,
   showSearchBlock,
   markBoard,
+  saveImportantEvents,
+  saveDataForBoardsPage,
 };

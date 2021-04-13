@@ -61,7 +61,13 @@ const SideBar = ({ rooms, email }) => {
           </div>
           <div className="retractable-block-item">
             <FavoriteBorderOutlinedIcon fontSize="small" />
-            <h1>Important events</h1>
+            <h1>
+              <Link
+                to={`/boards/${e.name_Project + e.board_id}/important_events`}
+              >
+                Important events
+              </Link>
+            </h1>
           </div>
           <div className="retractable-block-item">
             <PeopleOutlineOutlinedIcon fontSize="small" />
@@ -86,7 +92,9 @@ const SideBar = ({ rooms, email }) => {
         <div className="sidebar-block-one">
           <div className="sidebar-block-one-item">
             <DashboardIcon fontSize="small" />
-            <h1>Boards</h1>
+            <h1>
+              <Link to="/boards"> Boards</Link>
+            </h1>
           </div>
           <div className="sidebar-block-one-item">
             <TimelineIcon fontSize="small" />
