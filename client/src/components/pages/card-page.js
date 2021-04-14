@@ -130,6 +130,7 @@ const CardPage = ({
         });
         recentActivity(value.original[0].recentActivity);
         setLoading(false);
+        console.log(activData);
       });
       return () => socket.emit("leaveRoomCard", { id: name });
     }
@@ -220,7 +221,7 @@ const CardPage = ({
         if (
           value.board.addedUsers.findIndex((e) => e.email == email) == -1 &&
           email !== value.board.creator &&
-          id.slice(0, id.length - 10) == value.board.board_id
+          id.slice(id.length - 10) == value.board.board_id
         ) {
           history.push("/page");
         }
@@ -252,7 +253,9 @@ const CardPage = ({
           <div className="name-command-card-page">
             <h1>
               Team name:{" "}
-              <span className="selected-text">{id.slice(id.length - 10)}</span>
+              <span className="selected-text">
+                {id.slice(0, id.length - 10)}
+              </span>
             </h1>
           </div>
           <div className="name-board-card-page">
@@ -299,7 +302,7 @@ const CardPage = ({
         >
           <p>
             <MenuIcon fontSize="small" />
-            <spana className="menu-txt">Menu</spana>
+            <span className="menu-txt">Menu</span>
           </p>
         </div>
       </div>

@@ -283,6 +283,8 @@ const Participants = ({ socket, saveActiveBoard, email, boardActive }) => {
           />
           <h1>Command: {id.slice(0, id.length - id.length - 10)}</h1>
           <h2>Team organizer: {boardActive.creator}</h2>
+          <h2>Description: {boardActive.description}</h2>
+          <h2>Expiration date: {boardActive.date}</h2>
           <div>{label}</div>
           <div className={boardActive.addedUsers.length == 0 ? "" : "hidden"}>
             <p>You did not add a single user to the team</p>

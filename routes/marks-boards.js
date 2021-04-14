@@ -3,6 +3,7 @@ const router = Router();
 const auth = require("../middleware/auth.middleware");
 const Board = require("../models/Board");
 const Cards = require("../models/Cards");
+const User = require("../models/User");
 const ObjectId = require("mongodb").ObjectId;
 
 router.post("/", auth, async (req, res) => {
@@ -34,23 +35,43 @@ router.post("/", auth, async (req, res) => {
       ];
     }
 
+    console.log("Выполнение - 1");
+
     await Board.updateOne(boardOriginal[0], board[0]);
 
-    const indexValue = board[0].addedUsers.findIndex((e) => e.email == email);
+    const value = await User.find({ email: email });
+    const command = value[0].active_rooms.concat(value[0].passive_rooms);
 
-    const marksCards = await Cards.find({
-      card_id: board[0].addedUsers[indexValue].marks,
-    });
+    const boards = await Board.find({ board_id: command });
+    const marksId = boards
+      .map((e, i) => {
+        const index = e.addedUsers.findIndex((e) => e.email == email);
+        return (e = {
+          items: e.addedUsers[index].marks,
+          board_id: e.board_id,
+          name: e.name_Project,
+        });
+      })
+      .flat();
 
-    const marksCardsFilter = marksCards.map((e) => {
-      return (e = {
-        card_id: e.card_id,
-        color: e.color,
-        name_Board: e.name_Board,
-      });
-    });
+    for (let i = 0; i < marksId.length; i++) {
+      marksId[i].items = await Cards.find({ card_id: marksId[i].items });
+      const lastItem = marksId[i].items.map(
+        (e) =>
+          (e = {
+            card_id: e.card_id,
+            color: e.color,
+            name_Board: e.name_Board,
+            board_id: marksId[i].board_id,
+            name: marksId[i].name,
+          })
+      );
+      marksId[i] = lastItem;
+    }
+    console.log("Выполнение - 2");
+
     res.json({
-      marksCards: marksCardsFilter,
+      marksCards: marksId.flat(),
     });
   } catch (e) {
     res.status(500).json({ message: "Что-то пошло не так, попробуйте снова" });

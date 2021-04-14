@@ -13,7 +13,6 @@ import {
   showSearchBlock,
   saveNotifications,
 } from "../../action/action-login";
-import BoardsBlock from "./boards";
 import SearchBlock from "./search";
 import UserBlock from "./user";
 import { useHttp } from "../hooks/http.hook";
@@ -74,7 +73,7 @@ const Header = ({
               <DashboardIcon />
             </div>
             <div>
-              <h1>Boards</h1>
+              <Link to="/boards">Boards page</Link>
             </div>
           </div>
           <div className="header-input">
@@ -122,9 +121,6 @@ const Header = ({
       </div>
       <div className={showNotification ? "" : "hidden"}>
         <NotificationsBlock />
-      </div>
-      <div className={showBoard ? "" : "hidden"}>
-        <BoardsBlock />
       </div>
       <div className={showSearch ? "" : "hidden"}>
         <SearchBlock />

@@ -5,6 +5,7 @@ const cors = require("cors");
 const Cards = require("./models/Cards");
 const Board = require("./models/Board");
 const User = require("./models/User");
+const e = require("cors");
 
 // Key-meaning (email - socket)
 let _users = {};
@@ -34,6 +35,7 @@ app.use("/api/getData", require("./routes/data.routes"));
 app.use("/api/", require("./routes/board.routes"));
 
 app.use("/api/addMark", require("./routes/mark-board"));
+app.use("/api/addMarkMainBoards", require("./routes/marks-boards"));
 
 // app.use("/api/", require("./routes/task.routes"));
 
@@ -77,6 +79,7 @@ io.on("connection", (socket) => {
 
   // получение всех досок
   socket.on("joinMainPageBoard", async ({ email }) => {
+    // Нужно вернуть id_board
     const value = await User.find({ email: email });
     const command = value[0].active_rooms.concat(value[0].passive_rooms);
 
@@ -84,15 +87,37 @@ io.on("connection", (socket) => {
     const marksId = boards
       .map((e, i) => {
         const index = e.addedUsers.findIndex((e) => e.email == email);
-        return (e = e.addedUsers[index].marks);
+        return (e = {
+          items: e.addedUsers[index].marks,
+          board_id: e.board_id,
+          name: e.name_Project,
+        });
       })
       .flat();
 
-    const marks = await Cards.find({ card_id: marksId });
+    for (let i = 0; i < marksId.length; i++) {
+      marksId[i].items = await Cards.find({ card_id: marksId[i].items });
+      const lastItem = marksId[i].items.map(
+        (e) =>
+          (e = {
+            card_id: e.card_id,
+            color: e.color,
+            name_Board: e.name_Board,
+            board_id: marksId[i].board_id,
+            name: marksId[i].name,
+          })
+      );
+      marksId[i] = lastItem;
+    }
+
     // активные карточки
     const boardsActive = await Board.find({ board_id: value[0].active_rooms });
     const cardsActive = boardsActive.map((e) => {
-      return (e = { items: e.board_item, name: e.name_Project });
+      return (e = {
+        items: e.board_item,
+        board_id: e.board_id,
+        name: e.name_Project,
+      });
     });
     for (let i = 0; i < cardsActive.length; i++) {
       cardsActive[i].items = await Cards.find({
@@ -104,7 +129,11 @@ io.on("connection", (socket) => {
       board_id: value[0].passive_rooms,
     });
     const cardsPassive = boardsPassive.map((e) => {
-      return (e = { items: e.board_item, name: e.name_Project });
+      return (e = {
+        items: e.board_item,
+        board_id: e.board_id,
+        name: e.name_Project,
+      });
     });
     for (let i = 0; i < cardsPassive.length; i++) {
       cardsPassive[i].items = await Cards.find({
@@ -112,10 +141,8 @@ io.on("connection", (socket) => {
       });
     }
 
-    console.log(cardsActive);
-
     socket.emit("getDataMainPageBoard", {
-      marks: marks,
+      marks: marksId.flat(),
       cards: { active: cardsActive, passive: cardsPassive },
     });
   });
@@ -132,7 +159,15 @@ io.on("connection", (socket) => {
     const marksCards = await Cards.find({
       card_id: value[0].addedUsers[indexValue].marks,
     });
-    socket.emit("getBoard", { filterCards, marksCards });
+    const lastItem = marksCards.map(
+      (e) =>
+        (e = {
+          card_id: e.card_id,
+          color: e.color,
+          name_Board: e.name_Board,
+        })
+    );
+    socket.emit("getBoard", { filterCards, marksCards: lastItem });
   });
 
   // подключение к комнате с участниками
@@ -934,6 +969,7 @@ io.on("connection", (socket) => {
   socket.on("joinCard", async ({ id, roleBack, levelBack }) => {
     console.log("Join_CARD", id);
     socket.join(id);
+
     const value = await Cards.find({ card_id: id });
     // Obtaining data
     const filterTaskRole = value[0].cards.map((e) => {

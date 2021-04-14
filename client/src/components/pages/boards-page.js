@@ -10,9 +10,8 @@ import Loading from "../loading/loading";
 import { useHistory } from "react-router-dom";
 import PersonOutlineOutlinedIcon from "@material-ui/icons/PersonOutlineOutlined";
 import { useHttp } from "../hooks/http.hook";
-import StarOutlineRoundedIcon from '@material-ui/icons/StarOutlineRounded';
-import StarRoundedIcon from '@material-ui/icons/StarRounded';
-
+import StarOutlineRoundedIcon from "@material-ui/icons/StarOutlineRounded";
+import StarRoundedIcon from "@material-ui/icons/StarRounded";
 
 const BoardPage = ({
   saveDataCards,
@@ -31,7 +30,6 @@ const BoardPage = ({
   const history = useHistory();
   const [modalShow, setModalShow] = useState(false);
   let { id } = useParams();
-  const test = useParams();
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -63,8 +61,8 @@ const BoardPage = ({
     if (socket) {
       socket.on("getBoard", (value) => {
         saveDataCards(value.filterCards);
-        console.log(value.marksCards);
         markBoard(value.marksCards);
+        console.log(value.marksCards);
         setLoading(false);
       });
     }
@@ -85,6 +83,14 @@ const BoardPage = ({
       return () => socket.off("getDataAfterDeleteUser");
     }
   }, [socket]);
+
+  if (loading) {
+    return (
+      <div className="loading">
+        <Loading />
+      </div>
+    );
+  }
 
   const labelMarks = marksBoard.map((e, i) => {
     const mark = async (bool) => {
@@ -165,14 +171,6 @@ const BoardPage = ({
       </div>
     );
   });
-
-  if (loading) {
-    return (
-      <div className="loading">
-        <Loading />
-      </div>
-    );
-  }
 
   return (
     <div>

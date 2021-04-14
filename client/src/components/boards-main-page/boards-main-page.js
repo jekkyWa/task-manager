@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import Header from "../header";
 import SideBar from "../sideBar/side-bar";
 import { connect } from "react-redux";
-import { saveDataForBoardsPage } from "../../action/action-login";
+import { saveDataForBoardsPage, markBoard } from "../../action/action-login";
 import Loading from "../loading/loading";
 import StarOutlineRoundedIcon from "@material-ui/icons/StarOutlineRounded";
 import "./boards-main-page.scss";
@@ -12,13 +12,19 @@ import DashboardIcon from "@material-ui/icons/Dashboard";
 import FavoriteBorderOutlinedIcon from "@material-ui/icons/FavoriteBorderOutlined";
 import PeopleOutlineOutlinedIcon from "@material-ui/icons/PeopleOutlineOutlined";
 import DeleteOutlineOutlinedIcon from "@material-ui/icons/DeleteOutlineOutlined";
+import { Link } from "react-router-dom";
+import { useHttp } from "../hooks/http.hook";
 
 const BoardsMainPage = ({
   socket,
   email,
   saveDataForBoardsPage,
   allDataForBoardsPage,
+  markBoard,
+  token,
 }) => {
+  const { request } = useHttp();
+
   const [loading, setLoading] = useState(true);
   useEffect(() => {
     if (socket) {
@@ -47,12 +53,31 @@ const BoardsMainPage = ({
   }
 
   const labelMarks = allDataForBoardsPage.marks.map((e, i) => {
+    const mark = async (bool) => {
+      const board_id = e.board_id;
+      const newMarkBoard = e.card_id;
+      const value = { board_id, email, newMarkBoard, state: bool };
+      const data = await request("/api/addMarkMainBoards", "POST", value, {
+        Authorization: `Bearer ${token}`,
+      });
+      saveDataForBoardsPage({
+        ...allDataForBoardsPage,
+        marks: data.marksCards,
+      });
+    };
     return (
-      <div className={`board ${e.color}`} key={e.card_id}>
+      <div className={`board ${e.color}`} key={i}>
         <div>
-          <div className="main-link-boards">{e.name_Board}</div>
+          <Link to={`/boards/${e.name + e.board_id}/${e.card_id}`}>
+            <div className="main-link-boards">{e.name_Board}</div>
+          </Link>
         </div>
-        <div className="star-icon-boards-page">
+        <div
+          className="star-icon-boards-page"
+          onClick={() => {
+            mark(false);
+          }}
+        >
           <h1>Take a label</h1>
           <StarRoundedIcon fontSize="small" />
         </div>
@@ -64,12 +89,53 @@ const BoardsMainPage = ({
     .concat(allDataForBoardsPage.cards.passive)
     .map((e, i) => {
       const labelItem = e.items.map((element, index) => {
+        const mark = async (bool) => {
+          const board_id = e.board_id;
+          const newMarkBoard = element.card_id;
+          const value = { board_id, email, newMarkBoard, state: bool };
+          const data = await request("/api/addMarkMainBoards", "POST", value, {
+            Authorization: `Bearer ${token}`,
+          });
+
+          saveDataForBoardsPage({
+            ...allDataForBoardsPage,
+            marks: data.marksCards,
+          });
+        };
         return (
           <div className={`board ${element.color}`} key={element.card_id}>
             <div>
-              <div className="main-link-boards">{element.name_Board}</div>
+              <Link to={`/boards/${e.name + e.board_id}/${element.card_id}`}>
+                <div className="main-link-boards">{element.name_Board}</div>
+              </Link>
             </div>
-            <div className="star-icon-boards-page">
+            <div
+              className={
+                allDataForBoardsPage.marks.findIndex(
+                  (elem) => elem.card_id == element.card_id
+                ) !== -1
+                  ? "hidden"
+                  : "star-icon-boards-page"
+              }
+              onClick={() => {
+                mark(true);
+              }}
+            >
+              <h1>Mark</h1>
+              <StarOutlineRoundedIcon fontSize="small" />
+            </div>
+            <div
+              className={
+                allDataForBoardsPage.marks.findIndex(
+                  (elem) => elem.card_id == element.card_id
+                ) == -1
+                  ? "hidden"
+                  : "star-icon-boards-page"
+              }
+              onClick={() => {
+                mark(false);
+              }}
+            >
               <h1>Take a label</h1>
               <StarRoundedIcon fontSize="small" />
             </div>
@@ -86,15 +152,25 @@ const BoardsMainPage = ({
             <div className="btn-block-boards-main-page">
               <div>
                 <DashboardIcon fontSize="small" />
-                <span>Boards</span>
+                <span>
+                  <Link to={`/boards/${e.name + e.board_id}`}>Boards</Link>
+                </span>
               </div>
               <div>
                 <FavoriteBorderOutlinedIcon fontSize="small" />
-                <span>Important events</span>
+                <span>
+                  <Link to={`/boards/${e.name + e.board_id}/important_events`}>
+                    Important events
+                  </Link>
+                </span>
               </div>
               <div>
                 <PeopleOutlineOutlinedIcon fontSize="small" />
-                <span>Participants</span>
+                <span>
+                  <Link to={`/boards/${e.name + e.board_id}/participants`}>
+                    Participants
+                  </Link>
+                </span>
               </div>
               <div>
                 <DeleteOutlineOutlinedIcon fontSize="small" />
@@ -130,15 +206,19 @@ const BoardsMainPage = ({
 };
 
 const mapStateToProps = ({
+  loginReducer: { token },
   getDataReducer: { socket, email, allDataForBoardsPage },
 }) => {
-  return { socket, email, allDataForBoardsPage };
+  return { socket, email, allDataForBoardsPage, token };
 };
 
 const mapDispatchToProps = (dispatch) => {
   return {
     saveDataForBoardsPage: (allDataForBoardsPage) => {
       dispatch(saveDataForBoardsPage(allDataForBoardsPage));
+    },
+    markBoard: (marksBoard) => {
+      dispatch(markBoard(marksBoard));
     },
   };
 };

@@ -79,7 +79,8 @@ const SideBar = ({ rooms, email }) => {
           </div>
           <div className="retractable-block-item">
             <DeleteOutlineOutlinedIcon fontSize="small" />
-            <h1>Delete</h1>
+            <h1 className={email == e.creator ? "" : "hidden"}>Delete</h1>
+            <h1 className={email !== e.creator ? "" : "hidden"}>Exit</h1>
           </div>
         </div>
       </React.Fragment>

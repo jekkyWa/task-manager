@@ -43,17 +43,6 @@ const Menu = ({ onHide, card, cardFull, displaySelection, activData }) => {
         <div
           className="menu-item"
           onClick={() => {
-            setSelectState("About board");
-          }}
-        >
-          <div>
-            <InfoOutlinedIcon />
-          </div>
-          <h1>О доске</h1>
-        </div>
-        <div
-          className="menu-item"
-          onClick={() => {
             setSelectState("Completed tasks");
           }}
         >
