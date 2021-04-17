@@ -13,7 +13,7 @@ import { connect } from "react-redux";
 import "./side-bar.scss";
 import { Link } from "react-router-dom";
 
-const SideBar = ({ rooms, email }) => {
+const SideBar = ({ rooms, email, socket }) => {
   const [modalShow, setModalShow] = useState(false);
   const [arrId, setArrId] = useState([]);
 
@@ -79,7 +79,14 @@ const SideBar = ({ rooms, email }) => {
           </div>
           <div className="retractable-block-item">
             <DeleteOutlineOutlinedIcon fontSize="small" />
-            <h1 className={email == e.creator ? "" : "hidden"}>Delete</h1>
+            <h1
+              className={email == e.creator ? "" : "hidden"}
+              onClick={() => {
+                socket.emit("deleteCommand", { board_id: e.board_id });
+              }}
+            >
+              Delete
+            </h1>
             <h1 className={email !== e.creator ? "" : "hidden"}>Exit</h1>
           </div>
         </div>
@@ -134,8 +141,8 @@ const SideBar = ({ rooms, email }) => {
   );
 };
 
-const mapStateToProps = ({ getDataReducer: { rooms, email } }) => {
-  return { rooms, email };
+const mapStateToProps = ({ getDataReducer: { rooms, email, socket } }) => {
+  return { rooms, email, socket };
 };
 
 export default connect(mapStateToProps, null)(SideBar);

@@ -1,0 +1,195 @@
+@import "../../../templates.scss";
+@import "../../../variables.scss";
+
+%font {
+  font-size: 20px;
+  font-weight: 700;
+}
+
+%textH1 {
+  font-size: 30px;
+  letter-spacing: 1px;
+}
+
+%textH2 {
+  font-size: 25px;
+  font-weight: 400;
+  letter-spacing: 1px;
+  margin-top: 5px;
+}
+
+%btnForMainPage {
+  @extend %styleBtn;
+  color: white;
+  width: 300px;
+  border-radius: 4px;
+  padding: 10px;
+  font-size: 20px;
+  margin-top: 15px;
+}
+
+.main-page-header {
+  display: flex;
+  justify-content: space-between;
+  position: fixed;
+  width: 100%;
+  z-index: 99999;
+  padding: 10px 20px 10px 20px;
+  background-color: white;
+  box-shadow: 0 0 10px rgb(0 0 0 / 30%);
+  .logo-block-main-page {
+    display: flex;
+    > .logo-main-page {
+      margin-top: 1px;
+    }
+    > h1 {
+      font-size: 30px;
+      margin-left: 3px;
+    }
+  }
+  .btns-header-main-page {
+    >a{
+      margin-left: 15px;
+      font-size: 18px
+    }
+  }
+  button {
+    @extend %styleBtn;
+    color: white;
+    width: 180px;
+    border-radius: 4px;
+    font-size: 18px;
+    height: 37.5px;
+  }
+}
+
+.main-page-body {
+  display: flex;
+  flex-direction: column;
+  padding-left: 20px;
+  padding-right: 20px;
+  padding-top: 7rem;
+  margin: 0px 15px 10px 15px;
+  .block-one-main-page {
+    width: 100% !important;
+    > div {
+      > h1 {
+        font-size: 48px;
+        letter-spacing: 2px;
+        margin-top: 10px;
+      }
+      > h2 {
+        font-size: 25px;
+        font-weight: 400;
+        letter-spacing: 1px;
+        margin-top: 15px;
+      }
+      .btn-register-main-page {
+        @extend %btnForMainPage;
+      }
+    }
+  }
+
+  .block-two-main-page {
+    margin-top: 100px;
+    > h1 {
+      font-size: 38px;
+      letter-spacing: 1px;
+    }
+    > h2 {
+      font-size: 25px;
+      font-weight: 400;
+      letter-spacing: 1px;
+      margin-top: 5px;
+    }
+    > div {
+      text-align: center;
+      > img {
+        width: 70%;
+        margin-top: 40px;
+      }
+    }
+  }
+
+  .block-other-main-page {
+    display: flex;
+    margin-top: 75px;
+    > div {
+      width: 55%;
+      margin-right: 20px;
+      margin-left: 20px;
+      > h1 {
+        @extend %textH1;
+      }
+      > h2 {
+        @extend %textH2;
+        color: #596270;
+        font-weight: 300;
+      }
+    }
+    > img {
+      width: 35%;
+    }
+  }
+
+  .last-info-block-main-page {
+    margin-bottom: 40px;
+    margin-top: 50px;
+    > h1 {
+      @extend %textH1;
+      text-align: center;
+      margin-top: 50px;
+      font-weight: 400;
+    }
+    .btn-footer-main-page {
+      text-align: center;
+      button {
+        @extend %btnForMainPage;
+        margin-top: 40px;
+      }
+    }
+  }
+}
+
+// Display for devices with small resolution
+@media screen and(max-width:995px) {
+  .block-one-main-page {
+    img {
+      display: none;
+    }
+  }
+  .block-two-main-page {
+    > div {
+      img {
+        width: 100% !important;
+      }
+    }
+  }
+  .block-other-main-page {
+    margin-top: 100px !important;
+    display: flex;
+    flex-direction: column;
+    > div {
+      width: 100% !important;
+      margin-right: 20px;
+      margin-left: 20px;
+      h1 {
+        width: 100% !important;
+      }
+    }
+
+    > img {
+      width: 100% !important;
+    }
+  }
+  .mobile-block-four {
+    display: flex;
+    flex-direction: column-reverse;
+    > img {
+      margin-top: 30px;
+    }
+  }
+  .last-info-block-main-page {
+    margin-top: 20px !important;
+  }
+}

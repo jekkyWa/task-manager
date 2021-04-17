@@ -1,8 +1,8 @@
 import React from "react";
 import { Redirect, Route, Switch } from "react-router-dom";
-import Register from "../authentication/register";
-import Login from "../authentication/login";
-import Page from "../pages/main-page";
+import Register from "../authentication/register/register-page.js";
+import Login from "../authentication/login/login";
+import Page from "../pages/main/main-page";
 import BeginningOfWorkPage from "../pages/beginning-of-work-page";
 import BoardPage from "../pages/boards-page";
 import CardPage from "../pages/card-page";
@@ -41,13 +41,16 @@ const useRoutes = (isAuthenticated) => {
   } else {
     return (
       <Switch>
+        <Route path="/page" exact>
+          <Page />
+        </Route>
         <Route path="/signup" exact>
           <Register />
         </Route>
         <Route path="/login" exact>
           <Login />
         </Route>
-        <Redirect to="/login" />
+        <Redirect to="/page" />
       </Switch>
     );
   }

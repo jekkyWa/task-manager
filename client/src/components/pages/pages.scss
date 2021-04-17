@@ -16,32 +16,6 @@
   min-height: 200px;
 }
 
-.main-page {
-  > p {
-    padding: 20px 20px 0px 20px;
-    @extend %font;
-  }
-  .none-project {
-    border: 1px solid black;
-    padding: 40px;
-    margin: 0px 10px 0 10px;
-    border-radius: 5px;
-    text-align: center;
-    p {
-      @extend %font;
-    }
-    button {
-      @extend %styleBtn;
-      padding: 5px;
-      width: 200px;
-      color: white;
-      &:hover {
-        background-color: $backColorFocusBtn;
-      }
-    }
-  }
-}
-
 // ---------------------------------------------------------------------------------
 
 .begin-page {
@@ -57,11 +31,11 @@
     border: 1px solid rgb(197, 197, 197);
     width: 70%;
     padding: 10px;
-    h1{
+    h1 {
       font-size: 20px;
       font-weight: 500;
     }
-    h2{
+    h2 {
       font-size: 18px;
     }
   }
@@ -441,56 +415,4 @@
 
 .menu-txt {
   vertical-align: -1px;
-}
-
-.main-page-body {
-  display: flex;
-  flex-direction: column;
-  margin-top: 70px;
-  > div {
-    text-align: center;
-  }
-  button {
-    width: 250px;
-    margin: 20px;
-    padding: 5px;
-    font-size: 18px;
-    background-color: rgb(66, 66, 192);
-    border: none;
-    border-radius: 3px;
-    color: white;
-  }
-  h4 {
-    margin-top: 20px;
-    font-size: 30px;
-    text-align: center;
-  }
-  h3 {
-    font-size: 30px;
-    margin-top: 20px;
-  }
-  p {
-    font-size: 20px;
-  }
-  h1 {
-    font-size: 30px;
-    text-align: center;
-    margin-top: 20px;
-  }
-  h2 {
-    font-size: 20px;
-    text-align: center;
-    margin: 20px 100px 20px 100px;
-  }
-  .name-proj-logo {
-    font-weight: 700;
-  }
-  > img {
-    width: 100%;
-    text-align: center;
-  }
-  .card-image {
-    width: 60%;
-    margin: 0 auto;
-  }
 }

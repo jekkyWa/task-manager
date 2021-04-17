@@ -15,6 +15,7 @@ const ModalCreateProject = ({
   socket,
 }) => {
   const [addedUsers, setAddedUsers] = useState([]);
+  const [loading, setLoading] = useState(false);
 
   const { request } = useHttp();
 
@@ -33,6 +34,7 @@ const ModalCreateProject = ({
 
   const createBord = async () => {
     try {
+      setLoading(true);
       const id_notification = shortid.generate();
       let id_board = shortid.generate();
       let cleanAddedUsers = addedUsers.map((e) => {
@@ -67,6 +69,9 @@ const ModalCreateProject = ({
         Authorization: `Bearer ${token}`,
       });
       saveDataIdentification(data.email, data.name, data.rooms);
+      setLoading(false);
+      onHide();
+
       // Отправка уведомлений пользователям
       await socket.emit("sendNotification", {
         data: cleanAddedUsers,

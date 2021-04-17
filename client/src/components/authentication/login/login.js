@@ -1,12 +1,14 @@
-import React, {useState} from "react";
-import {Link} from "react-router-dom";
+import React, { useState } from "react";
+import { Link } from "react-router-dom";
 import "../authentication.scss";
-import {useHttp} from "../../hooks/http.hook";
-import {connect} from "react-redux";
+import { useHttp } from "../../hooks/http.hook";
+import { connect } from "react-redux";
+import DashboardRoundedIcon from "@material-ui/icons/DashboardRounded";
+import InputLogin from "./input-login";
 
-const Login = ({login}) => {
-  const {error, request, clearError} = useHttp();
-  const [formLog, setFormLog] = useState({email: "", password: ""});
+const Login = ({ login }) => {
+  const { error, request, clearError } = useHttp();
+  const [formLog, setFormLog] = useState({ email: "", password: "" });
   const [validMessageLog, setValidMessageLog] = useState({
     loginMessage: "",
     passwordMessage: "",
@@ -17,7 +19,9 @@ const Login = ({login}) => {
     try {
       const data = await request("/api/auth/login", "POST", { ...formLog });
       login(data.token, data.userId);
-    } catch (e) {throw new Error(e)}
+    } catch (e) {
+      throw new Error(e);
+    }
   };
 
   const stateValidLog = (value, type) => {
@@ -28,26 +32,24 @@ const Login = ({login}) => {
 
   // Изменение validMessageLog
   const changeHandlerLog = (e) => {
-    // При вводе символа, иконка ошибки пропадает
-    if (error) {
-      clearError()
-    }
-    if (
-        e.target.name === "mail" &&
+    const check = (name, val) => {
+      if (
+        e.target.name === name &&
         e.target.value.length > 0 &&
-        validMessageLog.loginMessage.length !== 0
-    ) {
-      stateValidLog("", "loginMessage");
-      stateValidLog("", "passwordMessage");
+        val.length !== 0
+      ) {
+        stateValidLog("", "loginMessage");
+        stateValidLog("", "passwordMessage");
+      }
+    };
+    // When entering the symbol, the error icon disappears
+    check("email", validMessageLog.loginMessage);
+    check("password", validMessageLog.passwordMessage);
+    // When entering characters, the error is clean
+    if (error) {
+      clearError();
     }
-    if (
-        e.target.name === "password" &&
-      e.target.value.length > 0 &&
-      validMessageLog.passwordMessage.length !== 0
-    ) {
-      stateValidLog("", "loginMessage");
-      stateValidLog("", "passwordMessage");
-    }
+    // Prohibition of input gap
     setFormLog({
       ...formLog,
       [e.target.name]: e.target.value.replace(/[ ]*/g, ""),
@@ -57,18 +59,21 @@ const Login = ({login}) => {
   // Валидация login, password
   const checkValidForms = () => {
     let valid = 0;
+    // Validation Email
     if (formLog.email.length === 0) {
       stateValidLog("Enter login", "loginMessage");
       valid++;
     } else {
       stateValidLog("", "loginMessage");
     }
+    // Password Validation
     if (formLog.password.length === 0) {
       stateValidLog("Enter password", "passwordMessage");
       valid++;
     } else {
       stateValidLog("", "passwordMessage");
     }
+     // If the "valid" error appears increases and the condition is not executed
     if (valid === 0) {
       loginHandler();
     }
@@ -78,31 +83,25 @@ const Login = ({login}) => {
 
   return (
     <div className="authentication">
-      <h1>nieTask</h1>
+      <div className="logo-icon-aut">
+        <div className="icon-aut">
+          <DashboardRoundedIcon fontSize="large" />
+        </div>
+        <h1>Taskood</h1>
+      </div>
       <div className="authentication-form">
         <h3
           className={`${
-              error || loginMessage || passwordMessage ? "log-error" : "log-error-hidden"
+            error || loginMessage || passwordMessage
+              ? "log-error"
+              : "log-error-hidden"
           }`}
         >
           {error ? error : loginMessage ? loginMessage : passwordMessage}
         </h3>
         <h2>Login an account</h2>
-        <div className="mail">
-          <input
-            name="email"
-            placeholder="Please enter your email or name"
-            onChange={changeHandlerLog}
-          />
-        </div>
-        <div className="password">
-          <input
-            placeholder="Please enter your password"
-            name="password"
-            type="password"
-            onChange={changeHandlerLog}
-          />
-        </div>
+        <InputLogin type="email" func={changeHandlerLog} />
+        <InputLogin type="password" func={changeHandlerLog} />
         <div className="btn-authentication btn-login">
           <button onClick={checkValidForms}>Login</button>
         </div>

@@ -30,7 +30,6 @@ const UserBlock = ({ logout }) => {
         </div>
       </div>
       <div className="menu-user-block">
-        <h1>Сменить имя</h1>
         <h1>Сменить пароль</h1>
         <h1>Удалить аккаунт</h1>
         <h1 onClick={logoutHandler}>Выйти</h1>
