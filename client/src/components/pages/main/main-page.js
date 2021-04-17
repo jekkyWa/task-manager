@@ -10,14 +10,14 @@ import image_4 from "../../../images/image_4.svg";
 // icons
 import DashboardRoundedIcon from "@material-ui/icons/DashboardRounded";
 // components
-import ButtonVariation from "./button-variation";
+import ButtonVariation from "./utils/button-variation";
 
 export const MainPage = ({ token }) => {
   // Verification of authorization
   const authentication = !!token;
 
   return (
-    <div className="main-page ">
+    <div className="main-page">
       <div className="main-page-header">
         <div className="logo-block-main-page">
           <div className="logo-main-page">
@@ -60,7 +60,7 @@ export const MainPage = ({ token }) => {
           <div>
             <h1>On cards there is everything you need.</h1>
             <h2>
-              Nietask cards will help to effectively organize work: Track the
+              Taskood cards will help to effectively organize work: Track the
               tasks, as well as manage them and share information with Command
               participants.To see all available features - lists tasks, date of
               execution, comments on tasks and not only, open Any card.
@@ -82,7 +82,7 @@ export const MainPage = ({ token }) => {
         </div>
         <div className="last-info-block-main-page">
           <h1>
-            NieTask is a project created exclusively for educational purposes.
+            Taskood is a project created exclusively for educational purposes.
           </h1>
           <div className="btn-footer-main-page">
             <a href="https://trello.com/ru">
@@ -90,7 +90,7 @@ export const MainPage = ({ token }) => {
             </a>
           </div>
           <h1>
-            If you have not started your work in Nietask, what do you expect?
+            If you have not started your work in Taskood, what do you expect?
           </h1>
           <div className="btn-footer-main-page">
             <Link to="/signup">
@@ -107,4 +107,6 @@ const mapStateToProps = ({ loginReducer: { token } }) => {
   return { token };
 };
 
-export default connect(mapStateToProps)(MainPage);
+const MainPageContainer = connect(mapStateToProps, null)(MainPage);
+
+export default MainPageContainer;

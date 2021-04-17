@@ -5,7 +5,7 @@ const ButtonVariation = ({ aut }) => {
   if (aut) {
     return (
       <Link to="/begin">
-        <button>Go to the boards</button>
+        <button className="btn-to-the-boards">Go to the boards</button>
       </Link>
     );
   }
