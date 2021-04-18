@@ -260,3 +260,9 @@
     @include animRelib(rgb(0, 139, 0), 100%);
   }
 }
+
+@media screen and(max-width:600px) {
+  .authentication{
+    background-image: none;
+  }
+}

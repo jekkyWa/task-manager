@@ -1,12 +1,16 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
+import { connect } from "react-redux";
+import { useHistory } from "react-router-dom";
+// files
 import "../authentication.scss";
 import { useHttp } from "../../hooks/http.hook";
-import { connect } from "react-redux";
-import DashboardRoundedIcon from "@material-ui/icons/DashboardRounded";
 import InputLogin from "./input-login";
+// material
+import DashboardRoundedIcon from "@material-ui/icons/DashboardRounded";
 
 const Login = ({ login }) => {
+  const history = useHistory();
   const { error, request, clearError } = useHttp();
   const [formLog, setFormLog] = useState({ email: "", password: "" });
   const [validMessageLog, setValidMessageLog] = useState({
@@ -19,9 +23,7 @@ const Login = ({ login }) => {
     try {
       const data = await request("/api/auth/login", "POST", { ...formLog });
       login(data.token, data.userId);
-    } catch (e) {
-      throw new Error(e);
-    }
+    } catch (e) {}
   };
 
   const stateValidLog = (value, type) => {
@@ -73,7 +75,7 @@ const Login = ({ login }) => {
     } else {
       stateValidLog("", "passwordMessage");
     }
-     // If the "valid" error appears increases and the condition is not executed
+    // If the "valid" error appears increases and the condition is not executed
     if (valid === 0) {
       loginHandler();
     }

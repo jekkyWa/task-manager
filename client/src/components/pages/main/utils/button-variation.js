@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 const ButtonVariation = ({ aut }) => {
   if (aut) {
     return (
-      <Link to="/begin">
+      <Link to="/boards">
         <button className="btn-to-the-boards">Go to the boards</button>
       </Link>
     );

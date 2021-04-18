@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import { useHistory } from "react-router-dom";
+import { connect } from "react-redux";
 // files
 import { useHttp } from "../../hooks/http.hook";
 import { useComplexity } from "../hooks/complexity-password.hook";
@@ -11,8 +13,11 @@ import VisibilityIcon from "@material-ui/icons/Visibility";
 import VisibilityOutlinedIcon from "@material-ui/icons/VisibilityOutlined";
 import WarningIcon from "@material-ui/icons/Warning";
 import DashboardRoundedIcon from "@material-ui/icons/DashboardRounded";
+import Loading from "../../loading/loading";
+import LoadingBtn from "../../loading/loading-btn";
 
-const Register = () => {
+export const Register = ({ login }) => {
+  const history = useHistory();
   const [statePassword, setStatePassword] = useState(true);
   const [validMessageReg, setValidMessageReg] = useState({
     emailMessage: "",
@@ -20,6 +25,7 @@ const Register = () => {
     nameMessage: "",
   });
   const [err, setErr] = useState("");
+  const [load, setLoad] = useState(false);
   // Connecting custom hooks
   const {
     styleDifficult,
@@ -34,11 +40,20 @@ const Register = () => {
     // If the password is weak, the registration request is not sent, weak password is Middle or Unreliable
     if (warningMessageReg !== "Middle" && warningMessageReg !== "Unreliable") {
       try {
+        // Loader during data processing by server
+        setLoad(true);
+        // After registration, there is an instant authorization
         await request("/api/auth/register", "POST", { ...formReg });
+        const loginData = await request("/api/auth/login", "POST", {
+          email: formReg.email,
+          password: formReg.password,
+        });
+        login(loginData.token, loginData.userId);
+        history.push("/begin");
       } catch (e) {}
       return;
     }
-    setErr("Пароль слишком простой");
+    setErr("Password is too simple");
   };
 
   const stateValidReg = (value, type) => {
@@ -98,7 +113,7 @@ const Register = () => {
     } else {
       stateValidReg("", "emailMessage");
     }
-    // Check Name
+    // Checking Name
     if (formReg.name.length === 0) {
       stateValidReg("Enter full name", "nameMessage");
       valid++;
@@ -204,7 +219,9 @@ const Register = () => {
           <p className="message-text"> {warningMessageReg}</p>
         </div>
         <div className="btn-authentication">
-          <button onClick={checkValidFormsReg}>Register</button>
+          <button onClick={checkValidFormsReg}>
+            {load ? <LoadingBtn style="small" /> : "Register"}
+          </button>
         </div>
         <hr />
         <Link to="/login">Already have an account, sign in?</Link>
@@ -213,4 +230,10 @@ const Register = () => {
   );
 };
 
-export default Register;
+const mapStateToProps = ({ loginReducer: { login } }) => {
+  return { login };
+};
+
+const RegisterContainer = connect(mapStateToProps, null)(Register);
+
+export default RegisterContainer;

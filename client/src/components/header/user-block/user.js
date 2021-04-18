@@ -1,23 +1,32 @@
 import React from "react";
+import { useHistory } from "react-router-dom";
+// files
 import "./user.scss";
-import CloseIcon from "@material-ui/icons/Close";
+// redux
+import { showUserBlock } from "../../../action/action-login";
 import { connect } from "react-redux";
-import { Link, useHistory } from "react-router-dom";
+// material
+import CloseIcon from "@material-ui/icons/Close";
 
-const UserBlock = ({ logout }) => {
+const UserBlock = ({ logout, name, email, showUserBlock }) => {
   const history = useHistory();
-
   const logoutHandler = (event) => {
     event.preventDefault();
     logout();
     history.push("/login");
   };
+
   return (
     <div className="user-block">
       <div className="header-user-block">
         <p>Account</p>
-        <div className="close-notifications">
-          <CloseIcon fontSize="small" />
+        <div className="close-user">
+          <CloseIcon
+            onClick={() => {
+              showUserBlock(false);
+            }}
+            fontSize="small"
+          />
         </div>
       </div>
       <div className="user-profile-block">
@@ -25,8 +34,8 @@ const UserBlock = ({ logout }) => {
           <h1>1</h1>
         </div>
         <div className="user-profile-block-info">
-          <h1>1@mail.ru</h1>
-          <h1>1</h1>
+          <h1>{email}</h1>
+          <h1>{name}</h1>
         </div>
       </div>
       <div className="menu-user-block">
@@ -38,10 +47,23 @@ const UserBlock = ({ logout }) => {
   );
 };
 
-const mapStateToProps = ({ loginReducer: { logout } }) => {
+const mapDispatchToProps = (dispatch) => {
   return {
-    logout,
+    showUserBlock: (showUser) => {
+      dispatch(showUserBlock(showUser));
+    },
   };
 };
 
-export default connect(mapStateToProps, null)(UserBlock);
+const mapStateToProps = ({
+  getDataReducer: { name, email },
+  loginReducer: { logout },
+}) => {
+  return {
+    logout,
+    name,
+    email,
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(UserBlock);

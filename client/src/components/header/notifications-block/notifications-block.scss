@@ -1,3 +1,5 @@
+@import "../../../templates.scss";
+
 .notifications-block {
   position: fixed;
   z-index: 99999;
@@ -17,28 +19,34 @@
   max-height: calc(100vh - 43px);
   overflow-y: auto;
   .header-notifications {
-    >.close-notifications{
-        cursor: pointer;
+    > .close-notifications {
+      cursor: pointer;
+      &:hover {
+        color: rgb(95, 95, 95);
+      }
     }
     display: flex;
     justify-content: space-between;
-    border-bottom: 1px solid rgb(226, 226, 226);
+    border-bottom: 1px solid rgb(209, 209, 209);
     padding: 10px;
-    margin: 0px 10px 0px 10px;
+    margin: 2px 10px 0px 10px;
     > p {
       margin: 0 auto;
-      font-size: 16px;
+      font-size: 20px;
+      padding-left: 25px;
+      font-weight: 700;
     }
   }
   .body-notifications-empty {
     > .img-body-notifications {
       text-align: center;
-      margin-top: 15px;
+      margin-top: 5px;
       padding: 10px;
+      @extend %noselect;
       > h1 {
         font-size: 20px;
         margin-top: 15px;
-        margin-bottom: 30px;
+        margin-bottom: 10px;
       }
     }
   }
@@ -49,12 +57,12 @@
     }
     .notifications-item-body {
       border-bottom: 1px solid rgb(204, 204, 204);
-      padding: 5px;
       margin: 10px 10px 0px 10px;
       > h1 {
         font-size: 16px;
         font-weight: 300;
-        padding: 7px;
+        padding: 7px 7px 7px 0px;
+        color: #172b4d;
       }
       > .btns-notifications-item-body {
         display: flex;
@@ -70,10 +78,16 @@
         .join {
           background-color: rgb(90, 172, 68);
           color: white;
+          &:hover {
+            background-color: rgb(95, 184, 70);
+          }
         }
         .refuse {
           background-color: rgb(207, 81, 61);
           color: white;
+          &:hover {
+            background-color: rgb(219, 86, 66);
+          }
         }
       }
     }

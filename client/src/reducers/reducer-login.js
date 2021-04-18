@@ -1,12 +1,14 @@
 function noop() {}
-const initialState = {
-  token: null,
-  userId: null,
-  login: noop,
-  logout: noop,
-  isAuthenticated: false,
-};
-const loginReducer = (state = initialState, action) => {
+const loginReducer = (state, action) => {
+  if (state === undefined) {
+    return {
+      token: null,
+      userId: null,
+      login: noop,
+      logout: noop,
+      isAuthenticated: false,
+    };
+  }
   switch (action.type) {
     case "FETCH_LOGIN":
       return {
@@ -17,7 +19,7 @@ const loginReducer = (state = initialState, action) => {
         isAuthenticated: action.isAuthenticated,
       };
     default:
-      return state;
+      return state.loginReducer;
   }
 };
 

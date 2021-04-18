@@ -76,7 +76,7 @@ const ModalCreateProject = ({
       await socket.emit("sendNotification", {
         data: cleanAddedUsers,
         message: {
-          title: `User ${email} invites you to the team ${formCreateProject.nameProject}`,
+          title: `User "${email}" invites you to the team "${formCreateProject.nameProject}"`,
           type: "AddingToCommand",
           from: email,
           id_notification,

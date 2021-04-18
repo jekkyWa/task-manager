@@ -1,22 +1,23 @@
 import React, { useEffect } from "react";
-import "./header.scss";
 import { Link } from "react-router-dom";
-import HomeOutlinedIcon from "@material-ui/icons/HomeOutlined";
-import DashboardIcon from "@material-ui/icons/Dashboard";
-import NotificationsNoneOutlinedIcon from "@material-ui/icons/NotificationsNoneOutlined";
+//files
+import "./header.scss";
+import NotificationsBlock from "../notifications-block/notifications-block";
+import SearchBlock from "../search";
+import UserBlock from "../user-block/user";
+//redux
 import { connect } from "react-redux";
-import NotificationsBlock from "./notifications-block";
 import {
   showNotifications,
   showBoards,
   showUserBlock,
   showSearchBlock,
   saveNotifications,
-} from "../../action/action-login";
-import SearchBlock from "./search";
-import UserBlock from "./user";
-import { useHttp } from "../hooks/http.hook";
-import WbSunnyIcon from "@material-ui/icons/WbSunny";
+} from "../../../action/action-login";
+//material
+import HomeOutlinedIcon from "@material-ui/icons/HomeOutlined";
+import DashboardIcon from "@material-ui/icons/Dashboard";
+import NotificationsNoneOutlinedIcon from "@material-ui/icons/NotificationsNoneOutlined";
 
 const Header = ({
   email,
@@ -24,8 +25,6 @@ const Header = ({
   notifications,
   showNotifications,
   showNotification,
-  showBoard,
-  showBoards,
   showUser,
   showSearch,
   showUserBlock,
@@ -33,7 +32,7 @@ const Header = ({
   saveNotifications,
 }) => {
   useEffect(() => {
-    if (socket) {
+    if (socket && email !== "email") {
       socket.emit("joinNotification", { email: email });
     }
   }, [email, socket]);
@@ -50,31 +49,32 @@ const Header = ({
     }
   }, [socket, notifications]);
 
+  const stateWindow = (user, notification) => {
+    showUserBlock(user);
+    showNotifications(notification);
+  };
+
   return (
     <div>
       <div className={`header ${color + "-header"}`}>
         <div className="menu-header">
           <div className="header-item">
-            <Link to="/page">
+            <Link to="/main_page">
               <div>
-                <HomeOutlinedIcon />
+                <HomeOutlinedIcon className="home-icon-header" />
               </div>
             </Link>
           </div>
-          <div
-            className="header-item"
-            onClick={() => {
-              showBoards(!showBoard);
-              showUserBlock(false);
-              showNotifications(false);
-            }}
-          >
+          <div className="header-item">
             <div>
-              <DashboardIcon />
+              <DashboardIcon
+                fontSize="small"
+                className="dashboard-icon-header"
+              />
             </div>
-            <div>
+            <h2>
               <Link to="/boards">Boards page</Link>
-            </div>
+            </h2>
           </div>
           <div className="header-input">
             <input
@@ -87,18 +87,18 @@ const Header = ({
           <div>
             <DashboardIcon />
           </div>
-          <h1>nieTask</h1>
+          <h1>Taskood</h1>
         </div>
         <div className="item-header-email">
           <div
             className="notification-icon"
             onClick={() => {
-              showNotifications(!showNotification);
-              showUserBlock(false);
-              showBoards(false);
+              // Closing all unnecessary windows 1 - user, 2 - notification
+              stateWindow(false, !showNotification);
             }}
           >
             <NotificationsNoneOutlinedIcon />
+            {/* If there are no notifications, nothing is shown */}
             <span
               className={
                 notifications.length == 0 ? "hidden" : "number-of-natifications"
@@ -110,9 +110,8 @@ const Header = ({
           <div
             className="icon-profile"
             onClick={() => {
-              showUserBlock(!showUser);
-              showNotifications(false);
-              showBoards(false);
+              // Closing all unnecessary windows 1 - user, 2 - notification
+              stateWindow(!showUser, false);
             }}
           >
             <p>{email[0].toUpperCase()}</p>

@@ -1,9 +1,9 @@
 import React from "react";
 import { Redirect, Route, Switch } from "react-router-dom";
 import Register from "../authentication/register/register-page.js";
-import Login from "../authentication/login/login";
+import Login from "../authentication/login/login-page";
 import Page from "../pages/main/main-page";
-import BeginningOfWorkPage from "../pages/beginning-of-work-page";
+import BeginningOfWorkPage from "../pages/begin/beginning-of-work-page";
 import BoardPage from "../pages/boards-page";
 import CardPage from "../pages/card-page";
 import Participants from "../participants/participants";
@@ -14,7 +14,7 @@ const useRoutes = (isAuthenticated) => {
   if (isAuthenticated) {
     return (
       <Switch>
-        <Route path="/page" exact>
+        <Route path="/main_page" exact>
           <Page />
         </Route>
         <Route path="/begin" exact>
@@ -35,13 +35,13 @@ const useRoutes = (isAuthenticated) => {
         <Route path="/boards/:id/:name" exact>
           <CardPage />
         </Route>
-        <Redirect to="/page" />
+        <Redirect to="/begin" exact />
       </Switch>
     );
   } else {
     return (
       <Switch>
-        <Route path="/page" exact>
+        <Route path="/main_page" exact>
           <Page />
         </Route>
         <Route path="/signup" exact>
@@ -50,7 +50,6 @@ const useRoutes = (isAuthenticated) => {
         <Route path="/login" exact>
           <Login />
         </Route>
-        <Redirect to="/page" />
       </Switch>
     );
   }

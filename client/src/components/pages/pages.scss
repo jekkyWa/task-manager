@@ -18,42 +18,6 @@
 
 // ---------------------------------------------------------------------------------
 
-.begin-page {
-  display: flex;
-  .begin-body {
-    margin-top: 50px;
-    width: 100%;
-  }
-  .begin-container {
-    margin-left: 60px;
-    background-color: white;
-    border-radius: 10px;
-    border: 1px solid rgb(197, 197, 197);
-    width: 70%;
-    padding: 10px;
-    h1 {
-      font-size: 20px;
-      font-weight: 500;
-    }
-    h2 {
-      font-size: 18px;
-    }
-  }
-  .header-begin-container {
-    display: flex;
-    margin: 40px 0 0 50px;
-    padding: 9px;
-    .icon-begin {
-      margin-top: -5px;
-      margin-right: 4px;
-    }
-    > h1 {
-      font-size: 16px;
-      font-weight: 700;
-    }
-  }
-}
-
 // ---------------------------------------------------------------------------------
 
 .boards-page {

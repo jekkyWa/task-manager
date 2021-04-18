@@ -1,15 +1,18 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { connect } from "react-redux";
 import { useAuth } from "../hooks/auth.hook";
 import {
   fetchLogin,
   saveSocket,
   saveNotifications,
+  saveDataIdentification,
 } from "../../action/action-login";
 import "./app.css";
 import useRoutes from "../routes/routes";
 import { BrowserRouter as Router, withRouter } from "react-router-dom";
 import io from "socket.io-client";
+import { useHttp } from "../hooks/http.hook";
+import Loading from "../loading/loading";
 
 const App = ({
   fetchLogin,
@@ -17,20 +20,42 @@ const App = ({
   socket,
   email,
   saveNotifications,
+  saveDataIdentification,
   notifications,
 }) => {
+  // const [loading, setLoading] = useState(true);
   const { login, logout, token, userId } = useAuth();
   const isAuthenticated = !!token;
   useEffect(() => {
     fetchLogin(token, userId, login, logout, isAuthenticated);
   }, [token, login]);
+  const { request } = useHttp();
 
   const phone = "192.168.43.127:5000";
   const local = "http://localhost:5000";
-  const setupSocket = () => {};
 
+  useEffect(async () => {
+    let url = window.location.href;
+    const condition = (word) => {
+      return url.slice(url.length - word.length) !== word;
+    };
+    if (
+      isAuthenticated &&
+      condition("main_page") &&
+      condition("signup") &&
+      condition("login")
+    ) {
+      const data = await request("/api/getData/test", "GET", null, {
+        Authorization: `Bearer ${token}`,
+      });
+      saveDataIdentification(data.email, data.name, data.rooms);
+      // setLoading(false);
+    }
+  }, [isAuthenticated]);
+
+  // готово
   useEffect(() => {
-    if (email !== "email") {
+    if (isAuthenticated && email !== "email") {
       const newSocket = io(local, {
         query: {
           token,
@@ -48,7 +73,7 @@ const App = ({
       saveSocket(newSocket);
       return () => newSocket.disconnect();
     }
-  }, [email, isAuthenticated]);
+  }, [isAuthenticated, email]);
 
   // перенести в header
   // Обновление при получение notification
@@ -66,6 +91,14 @@ const App = ({
   }, [socket, notifications]);
 
   const routes = useRoutes(isAuthenticated);
+
+  // if (loading) {
+  //   return (
+  //     <div className="loading">
+  //       <Loading />
+  //     </div>
+  //   );
+  // }
 
   return routes;
 };
@@ -86,6 +119,9 @@ const mapDispatchToProps = (dispatch) => {
     },
     saveSocket: (socket) => {
       dispatch(saveSocket(socket));
+    },
+    saveDataIdentification: (email, name, rooms) => {
+      dispatch(saveDataIdentification(email, name, rooms));
     },
   };
 };

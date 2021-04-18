@@ -1,3 +1,5 @@
+@import "../../../templates.scss";
+
 .user-block {
   position: fixed;
   width: 280px;
@@ -18,19 +20,25 @@
   .header-user-block {
     display: flex;
     justify-content: space-between;
-    border-bottom: 1px solid rgb(226, 226, 226);
+    border-bottom: 1px solid rgb(209, 209, 209);
     padding: 10px;
     margin: 0px 10px 0px 10px;
+    .close-user {
+      cursor: pointer;
+      &:hover {
+        color: rgb(95, 95, 95);
+      }
+    }
     > p {
       margin: 0 auto;
-      font-size: 16px;
+      font-size: 20px;
+      padding-left: 25px;
+      font-weight: 700;
     }
   }
   .user-profile-block {
-    margin: 10px;
     padding: 10px;
     display: flex;
-    border-bottom: 1px solid rgb(226, 226, 226);
     .user-profile-block-icon {
       height: 40px;
       width: 40px;
@@ -45,7 +53,7 @@
       }
     }
     .user-profile-block-info {
-      margin-left: 7px;
+      margin-left: 10px;
       > h1 {
         font-size: 16px;
         font-weight: 300;
@@ -55,8 +63,18 @@
   .menu-user-block {
     padding: 0px 10px;
     > h1 {
-      font-size: 18px;
-      margin-top: 20px;
+      font-size: 16px;
+      margin-bottom: 20px;
+      font-weight: 300;
+      cursor: pointer;
+      background-color: rgb(240, 240, 240);
+      padding: 6px 6px 6px 5px;
+      border-radius: 2px;
+      text-align: center;
+      @extend %noselect;
+      &:hover {
+        background-color: rgb(236, 236, 236);
+      }
     }
   }
 }
