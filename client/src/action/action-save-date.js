@@ -68,13 +68,45 @@ const saveDataForBoardsPage = (allDataForBoardsPage) => {
   };
 };
 
+const markBoard = (marksBoard) => {
+  return {
+    type: "MARK_BOARD",
+    marksBoard,
+  };
+};
+
+const displaySelection = (valueDisplay) => {
+  return {
+    type: "DISPLAY_SELECTION",
+    valueDisplay,
+  };
+};
+
+const recentActivity = (activData) => {
+  return {
+    type: "RECENT_ACTIVITY",
+    activData,
+  };
+};
+
+const roleForNewTask = (saveRole) => {
+  return {
+    type: "ROLE_FOR_NEW_TASK",
+    saveRole,
+  };
+};
+
 export {
   saveRole,
+  markBoard,
   saveSocket,
   saveFullCard,
   saveDataCards,
+  roleForNewTask,
+  recentActivity,
   saveDataToModal,
   saveActiveBoard,
+  displaySelection,
   saveActivityCard,
   saveNotifications,
   saveImportantEvents,

@@ -2,8 +2,6 @@ import React, { useState } from "react";
 import "./menu.scss";
 import { connect } from "react-redux";
 import CloseIcon from "@material-ui/icons/Close";
-import InfoOutlinedIcon from "@material-ui/icons/InfoOutlined";
-import PhotoSizeSelectActualOutlinedIcon from "@material-ui/icons/PhotoSizeSelectActualOutlined";
 import AssignmentLateOutlinedIcon from "@material-ui/icons/AssignmentLateOutlined";
 import AssignmentOutlinedIcon from "@material-ui/icons/AssignmentOutlined";
 import AssignmentTurnedInOutlinedIcon from "@material-ui/icons/AssignmentTurnedInOutlined";
@@ -12,7 +10,7 @@ import AssignmentIndOutlinedIcon from "@material-ui/icons/AssignmentIndOutlined"
 import ArrowBackIcon from "@material-ui/icons/ArrowBack";
 import MyTask from "./my-task";
 import CreatedTasks from "./created-tasks";
-import { displaySelection } from "../../action/action-login";
+import { displaySelection } from "../../action/action-save-date";
 import RecentActivity from "./recent-activity";
 import DoneOutlineIcon from "@material-ui/icons/DoneOutline";
 import CompletedTasks from "./completed-tasks";

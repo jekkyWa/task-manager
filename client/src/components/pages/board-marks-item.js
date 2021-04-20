@@ -1,9 +1,9 @@
 import React from "react";
 import { Link } from "react-router-dom";
 // files
-import "./boards-main-page.scss";
+import "./boards//boards-main-page.scss";
 import { mark } from "./utils/mark";
-import { useHttp } from "../../hooks/http.hook";
+import { useHttp } from "../hooks/http.hook";
 // material
 import StarRoundedIcon from "@material-ui/icons/StarRounded";
 
@@ -12,6 +12,7 @@ const BoardMarkItem = ({
   token,
   allDataForBoardsPage,
   saveDataForBoardsPage,
+  url,
 }) => {
   const { request } = useHttp();
 
@@ -35,7 +36,8 @@ const BoardMarkItem = ({
               email,
               token,
               request,
-              false
+              false,
+              url
             );
           }}
         >

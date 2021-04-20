@@ -4,7 +4,8 @@ import CloseIcon from "@material-ui/icons/Close";
 import { connect } from "react-redux";
 import { Modal } from "react-bootstrap";
 import "./modal-add-role.scss";
-import { modalRoleShow, roleForNewTask } from "../../action/action-login";
+import { modalRoleShow } from "../../action/action-modal";
+import {roleForNewTask} from "../../action/action-save-date"
 
 const ModalAddRole = ({
   roleProfileInBoard,

@@ -96,7 +96,7 @@ const SideBarItem = ({ rooms, email, socket }) => {
 
 const mapStateToProps = ({
   reducerDataIdentification: { rooms, email },
-  getDataReducer: { socket },
+  reducerSaveData: { socket },
 }) => {
   return { rooms, email, socket };
 };

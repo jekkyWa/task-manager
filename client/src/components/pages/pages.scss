@@ -76,6 +76,15 @@
     flex-wrap: wrap;
     align-content: flex-start;
     padding: 10px;
+    > h1 {
+      width: 794px;
+      padding: 30px 30px 30px 0px;
+      color: #172b4d;
+      font-size: 18px;
+      font-weight: 300;
+      letter-spacing: 1px;
+      margin: 10px 0px 10px 0px;
+    }
     .board {
       z-index: 0;
       flex-basis: 190px;

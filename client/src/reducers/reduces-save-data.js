@@ -11,6 +11,10 @@ const reducerSaveData = (state, action) => {
       notifications: [],
       importantEvents: { board: [], card: [] },
       allDataForBoardsPage: { cards: [], marks: [] },
+      valueDisplay: { valueDisp: {}, stateFilter: true },
+      activData: [],
+      saveRole: [],
+      marksBoard: [],
     };
   }
   switch (action.type) {
@@ -56,20 +60,39 @@ const reducerSaveData = (state, action) => {
         ...state.reducerSaveData,
         notifications: action.notifications,
       };
-
     case "SAVE_IMPORTANT_EVENTS": {
       return {
         ...state.reducerSaveData,
         importantEvents: action.importantEvents,
       };
     }
-
     case "SAVE_DATA_FOR_BOARDS_PAGE": {
       return {
         ...state.reducerSaveData,
         allDataForBoardsPage: action.allDataForBoardsPage,
       };
     }
+    case "MARK_BOARD": {
+      return {
+        ...state.getDataReducer,
+        marksBoard: action.marksBoard,
+      };
+    }
+    case "DISPLAY_SELECTION":
+      return {
+        ...state.getDataReducer,
+        valueDisplay: action.valueDisplay,
+      };
+    case "RECENT_ACTIVITY":
+      return {
+        ...state.getDataReducer,
+        activData: action.activData,
+      };
+    case "ROLE_FOR_NEW_TASK":
+      return {
+        ...state.getDataReducer,
+        saveRole: action.saveRole,
+      };
     default:
       return state.reducerSaveData;
   }

@@ -2,18 +2,20 @@ import React from "react";
 import { Link } from "react-router-dom";
 // files
 import { mark } from "./utils/mark";
-import { useHttp } from "../../hooks/http.hook";
+import { useHttp } from "../hooks/http.hook";
 // material
 import PersonOutlineOutlinedIcon from "@material-ui/icons/PersonOutlineOutlined";
 import StarRoundedIcon from "@material-ui/icons/StarRounded";
 import StarOutlineRoundedIcon from "@material-ui/icons/StarOutlineRounded";
-import ButtonMenu from "./button-menu";
+import ButtonMenu from "./boards/button-menu";
+import EmptyHandlerBoard from "./boards/empty-handler-board";
 
 const BoardItem = ({
   email,
   token,
   allDataForBoardsPage,
   saveDataForBoardsPage,
+  url,
 }) => {
   const { request } = useHttp();
 
@@ -44,7 +46,8 @@ const BoardItem = ({
                   email,
                   token,
                   request,
-                  true
+                  true,
+                  url
                 );
               }}
             >
@@ -63,7 +66,8 @@ const BoardItem = ({
                   email,
                   token,
                   request,
-                  false
+                  false,
+                  url
                 );
               }}
             >
@@ -82,7 +86,7 @@ const BoardItem = ({
             </div>
             <ButtonMenu name={e.name} board_id={e.board_id} />
           </div>
-          <div className="boards-body">{labelItem}</div>
+          <EmptyHandlerBoard labelItem={labelItem} />
         </React.Fragment>
       );
     });

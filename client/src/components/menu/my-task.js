@@ -1,7 +1,7 @@
 import React from "react";
 import { connect } from "react-redux";
-import { modalShow,  } from "../../action/action-login";
-import {saveDataToModal} from "../../action/action-save-date"
+import { modalShow } from "../../action/action-modal";
+import { saveDataToModal } from "../../action/action-save-date";
 
 import { useParams } from "react-router-dom";
 

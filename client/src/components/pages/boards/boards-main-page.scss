@@ -19,17 +19,25 @@
     display: flex;
     flex-wrap: wrap;
     > div {
-      width: 155px;
+      width: 150px;
       margin-left: 10px;
       background-color: #e6e6e6;
       text-align: center;
       padding: 3px 2px 6px 2px;
       border-radius: 3px;
       cursor: pointer;
+      color: #172b4d !important;
       > span {
         margin-left: 5px;
         vertical-align: -1px;
-        font-weight: 300;
+        font-weight: 400;
+        a {
+          color: #172b4d;
+        }
+      }
+      &:hover{
+      background-color: #dfdede;
+
       }
     }
   }

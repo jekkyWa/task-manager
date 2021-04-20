@@ -8,16 +8,20 @@ export const mark = async (
   email,
   token,
   request,
-  bool
+  bool,
+  url
 ) => {
   const value = { board_id, email, newMarkBoard: mark_board, state: bool };
-  const data = await request("/api/addMarkMainBoards", "POST", value, {
+  const data = await request(`/api/${url}`, "POST", value, {
     Authorization: `Bearer ${token}`,
   });
-  console.log(data);
-  // Saving all received data
-  saveDataForBoardsPage({
-    ...allDataForBoardsPage,
-    marks: data.marksCards,
-  });
+  if (url == "addMarkMainBoards") {
+    // Saving all received data
+    saveDataForBoardsPage({
+      ...allDataForBoardsPage,
+      marks: data.marksCards,
+    });
+  } else {
+    saveDataForBoardsPage(data.marksCards);
+  }
 };

@@ -1,10 +1,6 @@
 import React, { useState } from "react";
-import {
-  modalShow,
-  roleForNewTask,
-  modalRoleShow,
-} from "../../action/action-login";
-import { saveDataToModal } from "../../action/action-save-date";
+import { modalShow, modalRoleShow } from "../../action/action-modal";
+import { saveDataToModal, roleForNewTask } from "../../action/action-save-date";
 import { useParams } from "react-router-dom";
 import MoreHorizIcon from "@material-ui/icons/MoreHoriz";
 import { connect } from "react-redux";

@@ -10,21 +10,27 @@ const ButtonMenu = ({ name, board_id }) => {
   return (
     <div className="btn-block-boards-main-page">
       <div>
-        <DashboardIcon fontSize="small" />
+        <DashboardIcon сlass="btn-icon-block-boards" fontSize="small" />
         <span>
           <Link to={`/boards/${name + board_id}`}>Boards</Link>
         </span>
       </div>
       <div>
-        <FavoriteBorderOutlinedIcon fontSize="small" />
+        <FavoriteBorderOutlinedIcon
+          сlassName="btn-icon-block-boards"
+          fontSize="small"
+        />
         <span>
           <Link to={`/boards/${name + board_id}/important_events`}>
-            Important events
+            Important
           </Link>
         </span>
       </div>
       <div>
-        <PeopleOutlineOutlinedIcon fontSize="small" />
+        <PeopleOutlineOutlinedIcon
+          сlassName="btn-icon-block-boards"
+          fontSize="small"
+        />
         <span>
           <Link to={`/boards/${name + board_id}/participants`}>
             Participants
@@ -32,7 +38,10 @@ const ButtonMenu = ({ name, board_id }) => {
         </span>
       </div>
       <div>
-        <DeleteOutlineOutlinedIcon fontSize="small" />
+        <DeleteOutlineOutlinedIcon
+          сlassName="btn-icon-block-boards"
+          fontSize="small"
+        />
         <span>Delete</span>
       </div>
     </div>

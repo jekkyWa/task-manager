@@ -1,18 +1,19 @@
 import React, { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
 // files
 import Header from "../../header";
 import SideBar from "../../sideBar/side-bar";
 import Loading from "../../loading/loading";
 import "./boards-main-page.scss";
-import BoardMarksItem from "./board-marks-item";
+import BoardMarksItem from "../board-marks-item";
 // redux
 import { connect } from "react-redux";
-import { markBoard } from "../../../action/action-login";
-import { saveDataForBoardsPage } from "../../../action/action-save-date";
+import {
+  saveDataForBoardsPage,
+  markBoard,
+} from "../../../action/action-save-date";
 // material
 import StarOutlineRoundedIcon from "@material-ui/icons/StarOutlineRounded";
-import BoardItem from "./board-item";
+import BoardItem from "../board-item";
 
 const BoardsMainPage = ({
   socket,
@@ -69,6 +70,7 @@ const BoardsMainPage = ({
                 token={token}
                 allDataForBoardsPage={allDataForBoardsPage}
                 saveDataForBoardsPage={saveDataForBoardsPage}
+                url="addMarkMainBoards"
               />
             </div>
           </div>
@@ -78,6 +80,7 @@ const BoardsMainPage = ({
               token={token}
               allDataForBoardsPage={allDataForBoardsPage}
               saveDataForBoardsPage={saveDataForBoardsPage}
+              url="addMarkMainBoards"
             />
           </div>
         </div>

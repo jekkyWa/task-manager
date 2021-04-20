@@ -246,7 +246,7 @@ const ModalCreateProject = ({
 const mapStateToProps = ({
   reducerDataIdentification: { rooms, email },
   loginReducer: { token },
-  getDataReducer: { socket },
+  reducerSaveData: { socket },
 }) => {
   return { token, rooms, email, socket };
 };

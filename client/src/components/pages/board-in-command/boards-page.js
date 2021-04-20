@@ -1,18 +1,24 @@
 import React, { useState, useEffect } from "react";
-import Header from "../header";
-import ModalAddBoard from "../modal-add-board/modal-add-board";
-import SideBar from "../sideBar/side-bar";
-import "./pages.scss";
-import { connect } from "react-redux";
-import { markBoard } from "../../action/action-login";
-import { saveDataCards, saveRole } from "../../action/action-save-date";
-import { Link, useParams } from "react-router-dom";
-import Loading from "../loading/loading";
+import { useParams } from "react-router-dom";
 import { useHistory } from "react-router-dom";
+// files
+import Header from "../../header";
+import ModalAddBoard from "../../modal-add-board/modal-add-board";
+import SideBar from "../../sideBar/side-bar";
+import "../pages.scss";
+import Loading from "../../loading/loading";
+import BoardMarkItem from "../board-marks-item";
+// redux
+import { connect } from "react-redux";
+import {
+  saveDataCards,
+  saveRole,
+  markBoard,
+} from "../../../action/action-save-date";
+// material
 import PersonOutlineOutlinedIcon from "@material-ui/icons/PersonOutlineOutlined";
-import { useHttp } from "../hooks/http.hook";
 import StarOutlineRoundedIcon from "@material-ui/icons/StarOutlineRounded";
-import StarRoundedIcon from "@material-ui/icons/StarRounded";
+import BoardItem from "../board-item";
 
 const BoardPage = ({
   saveDataCards,
@@ -26,11 +32,11 @@ const BoardPage = ({
   markBoard,
   marksBoard,
 }) => {
-  const { request } = useHttp();
-
+  // router
   const history = useHistory();
-  const [modalShow, setModalShow] = useState(false);
   let { id } = useParams();
+
+  const [modalShow, setModalShow] = useState(false);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -93,86 +99,6 @@ const BoardPage = ({
     );
   }
 
-  const labelMarks = marksBoard.map((e, i) => {
-    const mark = async (bool) => {
-      const board_id = id.slice(id.length - 10);
-      const newMarkBoard = e.card_id;
-      const value = { board_id, email, newMarkBoard, state: bool };
-      const data = await request("/api/addMark", "POST", value, {
-        Authorization: `Bearer ${token}`,
-      });
-      markBoard(data.marksCards);
-    };
-    return (
-      <div className={`board ${e.color}`} key={e.card_id}>
-        <div>
-          <Link to={`/boards/${id}/${e.card_id}`}>
-            <div className="main-link-boards">{e.name_Board}</div>
-          </Link>
-        </div>
-        <div
-          className="star-icon-boards-page"
-          onClick={() => {
-            mark(false);
-          }}
-        >
-          <h1>Take a label</h1>
-          <StarRoundedIcon fontSize="small" />
-        </div>
-      </div>
-    );
-  });
-
-  const label = boards.map((e) => {
-    const mark = async (bool) => {
-      const board_id = id.slice(id.length - 10);
-      const newMarkBoard = e.card_id;
-      const value = { board_id, email, newMarkBoard, state: bool };
-      const data = await request("/api/addMark", "POST", value, {
-        Authorization: `Bearer ${token}`,
-      });
-      markBoard(data.marksCards);
-    };
-    return (
-      <div className={`board ${e.color}`} key={e.card_id}>
-        <div>
-          <Link to={`/boards/${id}/${e.card_id}`}>
-            <div className="main-link-boards">{e.name_Board}</div>
-          </Link>
-        </div>
-
-        <div
-          className={
-            marksBoard.findIndex((element) => element.card_id == e.card_id) !==
-            -1
-              ? "hidden"
-              : "star-icon-boards-page"
-          }
-          onClick={() => {
-            mark(true);
-          }}
-        >
-          <h1>Mark</h1>
-          <StarOutlineRoundedIcon fontSize="small" />
-        </div>
-        <div
-          className={
-            marksBoard.findIndex((element) => element.card_id == e.card_id) ==
-            -1
-              ? "hidden"
-              : "star-icon-boards-page"
-          }
-          onClick={() => {
-            mark(false);
-          }}
-        >
-          <h1>Take a label</h1>
-          <StarRoundedIcon fontSize="small" />
-        </div>
-      </div>
-    );
-  });
-
   return (
     <div>
       <Header />
@@ -187,7 +113,13 @@ const BoardPage = ({
               <h1>Marked boards</h1>
             </div>
             <div className={marksBoard.length == 0 ? "hidden" : "boards-body"}>
-              {labelMarks}
+              <BoardMarkItem
+                email={email}
+                token={token}
+                allDataForBoardsPage={marksBoard}
+                saveDataForBoardsPage={markBoard}
+                url="addMark"
+              />
             </div>
             <div className={marksBoard.length !== 0 ? "hidden" : ""}>
               <h1 className="mark-recomendation">
@@ -201,7 +133,13 @@ const BoardPage = ({
               <h1>Your workspace boards</h1>
             </div>
             <div className="boards-body">
-              {label}
+              <BoardItem
+                email={email}
+                token={token}
+                allDataForBoardsPage={boards}
+                saveDataForBoardsPage={markBoard}
+                url="addMark"
+              />
               <div
                 className={`${
                   roleProfileInBoard.role == "Product manager"

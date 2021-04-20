@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { connect } from "react-redux";
 import CloseIcon from "@material-ui/icons/Close";
 import dateFormat from "dateformat";
-import { recentActivity } from "../../action/action-login";
+import { recentActivity } from "../../action/action-save-date";
 
 const DescriptionBlock = ({
   dataToModal,
