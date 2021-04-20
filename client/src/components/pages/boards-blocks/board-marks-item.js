@@ -1,9 +1,9 @@
 import React from "react";
 import { Link } from "react-router-dom";
 // files
-import "./boards//boards-main-page.scss";
-import { mark } from "./utils/mark";
-import { useHttp } from "../hooks/http.hook";
+import "./boards-main-page.scss";
+import { mark } from "../utils/mark";
+import { useHttp } from "../../hooks/http.hook";
 // material
 import StarRoundedIcon from "@material-ui/icons/StarRounded";
 
@@ -16,12 +16,14 @@ const BoardMarkItem = ({
 }) => {
   const { request } = useHttp();
 
-  const labelMarks = allDataForBoardsPage.marks.map((e, i) => {
+  const labelMarks = allDataForBoardsPage.map((e, i) => {
     return (
       <div className={`board ${e.color}`} key={i}>
         <div>
           <Link to={`/boards/${e.name + e.board_id}/${e.card_id}`}>
-            <div className="main-link-boards">{e.name_Board}</div>
+            <div className="main-link-boards">
+              <h1>{e.name_Board}</h1>
+            </div>
           </Link>
         </div>
         <div

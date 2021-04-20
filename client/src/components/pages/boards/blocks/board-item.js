@@ -1,14 +1,15 @@
 import React from "react";
 import { Link } from "react-router-dom";
 // files
-import { mark } from "./utils/mark";
-import { useHttp } from "../hooks/http.hook";
+import { mark } from "../../utils/mark";
+import { useHttp } from "../../../hooks/http.hook";
+import "../../boards-blocks/boards-main-page.scss";
 // material
 import PersonOutlineOutlinedIcon from "@material-ui/icons/PersonOutlineOutlined";
 import StarRoundedIcon from "@material-ui/icons/StarRounded";
 import StarOutlineRoundedIcon from "@material-ui/icons/StarOutlineRounded";
-import ButtonMenu from "./boards/button-menu";
-import EmptyHandlerBoard from "./boards/empty-handler-board";
+import ButtonMenu from "./button-menu";
+import EmptyHandlerBoard from "./empty-handler-board";
 
 const BoardItem = ({
   email,
@@ -31,7 +32,9 @@ const BoardItem = ({
           <div className={`board ${element.color}`} key={element.card_id}>
             <div>
               <Link to={`/boards/${e.name + e.board_id}/${element.card_id}`}>
-                <div className="main-link-boards">{element.name_Board}</div>
+                <div className="main-link-boards">
+                  <h1>{element.name_Board}</h1>
+                </div>
               </Link>
             </div>
             <div

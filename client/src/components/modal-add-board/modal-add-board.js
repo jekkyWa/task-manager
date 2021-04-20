@@ -162,7 +162,8 @@ const ModalAddBoard = ({ show, onHide, saveDataCards, socket, boards }) => {
 
 const mapStateToProps = ({
   loginReducer: { token },
-  getDataReducer: { active_rooms, name, boards, socket },
+  reducerSaveData: { active_rooms, boards, socket },
+  reducerDataIdentification: { email, name },
 }) => {
   return { token, active_rooms, name, boards, socket };
 };

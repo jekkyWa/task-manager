@@ -3,8 +3,9 @@ import React, { useEffect, useState } from "react";
 import Header from "../../header";
 import SideBar from "../../sideBar/side-bar";
 import Loading from "../../loading/loading";
-import "./boards-main-page.scss";
-import BoardMarksItem from "../board-marks-item";
+import "../boards-blocks/boards-main-page.scss";
+import BoardMarksItem from "../boards-blocks/board-marks-item";
+import BoardItem from "./blocks/board-item";
 // redux
 import { connect } from "react-redux";
 import {
@@ -13,7 +14,6 @@ import {
 } from "../../../action/action-save-date";
 // material
 import StarOutlineRoundedIcon from "@material-ui/icons/StarOutlineRounded";
-import BoardItem from "../board-item";
 
 const BoardsMainPage = ({
   socket,
@@ -68,7 +68,7 @@ const BoardsMainPage = ({
               <BoardMarksItem
                 email={email}
                 token={token}
-                allDataForBoardsPage={allDataForBoardsPage}
+                allDataForBoardsPage={allDataForBoardsPage.marks}
                 saveDataForBoardsPage={saveDataForBoardsPage}
                 url="addMarkMainBoards"
               />

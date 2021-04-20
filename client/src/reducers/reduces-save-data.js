@@ -74,23 +74,23 @@ const reducerSaveData = (state, action) => {
     }
     case "MARK_BOARD": {
       return {
-        ...state.getDataReducer,
+        ...state.reducerSaveData,
         marksBoard: action.marksBoard,
       };
     }
     case "DISPLAY_SELECTION":
       return {
-        ...state.getDataReducer,
+        ...state.reducerSaveData,
         valueDisplay: action.valueDisplay,
       };
     case "RECENT_ACTIVITY":
       return {
-        ...state.getDataReducer,
+        ...state.reducerSaveData,
         activData: action.activData,
       };
     case "ROLE_FOR_NEW_TASK":
       return {
-        ...state.getDataReducer,
+        ...state.reducerSaveData,
         saveRole: action.saveRole,
       };
     default:

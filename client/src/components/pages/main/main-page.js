@@ -10,7 +10,7 @@ import image_4 from "../../../images/image_4.svg";
 // icons
 import DashboardRoundedIcon from "@material-ui/icons/DashboardRounded";
 // components
-import ButtonVariation from "./utils/button-variation";
+import ButtonVariation from "./blocks/button-variation";
 
 export const MainPage = ({ token }) => {
   // Verification of authorization

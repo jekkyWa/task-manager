@@ -6,8 +6,10 @@ import Header from "../../header";
 import ModalAddBoard from "../../modal-add-board/modal-add-board";
 import SideBar from "../../sideBar/side-bar";
 import "../pages.scss";
+import "../boards-blocks/boards-main-page.scss";
 import Loading from "../../loading/loading";
-import BoardMarkItem from "../board-marks-item";
+import BoardMarkItem from "../boards-blocks/board-marks-item";
+import BoardInCommandItem from "./blocks/board-in-command-item";
 // redux
 import { connect } from "react-redux";
 import {
@@ -18,7 +20,6 @@ import {
 // material
 import PersonOutlineOutlinedIcon from "@material-ui/icons/PersonOutlineOutlined";
 import StarOutlineRoundedIcon from "@material-ui/icons/StarOutlineRounded";
-import BoardItem from "../board-item";
 
 const BoardPage = ({
   saveDataCards,
@@ -60,8 +61,8 @@ const BoardPage = ({
   useEffect(() => {
     if (socket) {
       socket.emit("joinroom", { id: id.slice(id.length - 10), email });
+      return () => socket.emit("leaveRoom", { id: id.slice(id.length - 10) });
     }
-    return () => socket.emit("leaveRoom", { id: id.slice(id.length - 10) });
   }, [id, socket]);
 
   useEffect(() => {
@@ -133,10 +134,11 @@ const BoardPage = ({
               <h1>Your workspace boards</h1>
             </div>
             <div className="boards-body">
-              <BoardItem
+              <BoardInCommandItem
                 email={email}
                 token={token}
-                allDataForBoardsPage={boards}
+                allDataForBoardsPageBoards={boards}
+                allDataForBoardsPageMarks={marksBoard}
                 saveDataForBoardsPage={markBoard}
                 url="addMark"
               />
@@ -164,15 +166,9 @@ const BoardPage = ({
 };
 
 const mapStateToProps = ({
-  getDataReducer: {
-    boards,
-    socket,
-    rooms,
-    email,
-    roleProfileInBoard,
-    stateDelete,
-    marksBoard,
-  },
+  reducerSaveData: { boards, socket, roleProfileInBoard, marksBoard },
+  reducerState: { stateDelete },
+  reducerDataIdentification: { email, rooms },
   loginReducer: { token },
 }) => {
   return {
