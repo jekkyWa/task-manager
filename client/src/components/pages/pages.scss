@@ -18,8 +18,6 @@
 
 // ---------------------------------------------------------------------------------
 
-// ---------------------------------------------------------------------------------
-
 .boards-page {
   display: flex;
   .mark-recomendation {
@@ -59,11 +57,12 @@
     width: 100%;
   }
   .boards-page-body {
-    margin-top: 90px;
+    margin-top: 80px;
     width: 100%;
     .boards-page-header {
       margin-left: 11px;
       display: flex;
+      color: #172b4d;
       > h1 {
         font-size: 18px;
         margin-left: 10px;

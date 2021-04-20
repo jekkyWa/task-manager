@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { connect } from "react-redux";
-import { modalShow, saveDataToModal } from "../../action/action-login";
+import { modalShow } from "../../action/action-login";
+import { saveDataToModal } from "../../action/action-save-date";
 import { useParams } from "react-router-dom";
 
 const CompletedTasks = ({ cardFull, modalShow, saveDataToModal }) => {
@@ -86,7 +87,7 @@ const CompletedTasks = ({ cardFull, modalShow, saveDataToModal }) => {
       </ul>
       <div className={roleForComplite !== "Select" ? "" : "hidden"}>
         <p
-        className="to-return"
+          className="to-return"
           onClick={() => {
             setRoleForComplite("Select");
           }}

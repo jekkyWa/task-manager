@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import Header from "../header";
 import SideBar from "../sideBar/side-bar";
 import { useParams } from "react-router-dom";
-import { saveImportantEvents } from "../../action/action-login";
+import { saveImportantEvents } from "../../action/action-save-date";
 import { connect } from "react-redux";
 import "./important-events.scss";
 import Loading from "../loading/loading";

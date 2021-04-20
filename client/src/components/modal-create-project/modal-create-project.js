@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Modal } from "react-bootstrap";
 import "./modal-create-project.scss";
-import { saveDataIdentification } from "../../action/action-login";
+import { saveDataIdentification } from "../../action/action-identfication-data";
 import shortid from "shortid";
 import { useHttp } from "../hooks/http.hook";
 import { connect } from "react-redux";
@@ -244,8 +244,9 @@ const ModalCreateProject = ({
 };
 
 const mapStateToProps = ({
+  reducerDataIdentification: { rooms, email },
   loginReducer: { token },
-  getDataReducer: { rooms, email, socket },
+  getDataReducer: { socket },
 }) => {
   return { token, rooms, email, socket };
 };

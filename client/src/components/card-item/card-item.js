@@ -1,10 +1,10 @@
 import React, { useState } from "react";
 import {
-  saveDataToModal,
   modalShow,
   roleForNewTask,
   modalRoleShow,
 } from "../../action/action-login";
+import { saveDataToModal } from "../../action/action-save-date";
 import { useParams } from "react-router-dom";
 import MoreHorizIcon from "@material-ui/icons/MoreHoriz";
 import { connect } from "react-redux";
@@ -152,7 +152,7 @@ const CardItem = ({
             }}
           >
             <p>Title: {element.title}</p>
-              <p>Role: {label}</p>
+            <p>Role: {label}</p>
             <div className="item-block-icon-state">
               <div className={!element.nameOfTaker ? "hidden" : ""}>
                 <CheckCircleOutlineOutlinedIcon fontSize="small" />

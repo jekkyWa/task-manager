@@ -7,13 +7,12 @@ import SearchBlock from "../search";
 import UserBlock from "../user-block/user";
 //redux
 import { connect } from "react-redux";
+import { saveNotifications } from "../../../action/action-save-date";
 import {
   showNotifications,
-  showBoards,
   showUserBlock,
   showSearchBlock,
-  saveNotifications,
-} from "../../../action/action-login";
+} from "../../../action/action-show";
 //material
 import HomeOutlinedIcon from "@material-ui/icons/HomeOutlined";
 import DashboardIcon from "@material-ui/icons/Dashboard";
@@ -31,12 +30,14 @@ const Header = ({
   socket,
   saveNotifications,
 }) => {
+  // Connecting to a room with notifications
   useEffect(() => {
     if (socket && email !== "email") {
       socket.emit("joinNotification", { email: email });
     }
   }, [email, socket]);
 
+  //  Getting all notifications
   useEffect(() => {
     if (socket) {
       socket.on("getNotifications", (value) => {
@@ -49,6 +50,7 @@ const Header = ({
     }
   }, [socket, notifications]);
 
+  // Function for closing all windows other than active
   const stateWindow = (user, notification) => {
     showUserBlock(user);
     showNotifications(notification);
@@ -132,16 +134,9 @@ const Header = ({
 };
 
 const mapStateToProps = ({
-  getDataReducer: {
-    email,
-    name,
-    notifications,
-    showNotification,
-    showBoard,
-    showUser,
-    showSearch,
-    socket,
-  },
+  reducerSaveData: { notifications, socket },
+  reducerDataIdentification: { email, name },
+  showReducer: { showNotification, showUser, showSearch },
   loginReducer: { logout },
 }) => {
   return {
@@ -150,7 +145,6 @@ const mapStateToProps = ({
     logout,
     notifications,
     showNotification,
-    showBoard,
     showUser,
     showSearch,
     socket,
@@ -161,9 +155,6 @@ const mapDispatchToProps = (dispatch) => {
   return {
     showNotifications: (showNotification) => {
       dispatch(showNotifications(showNotification));
-    },
-    showBoards: (showBoard) => {
-      dispatch(showBoards(showBoard));
     },
     showUserBlock: (showUser) => {
       dispatch(showUserBlock(showUser));

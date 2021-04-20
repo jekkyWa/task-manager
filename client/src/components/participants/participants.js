@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import Header from "../header";
 import SideBar from "../sideBar/side-bar";
 import { useParams } from "react-router-dom";
-import { saveDataCards, saveActiveBoard } from "../../action/action-login";
+import { saveDataCards, saveActiveBoard } from "../../action/action-save-date";
 import { connect } from "react-redux";
 import "./participants.scss";
 import CloseIcon from "@material-ui/icons/Close";

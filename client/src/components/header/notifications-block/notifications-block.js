@@ -3,11 +3,9 @@ import React, { useEffect } from "react";
 import "./notifications-block.scss";
 import dogImage from "../../../images/dog.svg";
 // redux
-import {
-  showNotifications,
-  saveNotifications,
-  saveDataIdentification,
-} from "../../../action/action-login";
+import { saveNotifications } from "../../../action/action-save-date";
+import { saveDataIdentification } from "../../../action/action-identfication-data";
+import { showNotifications } from "../../../action/action-show";
 import { connect } from "react-redux";
 // material
 import CloseIcon from "@material-ui/icons/Close";
@@ -82,7 +80,8 @@ const NotificationsBlock = ({
 };
 
 const mapStateToProps = ({
-  getDataReducer: { notifications, socket, email },
+  reducerDataIdentification: { email },
+  reducerSaveData: { notifications, socket },
   loginReducer: { token },
 }) => {
   return { notifications, socket, email, token };

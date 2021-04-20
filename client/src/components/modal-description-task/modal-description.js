@@ -1,11 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Modal } from "react-bootstrap";
-import {
-  saveActivityCard,
-  modalShow,
-  saveFullCard,
-  displaySelection,
-} from "../../action/action-login";
+import { modalShow, displaySelection } from "../../action/action-login";
+import { saveActivityCard, saveFullCard } from "../../action/action-save-date";
 import { connect } from "react-redux";
 import ReorderIcon from "@material-ui/icons/Reorder";
 import FormatListBulletedIcon from "@material-ui/icons/FormatListBulleted";

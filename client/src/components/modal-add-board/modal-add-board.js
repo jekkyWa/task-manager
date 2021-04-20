@@ -1,6 +1,6 @@
 import React, { useState, useMemo, useEffect } from "react";
 import { Modal } from "react-bootstrap";
-import { saveDataCards } from "../../action/action-login";
+import { saveDataCards } from "../../action/action-save-date";
 import { connect } from "react-redux";
 import "./modal-add-board.scss";
 import { useParams } from "react-router-dom";

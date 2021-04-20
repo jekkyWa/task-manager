@@ -1,5 +1,6 @@
 .mark-header-boards-main-page {
   display: flex;
+
   > h1 {
     font-size: 18px;
     margin-left: 10px;
@@ -11,13 +12,14 @@
   margin-left: 11px;
   display: flex;
   justify-content: space-between;
+  max-width: 794px;
   flex-wrap: wrap;
   margin-top: 10px;
   .btn-block-boards-main-page {
     display: flex;
     flex-wrap: wrap;
     > div {
-      width: 165px;
+      width: 155px;
       margin-left: 10px;
       background-color: #e6e6e6;
       text-align: center;
@@ -34,10 +36,17 @@
   .logo-team-boards-main-page {
     display: flex;
     margin-top: 5px;
+    color: #172b4d !important;
+    white-space: nowrap; /* Отменяем перенос текста */
   }
   h1 {
+    white-space: nowrap; /* Отменяем перенос текста */
+    overflow: hidden; /* Обрезаем содержимое */
+    text-overflow: ellipsis;
+    width: 100px;
     font-size: 18px;
     margin-left: 10px;
     margin-top: 1px;
+    color: #172b4d !important;
   }
 }

@@ -1,12 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { connect } from "react-redux";
 import { useAuth } from "../hooks/auth.hook";
-import {
-  fetchLogin,
-  saveSocket,
-  saveNotifications,
-  saveDataIdentification,
-} from "../../action/action-login";
+import { fetchLogin } from "../../action/action-login";
+import { saveDataIdentification } from "../../action/action-identfication-data";
+import { saveSocket, saveNotifications } from "../../action/action-save-date";
 import "./app.css";
 import useRoutes from "../routes/routes";
 import { BrowserRouter as Router, withRouter } from "react-router-dom";
@@ -104,7 +101,8 @@ const App = ({
 };
 
 const mapStateToProps = ({
-  getDataReducer: { boardActive, email, socket, notifications },
+  reducerDataIdentification: { email },
+  reducerSaveData: { boardActive, socket, notifications },
 }) => {
   return { boardActive, email, socket, notifications };
 };

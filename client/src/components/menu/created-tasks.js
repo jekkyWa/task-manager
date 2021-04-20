@@ -1,7 +1,8 @@
 import React from "react";
 import { connect } from "react-redux";
 import { Link, useParams } from "react-router-dom";
-import { modalShow, saveDataToModal } from "../../action/action-login";
+import { modalShow } from "../../action/action-login";
+import { saveDataToModal } from "../../action/action-save-date";
 
 const CreatedTasks = ({ cardFull, email, modalShow, saveDataToModal }) => {
   let { name } = useParams();
@@ -19,7 +20,7 @@ const CreatedTasks = ({ cardFull, email, modalShow, saveDataToModal }) => {
   };
 
   const label = filterItem.map((e, i) => {
-    const arrRole = e.role.map((element,index) => {
+    const arrRole = e.role.map((element, index) => {
       return <span key={index}>{element.role + " " + element.level}</span>;
     });
     return (

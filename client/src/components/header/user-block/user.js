@@ -3,7 +3,7 @@ import { useHistory } from "react-router-dom";
 // files
 import "./user.scss";
 // redux
-import { showUserBlock } from "../../../action/action-login";
+import { showUserBlock } from "../../../action/action-show";
 import { connect } from "react-redux";
 // material
 import CloseIcon from "@material-ui/icons/Close";
@@ -56,7 +56,7 @@ const mapDispatchToProps = (dispatch) => {
 };
 
 const mapStateToProps = ({
-  getDataReducer: { name, email },
+  reducerDataIdentification: { name, email },
   loginReducer: { logout },
 }) => {
   return {

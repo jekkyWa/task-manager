@@ -4,14 +4,17 @@
   padding: 5px 8px 6px 5px;
 }
 
-// .my-command{
-// стили для моих комманд
+// .my-command {
+//   color: rgb(116, 116, 250);
 // }
 
+.main-icon-side-bar {
+  color: #172b4d !important;
+}
+
 .main-page-left-sidebar {
-  margin: 40px 0 0 0;
   width: 260px;
-  margin-top: 80px;
+  margin-top: 70px;
   .sidebar-block-one {
     display: flex;
     flex-direction: column-reverse;
@@ -19,6 +22,10 @@
       display: flex;
       padding: 8px 8px 3px 5px;
       margin-top: 3px;
+      a {
+        color: #172b4d;
+        vertical-align: -1px;
+      }
       &:hover {
         background-color: rgb(231, 231, 231);
         border-radius: 4px;
@@ -46,28 +53,34 @@
       justify-content: space-between;
       h2 {
         font-size: 20px;
-        color: rgb(85, 84, 84);
+        color: rgb(104, 104, 104);
         font-weight: 200;
         text-align: end;
+        letter-spacing: 1.5px;
       }
       .add-icon {
-        margin-top: 5px;
-        color: rgb(85, 84, 84);
+        color: rgb(104, 104, 104);
         &:hover {
           background-color: rgb(231, 231, 231);
           border-radius: 4px;
           transition: 0.2s all;
           cursor: pointer;
+          color: rgb(41, 41, 41);
         }
         justify-content: end;
       }
     }
     .sidebar-block-two-item-work-place {
+      .proj-icon {
+        margin-top: 2.5px;
+        color: #172b4d;
+      }
       @extend %flexMarg;
       display: flex;
       justify-content: space-between;
       margin-top: 10px;
       > h2 {
+        color: #172b4d;
         font-size: 16px;
         font-weight: 400;
         line-height: 25px;
@@ -89,11 +102,17 @@
     .retractable-block {
       display: flex;
       flex-direction: column;
+      h1 {
+        color: #172b4d;
+      }
       .retractable-block-item {
         display: flex;
         margin-left: 35px;
         margin-top: 5px;
         padding: 8px 8px 3px 5px;
+        a {
+          color: #172b4d;
+        }
         h1 {
           font-size: 14px;
           margin-left: 5px;
