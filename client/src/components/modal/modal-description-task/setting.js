@@ -1,9 +1,9 @@
 import React, { useState } from "react";
 import SettingsIcon from "@material-ui/icons/Settings";
 import CloseIcon from "@material-ui/icons/Close";
-import { recentActivity } from "../../action/action-save-date";
-import { modalShow, modalRoleChange } from "../../action/action-modal";
-import { roleDependencies } from "../role";
+import { recentActivity } from "../../../action/action-save-date";
+import { modalShow, modalRoleChange } from "../../../action/action-modal";
+import { roleDependencies } from "../../role";
 import { connect } from "react-redux";
 
 const Setting = ({

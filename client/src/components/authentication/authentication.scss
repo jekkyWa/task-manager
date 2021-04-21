@@ -89,12 +89,10 @@
     width: 100%;
     font-size: 16px;
     font-weight: 300;
-
     &:hover {
       background-color: rgba(230, 230, 230, 0.9);
       transition: 0.4s;
     }
-
     &:focus {
       border: 3px solid rgb(0, 82, 204);
     }

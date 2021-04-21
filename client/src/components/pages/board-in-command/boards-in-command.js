@@ -3,7 +3,7 @@ import { useParams } from "react-router-dom";
 import { useHistory } from "react-router-dom";
 // files
 import Header from "../../header";
-import ModalAddBoard from "../../modal-add-board/modal-add-board";
+import ModalAddBoard from "../../modal/modal-add-board/modal-add-board";
 import SideBar from "../../sideBar/side-bar";
 import "../pages.scss";
 import "../boards-blocks/boards-main-page.scss";

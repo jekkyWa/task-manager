@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 // files
-import ModalCreateProject from "../modal-create-project";
+import ModalCreateProject from "../modal/modal-create-project/modal-create-project";
 import "./side-bar.scss";
 import SideBarItem from "./side-bar-item";
 // material

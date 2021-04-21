@@ -6,7 +6,7 @@ import { saveDataCards, saveActiveBoard } from "../../action/action-save-date";
 import { connect } from "react-redux";
 import "./participants.scss";
 import CloseIcon from "@material-ui/icons/Close";
-import ModalConfirmation from "../modal-confirmation/modal-confirmation";
+import ModalConfirmation from "../modal/modal-confirmation/modal-confirmation";
 import Loading from "../loading/loading";
 import { useHistory } from "react-router-dom";
 import ExpandLessIcon from "@material-ui/icons/ExpandLess";

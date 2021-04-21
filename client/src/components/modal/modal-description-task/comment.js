@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import CloseIcon from "@material-ui/icons/Close";
 import { connect } from "react-redux";
-import { recentActivity } from "../../action/action-save-date";
+import { recentActivity } from "../../../action/action-save-date";
 import dateFormat from "dateformat";
 
 const Comment = ({

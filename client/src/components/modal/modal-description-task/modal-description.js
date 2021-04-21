@@ -1,18 +1,18 @@
 import React, { useState, useEffect } from "react";
 import { Modal } from "react-bootstrap";
-import { modalShow } from "../../action/action-modal";
+import { modalShow } from "../../../action/action-modal";
 import {
   saveActivityCard,
   saveFullCard,
   displaySelection,
-} from "../../action/action-save-date";
+} from "../../../action/action-save-date";
 import { connect } from "react-redux";
 import ReorderIcon from "@material-ui/icons/Reorder";
 import FormatListBulletedIcon from "@material-ui/icons/FormatListBulleted";
 import CheckBoxOutlinedIcon from "@material-ui/icons/CheckBoxOutlined";
 import "./modal-description.scss";
 import DescriptionBlock from "./description-block";
-import { availCheck } from "../hooks/availability-check.hook";
+import { availCheck } from "../../hooks/availability-check.hook";
 import CardOfTaker from "./card-of-taker";
 import Comment from "./comment";
 import Setting from "./setting";

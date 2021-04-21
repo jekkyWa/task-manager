@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import { connect } from "react-redux";
 import dateFormat from "dateformat";
-import { recentActivity } from "../../action/action-save-date";
+import { recentActivity } from "../../../action/action-save-date";
 
 const CardOfTaker = ({
   dataToModal,

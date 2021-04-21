@@ -1,11 +1,11 @@
 import React, { useState } from "react";
-import { roleDependencies } from "../role";
+import { roleDependencies } from "../../role";
 import CloseIcon from "@material-ui/icons/Close";
 import { connect } from "react-redux";
 import { Modal } from "react-bootstrap";
 import "./modal-add-role.scss";
-import { modalRoleShow } from "../../action/action-modal";
-import {roleForNewTask} from "../../action/action-save-date"
+import { modalRoleShow } from "../../../action/action-modal";
+import {roleForNewTask} from "../../../action/action-save-date"
 
 const ModalAddRole = ({
   roleProfileInBoard,

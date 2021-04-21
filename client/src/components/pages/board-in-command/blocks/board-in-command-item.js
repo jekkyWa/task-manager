@@ -21,7 +21,6 @@ const BoardInCommandItem = ({
 
   const label = allDataForBoardsPageBoards.map((element) => {
     // Check the existence of an element with an array in the database
-    // const index =
     return (
       <div className={`board ${element.color}`} key={element.card_id}>
         <div>

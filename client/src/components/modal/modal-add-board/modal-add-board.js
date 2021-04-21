@@ -1,11 +1,11 @@
 import React, { useState, useMemo, useEffect } from "react";
 import { Modal } from "react-bootstrap";
-import { saveDataCards } from "../../action/action-save-date";
+import { saveDataCards } from "../../../action/action-save-date";
 import { connect } from "react-redux";
 import "./modal-add-board.scss";
 import { useParams } from "react-router-dom";
 import CloseIcon from "@material-ui/icons/Close";
-import { useHttp } from "../hooks/http.hook";
+import { useHttp } from "../../hooks/http.hook";
 import shortid from "shortid";
 
 const ModalAddBoard = ({ show, onHide, saveDataCards, socket, boards }) => {

@@ -1,0 +1,151 @@
+@import "../../../variables.scss";
+@import "../../../templates.scss";
+
+%margin {
+  margin: 30px 0 7px 0;
+}
+
+%input {
+  border: 2px solid rgb(230, 231, 235);
+  border-radius: 2px;
+  font-size: 14px;
+  font-weight: 400;
+  &:hover {
+    background-color: rgba(243, 242, 242, 0.9);
+    transition: 0.4s;
+  }
+  &:focus {
+    border: 2px solid rgb(0, 82, 204);
+  }
+}
+
+.modal-100w {
+  min-width: 98%;
+}
+
+.title-modal {
+  font-size: 20px;
+  font-weight: 700;
+}
+
+.main-content-modal-create-project {
+  color: #172b4d;
+  display: flex;
+  justify-content: space-between;
+  height: 100%;
+  .img-modal-create-project {
+    background-image: url(../../../images/background-modal-create-project.svg);
+    width: 48%;
+    text-align: center;
+    > img {
+      margin-top: 50px;
+    }
+  }
+  .body-modal {
+    width: 48%;
+    margin-left: 20px;
+    .slogan-modal-create-project {
+      > h1 {
+        font-size: 30px;
+        margin-top: 30px;
+        font-weight: 500;
+      }
+      > h2 {
+        font-size: 20px;
+        margin-top: 10px;
+        font-weight: 400;
+        color: rgb(95, 100, 109);
+      }
+    }
+    h2 {
+      font-size: 13px;
+      font-weight: 700;
+      @extend %margin;
+    }
+    h3 {
+      font-size: 13px;
+      margin-top: 5px;
+      color: rgb(95, 100, 109);
+      font-weight: 400;
+    }
+    .description-input-modal-create-project {
+      width: 100%;
+      height: 120px;
+      resize: none;
+      padding: 10px;
+      @extend %input;
+    }
+    > input {
+      width: 100%;
+      padding: 10px;
+      @extend %input;
+    }
+  }
+}
+
+.body-modal-add-user {
+  > button {
+    width: 100%;
+    font-weight: 400;
+    padding: 6px;
+    font-size: 16px;
+    color: white;
+    @extend %styleBtn;
+    @extend %margin;
+    &:hover {
+      background-color: $backColorFocusBtn;
+    }
+  }
+}
+.add-user-block {
+  display: flex;
+  .add-user-email,
+  .add-user-role {
+    margin: 15px 5px 15px 0;
+    input {
+      width: 238px;
+      @extend %input;
+      padding: 7px;
+    }
+  }
+  .add-user-role {
+    select {
+      padding: 7.3px;
+      width: 100%;
+      @extend %input;
+    }
+  }
+  .add-user-delete-btn {
+    margin-top: 50px;
+    float: right;
+    button {
+      color: white;
+      padding: 6px 15px 7px 15px;
+      width: 100%;
+      @extend %styleBtn;
+      background-color: rgb(218, 107, 92);
+      &:hover {
+        background-color: rgb(239, 129, 114);
+      }
+    }
+  }
+  p {
+    font-size: 13px;
+    font-weight: 700;
+  }
+}
+.create-proj-btn,
+.clear-form-btn {
+  @extend %styleBtn;
+  margin-top: 5px;
+  padding: 5px;
+  color: white;
+  width: 100%;
+  &:hover {
+    background-color: $backColorFocusBtn;
+  }
+}
+
+.create-proj-btn {
+  background-color: rgb(50, 209, 109);
+}
