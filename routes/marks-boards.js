@@ -10,13 +10,10 @@ router.post("/", auth, async (req, res) => {
   try {
     const { board_id, email, newMarkBoard, state } = req.body;
 
-    console.log(board_id, email, newMarkBoard, state);
     const board = await Board.find({ board_id });
     let boardOriginal = JSON.parse(JSON.stringify(board));
 
     const indexUser = board[0].addedUsers.findIndex((e) => e.email == email);
-
-    console.log(indexUser);
 
     if (state) {
       board[0].addedUsers[indexUser].marks = [
@@ -29,7 +26,6 @@ router.post("/", auth, async (req, res) => {
       const indexMarkDelete = board[0].addedUsers[indexUser].marks.indexOf(
         newMarkBoard
       );
-      console.log(indexMarkDelete);
       board[0].addedUsers[indexUser].marks = [
         ...board[0].addedUsers[indexUser].marks.slice(0, indexMarkDelete),
         ...board[0].addedUsers[indexUser].marks.slice(indexMarkDelete + 1),

@@ -12,15 +12,18 @@ export const mark = async (
   url
 ) => {
   const value = { board_id, email, newMarkBoard: mark_board, state: bool };
+  console.log(value);
   const data = await request(`/api/${url}`, "POST", value, {
     Authorization: `Bearer ${token}`,
   });
+  // Saving data for the main page
   if (url == "addMarkMainBoards") {
     // Saving all received data
     saveDataForBoardsPage({
       ...allDataForBoardsPage,
       marks: data.marksCards,
     });
+    // Saving data for the board in command page
   } else {
     saveDataForBoardsPage(data.marksCards);
   }

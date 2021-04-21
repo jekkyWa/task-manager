@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
-import { useHistory } from "react-router-dom";
+import { useParams, useHistory } from "react-router-dom";
 // files
 import Header from "../../header";
 import ModalAddBoard from "../../modal/modal-add-board/modal-add-board";
@@ -117,6 +116,7 @@ const BoardPage = ({
               <BoardMarkItem
                 email={email}
                 token={token}
+                dataMarksForBoardsPage={marksBoard}
                 allDataForBoardsPage={marksBoard}
                 saveDataForBoardsPage={markBoard}
                 url="addMark"

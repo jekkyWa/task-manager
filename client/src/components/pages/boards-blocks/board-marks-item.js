@@ -1,5 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import { useParams } from "react-router-dom";
 // files
 import "./boards-main-page.scss";
 import { mark } from "../utils/mark";
@@ -11,16 +12,18 @@ const BoardMarkItem = ({
   email,
   token,
   allDataForBoardsPage,
+  dataMarksForBoardsPage,
   saveDataForBoardsPage,
   url,
 }) => {
   const { request } = useHttp();
+  let { id } = useParams();
 
-  const labelMarks = allDataForBoardsPage.map((e, i) => {
+  const labelMarks = dataMarksForBoardsPage.map((e, i) => {
     return (
       <div className={`board ${e.color}`} key={i}>
         <div>
-          <Link to={`/boards/${e.name + e.board_id}/${e.card_id}`}>
+          <Link to={`/boards/${id}/${e.card_id}`}>
             <div className="main-link-boards">
               <h1>{e.name_Board}</h1>
             </div>
@@ -31,7 +34,7 @@ const BoardMarkItem = ({
           onClick={() => {
             // Cancel boot mark for it answers bool
             mark(
-              e.board_id,
+              id.slice(id.length - 10),
               e.card_id,
               allDataForBoardsPage,
               saveDataForBoardsPage,

@@ -68,7 +68,8 @@ const BoardsMainPage = ({
               <BoardMarksItem
                 email={email}
                 token={token}
-                allDataForBoardsPage={allDataForBoardsPage.marks}
+                dataMarksForBoardsPage={allDataForBoardsPage.marks}
+                allDataForBoardsPage={allDataForBoardsPage}
                 saveDataForBoardsPage={saveDataForBoardsPage}
                 url="addMarkMainBoards"
               />

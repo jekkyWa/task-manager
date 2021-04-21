@@ -1,14 +1,13 @@
 import React, { useState } from "react";
 import { Modal } from "react-bootstrap";
 import shortid from "shortid";
-// filex
+// files
 import "./modal-create-project.scss";
 import { useHttp } from "../../hooks/http.hook";
 import { useCreateBoard } from "./utils/create-board.hook";
 import image_2 from "../../../images/modal-create-project.svg";
 import AddedUsers from "./blocks/added-users";
 import LoadingBtn from "../../loading/loading-btn";
-
 // redux
 import { saveDataIdentification } from "../../../action/action-identfication-data";
 import { connect } from "react-redux";
@@ -23,7 +22,7 @@ const ModalCreateProject = ({
 }) => {
   const [addedUsers, setAddedUsers] = useState([]);
 
-  // Using third-party hukov
+  // Using hooks
   const { request } = useHttp();
   const {
     createBoard,
