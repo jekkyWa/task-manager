@@ -35,6 +35,7 @@ app.use("/api/getData", require("./routes/data.routes"));
 app.use("/api/", require("./routes/board.routes"));
 
 app.use("/api/addMark", require("./routes/mark-board"));
+
 app.use("/api/addMarkMainBoards", require("./routes/marks-boards"));
 
 // app.use("/api/", require("./routes/task.routes"));
@@ -72,7 +73,7 @@ io.on("connection", (socket) => {
 
   // Подключение к команте с notifications
   socket.on("joinNotification", async ({ email }) => {
-    console.log(socket.rooms.size);
+    console.log("joinNotification");
     const value = await User.find({ email: email });
     socket.emit("getNotifications", value[0].notifications);
   });
@@ -209,6 +210,32 @@ io.on("connection", (socket) => {
     console.log("A user left participants room : " + id + "partic");
   });
 
+  // Удаление и выход из команды
+  // Удаление
+  socket.on("deleteCommand", async ({ board_id }) => {
+    const value = await Board.find({ board_id });
+    const dataActive = await User.find({ active_rooms: board_id });
+    const indexActive = dataActive[0].active_rooms.indexOf(board_id);
+    await User.updateOne(dataActive[0], {
+      active_rooms: [
+        ...dataActive[0].active_rooms.slice(0, indexActive),
+        ...dataActive[0].active_rooms.slice(indexActive + 1),
+      ],
+    });
+    await User.updateMany(
+      { passive_rooms: board_id },
+      {
+        $pull: { passive_rooms: board_id },
+      }
+    );
+    await Cards.deleteMany({ card_id: value[0].board_item });
+    await Board.deleteOne({ board_id });
+  });
+
+  socket.on("exitCommand", async ({ board_id, email }) => {
+    const value = await Board.find({ board_id });
+  });
+
   // Notifications
 
   socket.on("sendNotification", async ({ data, message }) => {
@@ -274,6 +301,7 @@ io.on("connection", (socket) => {
   socket.on(
     "acceptOffer",
     async ({ id_notification, id_board, email, message, date }) => {
+      console.log(id_notification, id_board, email, message);
       // Нужен: id доски, id уведомления, сообщение
       const user = await User.find({ email });
       const board = await Board.find({ board_id: id_board });

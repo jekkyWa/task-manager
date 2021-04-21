@@ -9,6 +9,7 @@ const ObjectId = require("mongodb").ObjectId;
 router.post("/", auth, async (req, res) => {
   try {
     const { board_id, email, newMarkBoard, state } = req.body;
+
     console.log(board_id, email, newMarkBoard, state);
     const board = await Board.find({ board_id });
     let boardOriginal = JSON.parse(JSON.stringify(board));
@@ -68,8 +69,6 @@ router.post("/", auth, async (req, res) => {
       );
       marksId[i] = lastItem;
     }
-    console.log("Выполнение - 2");
-
     res.json({
       marksCards: marksId.flat(),
     });
