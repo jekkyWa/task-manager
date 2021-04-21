@@ -13,7 +13,6 @@ import VisibilityIcon from "@material-ui/icons/Visibility";
 import VisibilityOutlinedIcon from "@material-ui/icons/VisibilityOutlined";
 import WarningIcon from "@material-ui/icons/Warning";
 import DashboardRoundedIcon from "@material-ui/icons/DashboardRounded";
-import Loading from "../../loading/loading";
 import LoadingBtn from "../../loading/loading-btn";
 
 export const Register = ({ login }) => {

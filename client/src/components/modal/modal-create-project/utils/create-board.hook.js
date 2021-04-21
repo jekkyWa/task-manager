@@ -3,23 +3,39 @@ import { useState } from "react";
 
 export const useCreateBoard = () => {
   const [loading, setLoading] = useState(false);
-  const onChangeOptionProject = (e) => {
-    setFormCreateProject({
-      ...formCreateProject,
-      [e.target.name]: e.target.value,
-    });
-  };
-
+  const [valid, setValid] = useState(true);
+  const [error, setError] = useState(null);
   const [formCreateProject, setFormCreateProject] = useState({
     nameProject: "",
     description: "",
     date: "",
   });
 
+  // Cleaning errors
+  const clearError = () => setError(null);
+  // handler option
+  const onChangeOptionProject = (e) => {
+    clearError();
+    // If at least one input is empty, Button will be disabled
+    let item = { ...formCreateProject, [e.target.name]: e.target.value };
+    setFormCreateProject(item);
+
+    if (
+      item.nameProject.length !== 0 &&
+      item.description.length !== 0 &&
+      item.date.length !== 0
+    ) {
+      setValid(false);
+    } else {
+      setValid(true);
+    }
+  };
+
   // Creating a new board
   const createBoard = async (
     email,
     addedUsers,
+    setAddedUsers,
     token,
     onHide,
     saveDataIdentification,
@@ -27,21 +43,28 @@ export const useCreateBoard = () => {
     request
   ) => {
     try {
+      if (addedUsers.findIndex((e) => e.emailOfUserToAdd == "") !== -1) {
+        return setError(
+          "You did not specify email to add a user, please enter the necessary data."
+        );
+      }
       // As soon as the function starts, will appear loading
       setLoading(true);
       //Generation id
       const id_notification = shortid.generate();
       let id_board = shortid.generate();
       // Preparation of data to send to the server
-      let cleanAddedUsers = addedUsers.map((e) => {
-        return {
-          email: e.emailOfUserToAdd,
-          role: e.roleOfUserToAdd,
-          level: e.levelOfUserToAdd,
-          memberStatus: false,
-          marks: [],
-        };
-      });
+      let cleanAddedUsers = addedUsers
+        .filter((e) => e.emailOfUserToAdd)
+        .map((e) => {
+          return {
+            email: e.emailOfUserToAdd,
+            role: e.roleOfUserToAdd,
+            level: e.levelOfUserToAdd,
+            memberStatus: false,
+            marks: [],
+          };
+        });
       // End data
       let objForSend = {
         ...formCreateProject,
@@ -65,9 +88,12 @@ export const useCreateBoard = () => {
       const data = await request("/api/getData/test", "GET", null, {
         Authorization: `Bearer ${token}`,
       });
+      clearError();
       //Saving all data, complete download and output from the modal window
       saveDataIdentification(data.email, data.name, data.rooms);
       setLoading(false);
+      setAddedUsers([]);
+      setFormCreateProject({ nameProject: "", description: "", date: "" });
       onHide();
 
       // Sending notifications about the team of users
@@ -82,8 +108,19 @@ export const useCreateBoard = () => {
         },
       });
     } catch (e) {
-      console.error(e);
+      setError(e.message);
+      setLoading(false);
     }
   };
-  return { createBoard, loading, onChangeOptionProject, formCreateProject };
+
+  return {
+    createBoard,
+    loading,
+    onChangeOptionProject,
+    setFormCreateProject,
+    formCreateProject,
+    valid,
+    error,
+    clearError,
+  };
 };

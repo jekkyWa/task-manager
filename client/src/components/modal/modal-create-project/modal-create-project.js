@@ -7,6 +7,8 @@ import { useHttp } from "../../hooks/http.hook";
 import { useCreateBoard } from "./utils/create-board.hook";
 import image_2 from "../../../images/modal-create-project.svg";
 import AddedUsers from "./blocks/added-users";
+import LoadingBtn from "../../loading/loading-btn";
+
 // redux
 import { saveDataIdentification } from "../../../action/action-identfication-data";
 import { connect } from "react-redux";
@@ -26,11 +28,24 @@ const ModalCreateProject = ({
   const {
     createBoard,
     onChangeOptionProject,
+    setFormCreateProject,
     formCreateProject,
+    valid,
+    error,
+    loading,
+    clearError,
   } = useCreateBoard();
+
+  // Clearing data when closing the modal window
+  const clearDataModal = () => {
+    setAddedUsers([]);
+    setFormCreateProject({ nameProject: "", description: "", date: "" });
+    onHide();
+  };
 
   // Adding a new string to fill
   const createNewUser = () => {
+    clearError();
     setAddedUsers([
       ...addedUsers,
       {
@@ -45,7 +60,7 @@ const ModalCreateProject = ({
   const { nameProject, description, date } = formCreateProject;
 
   return (
-    <Modal show={show} onHide={onHide} dialogClassName="modal-100w">
+    <Modal show={show} onHide={clearDataModal} dialogClassName="modal-100w">
       <Modal.Body>
         <div>
           <div className="main-content-modal-create-project">
@@ -91,14 +106,19 @@ const ModalCreateProject = ({
                 <AddedUsers
                   addedUsers={addedUsers}
                   setAddedUsers={setAddedUsers}
+                  clearError={clearError}
                 />
               </div>
+              <h1 className={error ? "" : "hidden"}>{error}</h1>
               <button
-                className="create-proj-btn"
+                className={
+                  valid ? "disabled-create-proj-btn" : "create-proj-btn"
+                }
                 onClick={() => {
                   createBoard(
                     email,
                     addedUsers,
+                    setAddedUsers,
                     token,
                     onHide,
                     saveDataIdentification,
@@ -106,8 +126,9 @@ const ModalCreateProject = ({
                     request
                   );
                 }}
+                disabled={valid}
               >
-                Create a project
+                {loading ? <LoadingBtn /> : "Create a project"}
               </button>
             </div>
             <div className="img-modal-create-project">

@@ -1,6 +1,7 @@
 import React from "react";
+// files
 
-const AddedUsers = ({ addedUsers, setAddedUsers }) => {
+const AddedUsers = ({ addedUsers, setAddedUsers, clearError }) => {
   const label = addedUsers.map((element, i) => {
     const changeHandlerAddUser = (e) => {
       const id = addedUsers.findIndex((e) => e.id == element.id);
@@ -19,6 +20,7 @@ const AddedUsers = ({ addedUsers, setAddedUsers }) => {
             ? e.target.value
             : addedUsers[id].levelOfUserToAdd,
       };
+      console.log(newItem);
       setAddedUsers([
         ...addedUsers.slice(0, id),
         newItem,
@@ -67,6 +69,7 @@ const AddedUsers = ({ addedUsers, setAddedUsers }) => {
         <div className="add-user-delete-btn">
           <button
             onClick={() => {
+              clearError();
               setAddedUsers([
                 ...addedUsers.slice(0, i),
                 ...addedUsers.slice(i + 1),

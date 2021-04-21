@@ -44,6 +44,12 @@
   .body-modal {
     width: 48%;
     margin-left: 20px;
+    >h1{
+      font-size: 13px;
+      text-align: center;
+      font-weight: 700;
+      padding: 5px;
+    }
     .slogan-modal-create-project {
       > h1 {
         font-size: 30px;
@@ -148,4 +154,16 @@
 
 .create-proj-btn {
   background-color: rgb(50, 209, 109);
+  &:hover {
+    background-color: rgb(55, 228, 118);
+  }
+}
+
+.disabled-create-proj-btn {
+  @extend %styleBtn;
+  margin-top: 5px;
+  padding: 5px;
+  color: white;
+  width: 100%;
+  background-color: rgb(165, 164, 164);
 }

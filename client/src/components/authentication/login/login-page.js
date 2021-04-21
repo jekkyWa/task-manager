@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { connect } from "react-redux";
-import { useHistory } from "react-router-dom";
 // files
 import "../authentication.scss";
 import { useHttp } from "../../hooks/http.hook";
@@ -10,7 +9,6 @@ import InputLogin from "./input-login";
 import DashboardRoundedIcon from "@material-ui/icons/DashboardRounded";
 
 const Login = ({ login }) => {
-  const history = useHistory();
   const { error, request, clearError } = useHttp();
   const [formLog, setFormLog] = useState({ email: "", password: "" });
   const [validMessageLog, setValidMessageLog] = useState({
@@ -32,7 +30,7 @@ const Login = ({ login }) => {
     });
   };
 
-  // Изменение validMessageLog
+  // Changing ValidMessageLog.
   const changeHandlerLog = (e) => {
     const check = (name, val) => {
       if (
@@ -58,7 +56,7 @@ const Login = ({ login }) => {
     });
   };
 
-  // Валидация login, password
+  // Login Validation, Password
   const checkValidForms = () => {
     let valid = 0;
     // Validation Email
