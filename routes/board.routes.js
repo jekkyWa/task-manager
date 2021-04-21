@@ -26,21 +26,24 @@ router.post("/createBoard", auth, async (req, res) => {
       creator,
     });
 
-    const check = await User.find(
-      { email: { $in: addedUsers.map((e) => e.email) } },
-      function (err, data) {}
-    );
+    const check = await User.find({
+      email: { $in: addedUsers.map((e) => e.email) },
+    });
 
     if (check.length !== addedUsers.length) {
       const errorEmail = addedUsers.filter((e) => {
         return check.map((e) => e.email).indexOf(e.email) == -1;
       });
-      res.status(500).json({
-        message: `${errorEmail
-          .map((e) => e.email)
-          .join(", ")} не существует(ют)`,
+      return res.status(500).json({
+        message: `${
+          errorEmail.length == 1 ? "User" : "Users"
+        } with email: "${errorEmail.map((e) => e.email).join(", ")}" ${
+          errorEmail.length == 1 ? "does not exist" : "do not exist"
+        }`,
       });
     }
+
+    console.log(board);
 
     await board.save();
 
@@ -51,14 +54,9 @@ router.post("/createBoard", auth, async (req, res) => {
       active_rooms: [...value[0].active_rooms, id_board],
     });
 
-    // await User.updateMany(
-    //   { email: { $in: addedUsers.map((e) => e.email) } },
-    //   { $addToSet: { passive_rooms: [id] } }
-    // );
-
-    res.status(201).json({ message: "Доска создана" });
+    res.status(201).json({ message: "Board created" });
   } catch (e) {
-    res.status(500).json({ message: "Что-то пошло не так, попробуйте снова" });
+    res.status(500).json({ message: "Something went wrong, try again" });
   }
 });
 
