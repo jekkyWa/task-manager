@@ -118,7 +118,9 @@ const Menu = ({ onHide, card, cardFull, displaySelection, activData }) => {
   );
 };
 
-const mapStateToProps = ({ getDataReducer: { card, cardFull, activData } }) => {
+const mapStateToProps = ({
+  reducerSaveData: { card, cardFull, activData },
+}) => {
   return {
     card,
     cardFull,

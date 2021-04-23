@@ -1,11 +1,14 @@
 import React, { useState } from "react";
-import { roleDependencies } from "../../role";
-import CloseIcon from "@material-ui/icons/Close";
-import { connect } from "react-redux";
 import { Modal } from "react-bootstrap";
+// files
+import { roleDependencies } from "../../role";
 import "./modal-add-role.scss";
+// redux
+import { connect } from "react-redux";
 import { modalRoleShow } from "../../../action/action-modal";
-import {roleForNewTask} from "../../../action/action-save-date"
+import { roleForNewTask } from "../../../action/action-save-date";
+// material
+import CloseIcon from "@material-ui/icons/Close";
 
 const ModalAddRole = ({
   roleProfileInBoard,
@@ -21,6 +24,7 @@ const ModalAddRole = ({
 
   // Adding a role in the form
   const addRole = () => {
+    // If "value" is empty, then add a change without a comma
     setRoleHandler(
       (prev) =>
         `${prev.length !== 0 ? prev + ", " : prev} ${dataRole.role}-${
@@ -41,7 +45,10 @@ const ModalAddRole = ({
 
   // Saving all added roles for the task
   const addRolesToSend = () => {
+    // We divide the entered data on an array
     const arrRole = roleHandler.split(", ");
+    // We convert all the values of the array in the type of type {Role: Value, Level: Value},
+    // where 2 elements are divided by the principle of Role, Level
     const newItem = arrRole.map((e, i) => {
       const id = e.lastIndexOf("-");
       return (e = {
@@ -58,37 +65,44 @@ const ModalAddRole = ({
       show={roleShow}
       onHide={() => {
         modalRoleShow(false);
+        setRoleHandler("");
       }}
       dialogClassName="modal-50w"
     >
       <Modal.Body>
         <div className="modal-role-change">
           <div className="header-modal-role-change">
-            <p>Выбрать роли для выполнения задания</p>
+            <p>Select roles to perform the task</p>
             <div>
               <CloseIcon
-                className="close-icon"
+                className="close-icon-modal-add-role"
                 onClick={() => {
                   modalRoleShow(false);
                 }}
               />
             </div>
           </div>
-          List participants in role-level format separated by commas
+          <h1>List participants in role-level format separated by commas</h1>
           <input
-            placeholder="Enter or select data"
-            value={roleHandler}
+            placeholder="Enter the data in the Role-Level, Role-Level format or select the right roles below."
+            value={roleHandler.replace(/^ +/gm, "")}
             onChange={inputRoleHandler}
           />
           <div className="select-modal-role-change">
+            {/* Display "select" depending on the roles */}
             {roleDependencies(roleProfileInBoard, roleAndLvlHandler)}
           </div>
-          <button className="modal-role-change-btn" onClick={addRole}>
-            Add role to form
-          </button>
-          <button className="modal-role-change-btn" onClick={addRolesToSend}>
-            Save and close
-          </button>
+          <div className="btn-block-modal-role-change">
+            <button className="modal-role-change-btn" onClick={addRole}>
+              Add role to form
+            </button>
+            <button
+              className="modal-role-change-btn save-btn-modal-add-role"
+              onClick={addRolesToSend}
+            >
+              Save and close
+            </button>
+          </div>
         </div>
       </Modal.Body>
     </Modal>
@@ -96,7 +110,8 @@ const ModalAddRole = ({
 };
 
 const mapStateToProps = ({
-  getDataReducer: { roleProfileInBoard, roleShow },
+  reducerSaveData: { roleProfileInBoard },
+  reducerModal: { roleShow },
 }) => {
   return {
     roleProfileInBoard,

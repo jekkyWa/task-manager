@@ -1,28 +1,28 @@
 import React, { useEffect, useState, useRef } from "react";
-import Header from "../header";
+import Header from "../../header";
 import { useParams } from "react-router-dom";
 import {
   displaySelection,
   recentActivity,
-} from "../../action/action-save-date";
-import { modalShow } from "../../action/action-modal";
+} from "../../../action/action-save-date";
+import { modalShow } from "../../../action/action-modal";
 import {
   saveActivityCard,
   saveDataToModal,
   saveFullCard,
-} from "../../action/action-save-date";
+} from "../../../action/action-save-date";
 import { connect } from "react-redux";
-import Loading from "../loading/loading";
+import Loading from "../../loading/loading";
 import AddIcon from "@material-ui/icons/Add";
 import CloseIcon from "@material-ui/icons/Close";
 import shortid from "shortid";
 import MenuIcon from "@material-ui/icons/Menu";
-import ModalDescription from "../modal/modal-description-task/modal-description";
-import Menu from "../menu/menu";
-import { availCheck } from "../hooks/availability-check.hook";
+import ModalDescription from "../../modal/modal-description-task/modal-description";
+import Menu from "../../menu/menu";
+import { availCheck } from "../../hooks/availability-check.hook";
 import dateFormat from "dateformat";
-import CardItem from "../card-item/card-item";
-import ModalAddRole from "../modal/modal-add-role/modal-add-role";
+import CardItem from "./blocks/card-item";
+import ModalAddRole from "../../modal/modal-add-role/modal-add-role";
 import { useHistory } from "react-router-dom";
 
 const CardPage = ({
@@ -354,21 +354,19 @@ const CardPage = ({
 };
 
 const mapStateToProps = ({
-  getDataReducer: {
+  reducerSaveData: {
+    valueDisplay,
+    activData,
     card,
     cardFull,
     socket,
     roleProfileInBoard,
-    email,
     dataToModal,
-    show,
-    valueDisplay,
-    activData,
   },
-  loginReducer: { token },
+  reducerDataIdentification: { email },
+  reducerModal: { show },
 }) => {
   return {
-    token,
     card,
     socket,
     roleProfileInBoard,

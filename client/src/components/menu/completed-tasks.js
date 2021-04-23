@@ -121,7 +121,7 @@ const CompletedTasks = ({ cardFull, modalShow, saveDataToModal }) => {
   );
 };
 
-const mapStateToProps = ({ getDataReducer: { cardFull } }) => {
+const mapStateToProps = ({ reducerSaveData: { cardFull } }) => {
   return {
     cardFull,
   };

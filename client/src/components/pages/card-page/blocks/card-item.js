@@ -1,6 +1,9 @@
 import React, { useState } from "react";
-import { modalShow, modalRoleShow } from "../../action/action-modal";
-import { saveDataToModal, roleForNewTask } from "../../action/action-save-date";
+import { modalShow, modalRoleShow } from "../../../../action/action-modal";
+import {
+  saveDataToModal,
+  roleForNewTask,
+} from "../../../../action/action-save-date";
 import { useParams } from "react-router-dom";
 import MoreHorizIcon from "@material-ui/icons/MoreHoriz";
 import { connect } from "react-redux";
@@ -220,7 +223,8 @@ const CardItem = ({
 };
 
 const mapStateToProps = ({
-  getDataReducer: { socket, roleProfileInBoard, email, valueDisplay, saveRole },
+  reducerSaveData: { socket, roleProfileInBoard, valueDisplay, saveRole },
+  reducerDataIdentification: { email },
   loginReducer: { token },
 }) => {
   return {

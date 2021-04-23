@@ -179,7 +179,7 @@ const CheckList = ({ cardFull, dataToModal, socket }) => {
 
 const mapStateToProps = ({
   loginReducer: { token },
-  getDataReducer: { roleProfileInBoard, cardFull, activData },
+  reducerSaveData: { roleProfileInBoard, cardFull, activData },
 }) => {
   return { token, roleProfileInBoard, cardFull, activData };
 };

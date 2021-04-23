@@ -9,6 +9,7 @@ const ModalConfirmation = ({ show, onHide, dataForDelete, socket }) => {
       id: dataForDelete.id,
       email: dataForDelete.email,
     });
+    // Close a window
     onHide()
   };
 

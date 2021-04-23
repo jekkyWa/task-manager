@@ -63,7 +63,8 @@ const CreatedTasks = ({ cardFull, email, modalShow, saveDataToModal }) => {
 };
 
 const mapStateToProps = ({
-  getDataReducer: { card, cardFull, socket, roleProfileInBoard, email },
+  reducerDataIdentification: { email },
+  reducerSaveData: { card, cardFull, socket, roleProfileInBoard },
   loginReducer: { token },
 }) => {
   return { token, card, cardFull, socket, roleProfileInBoard, email };

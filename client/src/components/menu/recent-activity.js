@@ -26,7 +26,7 @@ const RecentActivity = ({ activData }) => {
   );
 };
 
-const mapStateToProps = ({ getDataReducer: { activData } }) => {
+const mapStateToProps = ({ reducerSaveData: { activData } }) => {
   return {
     activData,
   };

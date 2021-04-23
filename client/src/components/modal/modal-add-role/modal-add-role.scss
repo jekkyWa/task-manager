@@ -1,26 +1,70 @@
+@import "../../../templates.scss";
+
 .modal-role-change {
+  color: #172b4d;
+  > h1 {
+    font-size: 18px;
+    font-weight: 300;
+  }
+  .close-icon-modal-add-role {
+    cursor: pointer;
+    margin-top: 5px;
+    &:hover {
+      color: black;
+    }
+  }
   > input {
     width: 100%;
-    padding: 5px;
+    padding: 8px 11px 8px 11px;
+    @extend %input;
+    font-size: 16px;
+    font-weight: 300;
+    margin-top: 10px;
+    color: #172b4d;
   }
   .header-modal-role-change {
     display: flex;
     justify-content: space-between;
+    > p {
+      font-size: 20px;
+      font-weight: 700;
+    }
   }
   .select-modal-role-change {
     display: flex;
     flex-direction: column;
     > select {
-      margin-top: 5px;
-      padding: 6px;
+      margin-top: 15px;
+      padding: 8px;
+      @extend %input;
+      font-size: 16px;
+      font-weight: 300;
+      color: #172b4d;
     }
   }
-  .modal-role-change-btn{
-      padding: 5px 10px 5px 10px;
-      margin-top: 5px;
-      margin-right: 5px;
-      border: none;
-      background-color: rgb(34, 105, 34);
-      color:white
+  .btn-block-modal-role-change {
+    display: flex;
+    justify-content: space-between;
+  }
+  .modal-role-change-btn {
+    padding: 5px 15px 5px 15px;
+    margin-top: 15px;
+    border: none;
+    width: 49%;
+    background-color: rgb(45, 151, 146);
+    color: white;
+    border-radius: 2px;
+    font-weight: 300;
+    &:hover {
+      background-color: rgb(41, 138, 133);
+      transition: 0.2s all;
+    }
+  }
+  .save-btn-modal-add-role {
+    background-color: rgb(50, 209, 109);
+    &:hover {
+      background-color: rgb(47, 184, 97);
+      transition: 0.2s all;
+    }
   }
 }

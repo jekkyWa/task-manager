@@ -211,7 +211,7 @@ const Setting = ({
 
 const mapStateToProps = ({
   loginReducer: { token },
-  getDataReducer: { roleProfileInBoard, valueDisplay, activData, cardFull },
+  reducerSaveData: { roleProfileInBoard, valueDisplay, activData, cardFull },
 }) => {
   return { token, roleProfileInBoard, valueDisplay, activData, cardFull };
 };

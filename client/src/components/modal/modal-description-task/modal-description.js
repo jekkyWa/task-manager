@@ -590,10 +590,9 @@ const ModalDescription = ({
 };
 
 const mapStateToProps = ({
+  reducerDataIdentification: { email, name },
   loginReducer: { token },
-  getDataReducer: {
-    email,
-    name,
+  reducerSaveData: {
     boards,
     socket,
     card,

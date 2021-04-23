@@ -139,7 +139,7 @@ const DescriptionBlock = ({
 
 const mapStateToProps = ({
   loginReducer: { token },
-  getDataReducer: { card, valueDisplay, activData, cardFull },
+  reducerSaveData: { card, valueDisplay, activData, cardFull },
 }) => {
   return { token, card, valueDisplay, activData, cardFull };
 };

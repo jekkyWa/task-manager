@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from "react";
-import Header from "../header";
-import SideBar from "../sideBar/side-bar";
+import Header from "../../header";
+import SideBar from "../../sideBar/side-bar";
 import { useParams } from "react-router-dom";
-import { saveImportantEvents } from "../../action/action-save-date";
+import { saveImportantEvents } from "../../../action/action-save-date";
 import { connect } from "react-redux";
 import "./important-events.scss";
-import Loading from "../loading/loading";
+import Loading from "../../loading/loading";
 import { useHistory } from "react-router-dom";
 import DeveloperBoardIcon from "@material-ui/icons/DeveloperBoard";
 import ViewAgendaTwoToneIcon from "@material-ui/icons/ViewAgendaTwoTone";
@@ -107,7 +107,7 @@ const ImportantEvents = ({ socket, saveImportantEvents, importantEvents }) => {
   );
 };
 
-const mapStateToProps = ({ getDataReducer: { socket, importantEvents } }) => {
+const mapStateToProps = ({ reducerSaveData: { socket, importantEvents } }) => {
   return { socket, importantEvents };
 };
 
