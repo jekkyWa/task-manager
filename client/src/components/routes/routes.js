@@ -6,7 +6,7 @@ import Page from "../pages/main/main-page";
 import BeginningOfWorkPage from "../pages/begin/beginning-of-work-page";
 import BoardPage from "../pages/board-in-command/boards-in-command";
 import CardPage from "../pages/card-page";
-import Participants from "../participants/participants";
+import Participants from "../pages/participants/participants";
 import ImportantEvents from "../important-events/important-events";
 import BoardsMainPage from "../pages/boards/boards-main-page";
 

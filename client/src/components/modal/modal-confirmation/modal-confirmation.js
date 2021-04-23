@@ -34,7 +34,7 @@ const ModalConfirmation = ({ show, onHide, dataForDelete, socket }) => {
   );
 };
 
-const mapStateToProps = ({ getDataReducer: { socket } }) => {
+const mapStateToProps = ({ reducerSaveData: { socket } }) => {
   return { socket };
 };
 
