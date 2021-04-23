@@ -4,7 +4,7 @@
 
 .modal-confirmation {
   > h1 {
-    font-size: 18px;
+    font-size: 16px;
     font-weight: 400;
     margin-bottom: 20px;
   }
@@ -14,16 +14,21 @@
     > button {
       width: 48%;
       border: none;
-      padding: 7px;
+      padding: 4px;
       font-weight: 300;
+      border-radius: 2px;
     }
     .delete-modal-confirmation {
       background-color: rgb(207, 81, 61);
       color: white;
+      &:hover{
+      background-color: rgb(221, 88, 67);
+
+      }
     }
-    .close-modal-confirmation{
+    .close-modal-confirmation {
       background-color: rgb(116, 116, 116);
-      color:white;
+      color: white;
     }
   }
 }

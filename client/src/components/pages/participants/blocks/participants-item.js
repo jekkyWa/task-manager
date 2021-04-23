@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 // material
 import ExpandLessIcon from "@material-ui/icons/ExpandLess";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
@@ -20,10 +20,23 @@ const ParticipantsItem = ({
     "Back-end developer"
   );
 
+  const [role, setRole] = useState("");
+
   // Saving data to change the role
   const onRoleUpdateHandler = (e) => {
     setDataSelectUpdateRole(e.target.value);
   };
+
+  // Getting the current role in board
+  const roleInBoard = () => {
+    const index = boardActive.addedUsers.findIndex((e) => e.email == email);
+    setRole(boardActive.addedUsers[index].role);
+  };
+
+  useEffect(() => {
+    roleInBoard();
+  }, [boardActive]);
+
   // Display body of patrticipant
   const label = boardActive.addedUsers.map((e, i) => {
     const addSelectForm = () => {
@@ -46,7 +59,7 @@ const ParticipantsItem = ({
         currentState: index,
       });
     };
-    const style = e.email == email && e.role == "Product manager";
+    const style = role == "Product manager";
     return (
       <div key={i} className="user-block-partic">
         <div className="user-item-partic">

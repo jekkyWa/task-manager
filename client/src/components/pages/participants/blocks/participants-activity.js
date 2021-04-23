@@ -1,9 +1,6 @@
 import React, { useEffect } from "react";
 
 const ParticipantsActivity = ({ boardActive }) => {
-  useEffect(() => {
-    console.log(boardActive);
-  }, []);
   const labelActivity = boardActive.boards_activity.map((e, i) => {
     return (
       <div className="activity-block" key={i}>
