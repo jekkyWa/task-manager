@@ -43,9 +43,9 @@
 
 .comment-item {
   display: flex;
+  margin-left: 30px;
   .icon-profile-comment {
     @extend %styleProfileIcon;
-    margin-right: 10px;
     width: 31px;
     align-self: center;
     > p {
@@ -55,25 +55,38 @@
   .сommentators-info-item {
     display: flex;
     > p {
-      font-weight: 500;
+      color: rgb(23, 43, 77);
+      font-weight: 700;
       font-size: 14px;
-      margin-left: 5px;
       margin-top: 20px;
     }
   }
   .comment-text {
-    margin-left: 5px;
-    background-color: rgb(234, 236, 240);
-    border-radius: 5px;
+    background-color: white;
+    box-shadow: 0px 0px 1px black;
+    border-radius: 2px;
     word-wrap: break-word;
-    min-width: 100px;
+    max-width: 100%;
     margin-top: -20px;
     > p {
-      padding: 8px 15px 8px 15px;
-      font-weight: 600;
+      color: #172b4d;
+      margin-top: 10px;
+      margin-bottom: 10px;
+      padding: 5px 10px 5px 10px;
+      font-weight: 400;
+    }
+  }
+  .date-comment {
+    margin-top: -5px;
+    > p {
+      font-weight: 400;
+      color: #808c9e;
+      margin-bottom: 10px;
+      font-size: 14px;
     }
   }
 }
+
 .comment-item-another {
   display: flex;
 }
@@ -93,26 +106,41 @@
 }
 
 .modal-decription-active-add {
-  background-color: rgb(236, 236, 236);
+  background-color: rgb(255, 255, 255);
   width: 100%;
   padding: 5px;
   box-shadow: 0px 0px 3px rgb(105, 105, 105);
   .modal-decription-active-add-btn {
     display: flex;
-    justify-content: space-between;
+    .close-icon-comment-block {
+      margin-left: 10px;
+      margin-top: 5px;
+      color: rgb(66, 82, 110);
+      cursor: pointer;
+      &:hover {
+        transition: 0.2s all;
+        color: black;
+      }
+    }
     button {
       @extend %styleBtnSave;
       margin-top: 5px;
       margin-left: 5px;
       width: 100px;
+      font-size: 14px;
+      padding: 5px 10px 5px 10px;
+      &:hover {
+        transition: 0.2s all;
+        background-color: rgb(99, 189, 74);
+      }
     }
   }
   > input {
     width: 100%;
-    background-color: rgb(236, 236, 236);
+    background-color: rgb(255, 255, 255);
     padding: 5px;
     border: none;
-    font-size: 14px;
+    font-size: 16px;
     font-weight: 400;
     &:focus {
       outline: none;

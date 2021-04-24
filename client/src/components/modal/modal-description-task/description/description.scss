@@ -43,6 +43,8 @@
   .modal-description-btn-save {
     @extend %styleBtnSave;
     width: 200px;
+    font-size: 14px;
+    padding: 5px 10px 5px 10px;
     &:hover {
       background-color: rgb(99, 189, 74);
     }

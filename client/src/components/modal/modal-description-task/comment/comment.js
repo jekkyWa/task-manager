@@ -3,7 +3,7 @@ import CloseIcon from "@material-ui/icons/Close";
 import { connect } from "react-redux";
 import { recentActivity } from "../../../../action/action-save-date";
 import dateFormat from "dateformat";
-import "./comment.scss"
+import "./comment.scss";
 
 const Comment = ({
   email,
@@ -76,10 +76,12 @@ const Comment = ({
         <div className="сommentators-info">
           <div className="сommentators-info-item">
             <p>{e.сommentatorsEmail}</p>
-            <p>{e.date}</p>
           </div>
           <div className="comment-text">
             <p>{e.text_comment}</p>
+          </div>
+          <div className="date-comment">
+            <p>{e.date}</p>
           </div>
         </div>
       </div>
@@ -121,8 +123,8 @@ const Comment = ({
               onChange={onHandlerComment}
             />
             <div className="modal-decription-active-add-btn">
-              <div>
-                <button onClick={addComment}>Send</button>
+              <button onClick={addComment}>Send</button>
+              <div className="close-icon-comment-block">
                 <CloseIcon
                   className="modal-description-close-icon"
                   onClick={() => {
