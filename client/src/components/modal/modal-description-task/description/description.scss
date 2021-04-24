@@ -1,0 +1,59 @@
+@import "../../../../templates.scss";
+
+.text-description-for-another-users {
+  margin-left: 30px;
+  color: rgb(23, 43, 77);
+  font-weight: 500;
+}
+
+.modal-description-select-input {
+  background-color: rgb(222, 222, 223);
+  height: 55px;
+  border-radius: 2px;
+  margin-top: 10px;
+  margin-left: 30px;
+  padding: 1px;
+  cursor: pointer;
+  &:hover {
+    background-color: rgb(207, 209, 212);
+    transition: 0.4s all;
+  }
+  > p {
+    margin-left: 10px;
+    padding: 4px 0px 4px 0px;
+    color: rgb(23, 43, 77);
+    font-weight: 400;
+  }
+}
+
+.modal-description-input {
+  margin-top: 6px;
+  margin-left: 30px;
+  > textarea {
+    min-width: 100% !important;
+    resize: none;
+    height: 100px;
+    margin: 5px 16px 5px 0px;
+    padding: 3px 10px 8px 10px;
+    font-weight: 400;
+    &:focus {
+      border: 2px solid rgb(0, 82, 204);
+    }
+  }
+  .modal-description-btn-save {
+    @extend %styleBtnSave;
+    width: 200px;
+    &:hover {
+      background-color: rgb(99, 189, 74);
+    }
+  }
+  .modal-description-close-icon {
+    margin-left: 10px;
+    margin-bottom: 4px;
+    color: rgb(66, 82, 110);
+    cursor: pointer;
+    &:hover {
+      color: black;
+    }
+  }
+}

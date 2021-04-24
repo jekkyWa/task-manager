@@ -1,7 +1,8 @@
 import React, { useEffect } from "react";
 import { connect } from "react-redux";
 import dateFormat from "dateformat";
-import { recentActivity } from "../../../action/action-save-date";
+import { recentActivity } from "../../../../action/action-save-date";
+import "./card-of-taker.scss";
 
 const CardOfTaker = ({
   dataToModal,
@@ -70,45 +71,56 @@ const CardOfTaker = ({
   if (name.name_add == email) {
     return (
       <div className="panel-of-control-task">
-        <h1>You have added this task</h1>
+        <h1>You have added this task.</h1>
       </div>
     );
   } else if (name.state && name.nameOfTaker == email) {
     return (
       <div className="panel-of-control-task">
-        <h1>You have completed the task</h1>
+        <h1>You have completed the task.</h1>
       </div>
     );
   } else if (name.state && name.nameOfTaker !== email) {
     return (
       <div className="panel-of-control-task">
-        <h1>The task is completed by the user: {name.nameOfTaker}</h1>
+        <h1>
+          The task is completed by the user: <span>{name.nameOfTaker}</span>.
+        </h1>
       </div>
     );
   } else if (name.nameOfTaker == email) {
     return (
       <div className="panel-of-control-task">
-        <h1>The task is assigned to you</h1>
-        <button
-          onClick={() => {
-            completedTask(true);
-          }}
-        >
-          Complete the task
-        </button>
-        <button
-          onClick={() => {
-            refuseAssignment();
-          }}
-        >
-          Refuse to task
-        </button>
+        <h1>
+          This task is assigned to you. If you cannot complete it, refuse. Or
+          complete the task if you completed it.
+        </h1>
+        <div>
+          <button
+            className="complete-panel-of-control-task"
+            onClick={() => {
+              completedTask(true);
+            }}
+          >
+            Complete the task
+          </button>
+          <button
+            className="refuse-panel-of-control-task"
+            onClick={() => {
+              refuseAssignment();
+            }}
+          >
+            Refuse to task
+          </button>
+        </div>
       </div>
     );
   } else if (name.nameOfTaker.length > 0) {
     return (
       <div className="panel-of-control-task">
-        <h1>The task is cried with the user: {name.nameOfTaker}</h1>
+        <h1>
+          The task is assigned to the user: <span>{name.nameOfTaker}</span>.
+        </h1>
       </div>
     );
   } else if (
@@ -122,12 +134,13 @@ const CardOfTaker = ({
   ) {
     return (
       <div className="panel-of-control-task">
-        <h1>You do not have the right to take this task</h1>
+        <h1>You do not have the right to take this task.</h1>
       </div>
     );
   } else {
     return (
       <div className="take-task-btn">
+        <h1>As soon as you click the button, you will take this task.</h1>
         <button onClick={addNameOfTaker}>Take up execution</button>
       </div>
     );

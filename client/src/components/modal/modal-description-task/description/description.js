@@ -2,7 +2,8 @@ import React, { useState, useEffect } from "react";
 import { connect } from "react-redux";
 import CloseIcon from "@material-ui/icons/Close";
 import dateFormat from "dateformat";
-import { recentActivity } from "../../../action/action-save-date";
+import { recentActivity } from "../../../../action/action-save-date";
+import "./description.scss";
 
 const DescriptionBlock = ({
   dataToModal,
@@ -11,7 +12,7 @@ const DescriptionBlock = ({
   valueDisplay,
   recentActivity,
   activData,
-  cardFull
+  cardFull,
 }) => {
   const [descriptionTask, setDescriptionTask] = useState("");
   const [descriptionState, setDescriptionState] = useState(false);
@@ -95,7 +96,11 @@ const DescriptionBlock = ({
       </div>
     );
   } else if (description.description) {
-    return <p>{description.description}</p>;
+    return (
+      <p className="text-description-for-another-users">
+        {description.description}
+      </p>
+    );
   } else if (dataToModal.name_add == email) {
     return (
       <React.Fragment>
@@ -112,7 +117,10 @@ const DescriptionBlock = ({
         <div
           className={descriptionState ? "modal-description-input" : "hidden"}
         >
-          <textarea onChange={onChangeDescriptionTask} />
+          <textarea
+            placeholder="Add a more detailed description ..."
+            onChange={onChangeDescriptionTask}
+          />
           <button
             className="modal-description-btn-save"
             onClick={addDescriptionToTask}
@@ -130,9 +138,9 @@ const DescriptionBlock = ({
     );
   } else {
     return (
-      <div>
-        <p>The creator of the task has not added any description.</p>
-      </div>
+      <p className="text-description-for-another-users">
+        The creator of the task has not added any description.
+      </p>
     );
   }
 };

@@ -1,9 +1,42 @@
 @import "./variables.scss";
 
+%nameSection {
+  font-size: 22px;
+  margin-left: 5px;
+  margin-top: 0px;
+  font-weight: 600;
+  color: rgb(23, 43, 77);
+}
+
+%btnModalDescription {
+  background-color: rgb(222, 222, 223);
+  margin-left: 30px;
+  margin-top: 15px;
+  border: none;
+  padding: 5px 10px 5px 10px;
+  font-weight: 600;
+  font-size: 14px;
+  border-radius: 2px;
+  width: 200px;
+  color: rgb(23, 43, 77);
+  &:hover {
+    background-color: rgb(207, 209, 212);
+    transition: 0.4s all;
+  }
+}
+
 %styleBtn {
   background-color: $backColorBtn;
   border-radius: $borderRadiusBtn;
   border: $borderBtn;
+}
+
+%styleBtnSave {
+  background-color: rgb(90, 172, 68);
+  padding: 2px 15px 2px 15px;
+  border: none;
+  color: white;
+  border-radius: 2px;
 }
 
 %noselect {

@@ -1,0 +1,25 @@
+.modal-description-header-block-one {
+  display: flex;
+  color: rgb(66, 82, 110);
+  h2 {
+    font-size: 22px;
+    margin-left: 5px;
+    margin-top: 1px;
+    font-weight: 600;
+    color: rgb(23, 43, 77);
+  }
+}
+
+.info-about-task-modal-description {
+  margin-left: 30px;
+  p {
+    color: #595858;
+    font-weight: 400;
+    color: rgb(128, 140, 158);
+    margin-bottom: 10px;
+    font-size: 14px;
+    > span {
+      text-decoration: underline;
+    }
+  }
+}

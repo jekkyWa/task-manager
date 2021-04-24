@@ -13,6 +13,7 @@ const UserBlock = ({ logout, name, email, showUserBlock }) => {
   const logoutHandler = (event) => {
     event.preventDefault();
     logout();
+    showUserBlock(false);
     history.push("/login");
   };
 
@@ -39,8 +40,8 @@ const UserBlock = ({ logout, name, email, showUserBlock }) => {
         </div>
       </div>
       <div className="menu-user-block">
-        <h1>Сменить пароль</h1>
-        <h1>Удалить аккаунт</h1>
+        <h1>Change password</h1>
+        <h1>Delete Account</h1>
         <h1 onClick={logoutHandler}>Выйти</h1>
       </div>
     </div>

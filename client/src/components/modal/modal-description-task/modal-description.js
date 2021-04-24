@@ -11,13 +11,13 @@ import ReorderIcon from "@material-ui/icons/Reorder";
 import FormatListBulletedIcon from "@material-ui/icons/FormatListBulleted";
 import CheckBoxOutlinedIcon from "@material-ui/icons/CheckBoxOutlined";
 import "./modal-description.scss";
-import DescriptionBlock from "./description-block";
+import DescriptionBlock from "./description/description";
 import { availCheck } from "../../hooks/availability-check.hook";
-import CardOfTaker from "./card-of-taker";
-import Comment from "./comment";
-import Setting from "./setting";
-import CheckList from "./check-list";
-import HeaderModalDescription from "./header-modal-description";
+import CardOfTaker from "./card-of-taker/card-of-taker";
+import Comment from "./comment/comment";
+import Setting from "./setting/setting";
+import CheckList from "./check-list/check-list";
+import HeaderModalDescription from "./header-modal-desription/header-modal-description";
 
 // -----------------------------------------------------
 
@@ -502,7 +502,7 @@ const ModalDescription = ({
   if (dataToModal.id == idDel) {
     return (
       <Modal
-        dialogClassName="modal-50w"
+        dialogClassName="modal-60w"
         show={show}
         onHide={() => {
           modalShow(false);
@@ -514,7 +514,7 @@ const ModalDescription = ({
   } else {
     return (
       <Modal
-        dialogClassName="modal-50w"
+        dialogClassName="modal-60w"
         show={show}
         onHide={() => {
           modalShow(false);
@@ -531,9 +531,7 @@ const ModalDescription = ({
               <div>
                 <ReorderIcon />
               </div>
-              <div>
-                <h2>Description</h2>
-              </div>
+              <h2>Description</h2>
             </div>
             <DescriptionBlock
               dataToModal={dataToModal}
@@ -550,9 +548,7 @@ const ModalDescription = ({
                 <div>
                   <CheckBoxOutlinedIcon />
                 </div>
-                <div>
-                  <h2>Take a task</h2>
-                </div>
+                <h2>Take a task</h2>
               </div>
               <CardOfTaker
                 dataToModal={dataToModal}
@@ -568,17 +564,12 @@ const ModalDescription = ({
                 socket={socket}
               />
             </div>
-            {/* Setting block */}
             <div className="modal-description-actions-block">
-              <div className="modal-description-actions">
-                <div>
-                  <FormatListBulletedIcon />
-                </div>
-                <div>
-                  <h2>Comments</h2>
-                </div>
+              <div>
+                <FormatListBulletedIcon />
               </div>
-              <button>Показать детали</button>
+
+              <h2>Comments</h2>
             </div>
             <Comment dataToModal={dataToModal} email={email} socket={socket} />
             <div></div>

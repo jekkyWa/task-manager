@@ -1,11 +1,12 @@
 import React from "react";
-import ListAltIcon from "@material-ui/icons/ListAlt";
+// files
+import "./header-modal-description.scss";
+// redux
 import { connect } from "react-redux";
+// material
+import ListAltIcon from "@material-ui/icons/ListAlt";
 
-const HeaderModalDescription = ({
-  dataToModal,
-  cardFull,
-}) => {
+const HeaderModalDescription = ({ dataToModal, cardFull }) => {
   const item = cardFull.cards.filter(
     (e) => e.card_item_id == dataToModal.card_id
   )[0];
@@ -24,24 +25,28 @@ const HeaderModalDescription = ({
           <h2>{title.title}</h2>
         </div>
       </div>
-      <p>In a collumn "{dataToModal.column}"</p>
-      <p>
-        Task Available for roles:{" "}
-        {title.role.map((e, i) => {
-          if (i == title.role.length - 1) {
+      <div className="info-about-task-modal-description">
+        <p>
+          In a collumn: <span>{dataToModal.column}</span>
+        </p>
+        <p>
+          Task Available for roles:{" "}
+          {title.role.map((e, i) => {
+            if (i == title.role.length - 1) {
+              return (
+                <span>
+                  {e.role}-{e.level}
+                </span>
+              );
+            }
             return (
               <span>
-                {e.role}-{e.level}
+                {e.role}-{e.level},{" "}
               </span>
             );
-          }
-          return (
-            <span>
-              {e.role}-{e.level},{" "}
-            </span>
-          );
-        })}
-      </p>
+          })}
+        </p>
+      </div>
     </React.Fragment>
   );
 };

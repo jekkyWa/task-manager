@@ -1,0 +1,59 @@
+.panel-of-control-task {
+  > h1 {
+    margin-left: 30px;
+    font-size: 16px;
+    font-weight: 500;
+    margin-top: 10px;
+    margin-bottom: 20px;
+    color: rgb(23, 43, 77);
+    > span {
+      text-decoration: underline;
+    }
+  }
+  > div {
+    margin-left: 30px;
+    > button {
+      margin-right: 10px;
+      border-radius: 2px;
+      border: none;
+      padding: 5px;
+      margin-bottom: 20px;
+      width: 200px;
+      color: white;
+    }
+    .complete-panel-of-control-task {
+      background-color: rgb(90, 172, 68);
+      &:hover {
+        background-color: rgb(95, 184, 70);
+      }
+    }
+    .refuse-panel-of-control-task {
+      background-color: rgb(207, 81, 61);
+      &:hover {
+        background-color: rgb(219, 86, 66);
+      }
+    }
+  }
+}
+
+.take-task-btn {
+  margin-top: 10px;
+  margin-bottom: 10px;
+  margin-left: 30px;
+  > h1 {
+    font-size: 16px;
+    font-weight: 500;
+    margin-top: 10px;
+    margin-bottom: 20px;
+    color: rgb(23, 43, 77);
+  }
+  > button {
+    background-color: rgb(65, 65, 204);
+    border-radius: 2px;
+    border: none;
+    padding: 5px;
+    margin-bottom: 20px;
+    width: 175px;
+    color: white;
+  }
+}

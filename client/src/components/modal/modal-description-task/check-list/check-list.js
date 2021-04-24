@@ -6,6 +6,7 @@ import { useState } from "react";
 import CheckBoxOutlineBlankIcon from "@material-ui/icons/CheckBoxOutlineBlank";
 import CheckBoxIcon from "@material-ui/icons/CheckBox";
 import shortid from "shortid";
+import "./check-list.scss";
 
 const CheckList = ({ cardFull, dataToModal, socket }) => {
   const [addItemCheckListState, setAddItemCheckListState] = useState(false);
@@ -74,9 +75,7 @@ const CheckList = ({ cardFull, dataToModal, socket }) => {
             <div>
               <FormatListNumberedRtlIcon fontSize="medium" />
             </div>
-            <div>
-              <h2>Check letter</h2>
-            </div>
+            <h2>Check letter</h2>
           </div>
           <div className="check-list-two">
             <button
@@ -84,7 +83,7 @@ const CheckList = ({ cardFull, dataToModal, socket }) => {
                 deleteList(false);
               }}
             >
-              Удалить
+              Delete
             </button>
           </div>
         </div>
@@ -99,14 +98,23 @@ const CheckList = ({ cardFull, dataToModal, socket }) => {
               : 0}
             %
           </h1>{" "}
-          <progress
-            max="100"
-            value={Math.round(
-              (checkList.check_letter.list.filter((e) => e.status).length /
-                checkList.check_letter.list.length) *
-                100
-            )}
-          />
+          <div className="progressbar">
+            <div
+              className="progress"
+              style={{
+                width: `${
+                  checkList.check_letter.list.length !== 0
+                    ? Math.round(
+                        (checkList.check_letter.list.filter((e) => e.status)
+                          .length /
+                          checkList.check_letter.list.length) *
+                          100
+                      )
+                    : 0
+                }%`,
+              }}
+            ></div>
+          </div>
         </div>
         {checkList.check_letter.list.map((e) => {
           return (
@@ -131,13 +139,13 @@ const CheckList = ({ cardFull, dataToModal, socket }) => {
                 </h3>
               </div>
               <div>
-                <h3
+                <h2
                   onClick={() => {
                     deleteCheckListItem(e.id_check_list_item);
                   }}
                 >
-                  Удалить
-                </h3>
+                  <CloseIcon />
+                </h2>
               </div>
             </div>
           );
@@ -150,25 +158,27 @@ const CheckList = ({ cardFull, dataToModal, socket }) => {
             !addItemCheckListState ? "add-check-list-item-btn" : "hidden"
           }
         >
-          Добавить элемент
+          Add item
         </button>
         <div
           className={
-            addItemCheckListState ? "modal-description-input" : "hidden"
+            addItemCheckListState
+              ? "modal-description-input-check-list"
+              : "hidden"
           }
         >
-          <textarea onChange={titleListHandler} />
+          <textarea placeholder="Add item" onChange={titleListHandler} />
           <button
             onClick={addCheckListItem}
-            className="modal-description-btn-save"
+            className="modal-description-btn-save-check-list"
           >
-            Save
+            Add
           </button>
           <CloseIcon
             onClick={() => {
               setAddItemCheckListState(false);
             }}
-            className="modal-description-close-icon"
+            className="modal-description-close-icon-check-list"
           />
         </div>
       </div>

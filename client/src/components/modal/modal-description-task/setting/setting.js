@@ -1,10 +1,11 @@
 import React, { useState } from "react";
 import SettingsIcon from "@material-ui/icons/Settings";
 import CloseIcon from "@material-ui/icons/Close";
-import { recentActivity } from "../../../action/action-save-date";
-import { modalShow, modalRoleChange } from "../../../action/action-modal";
-import { roleDependencies } from "../../role";
+import { recentActivity } from "../../../../action/action-save-date";
+import { modalShow, modalRoleChange } from "../../../../action/action-modal";
+import { roleDependencies } from "../../../role";
 import { connect } from "react-redux";
+import "./setting.scss";
 
 const Setting = ({
   email,
@@ -106,17 +107,18 @@ const Setting = ({
   if (setting.name_add == email) {
     return (
       <React.Fragment>
-        <div className="modal-description-add-description">
+        <div className="modal-description-setting">
           <div>
             <SettingsIcon />
           </div>
-          <div>
-            <h2>Settings</h2>
-          </div>
+          <h2>Settings</h2>
         </div>
         <div className="buttons-settings">
           <div>
-            <h1>Add Check List:</h1>
+            <h1>
+              Add a check list for more convenient task management. Slide one
+              task for a few small!
+            </h1>
             <button
               onClick={() => {
                 addList(true);
@@ -126,7 +128,11 @@ const Setting = ({
             </button>
           </div>
           <div>
-            <h1>Rename the selected task:</h1>
+            <h1>
+              Change the task. When the task is changed, if it was taken, it
+              will not be canceled, but the user may refuse its execution. Do
+              not change the task dramatically!
+            </h1>
             <button
               className={!showCard ? "" : "hidden"}
               onClick={() => {
@@ -147,7 +153,7 @@ const Setting = ({
                 Save
               </button>
               <CloseIcon
-                className="modal-description-close-icon"
+                className="modal-description-close-icon-setting"
                 onClick={() => {
                   setShowCard(false);
                   setRenameBody("");
@@ -156,7 +162,11 @@ const Setting = ({
             </div>
           </div>
           <div>
-            <h1>Change the roles to perform this task:</h1>
+            <h1>
+              The change in the role will also not lead to automatic refusal of
+              the job, but the user will not complete it, change the roles with
+              the mind!
+            </h1>
             <button
               className={showChangeRole ? "hidden" : ""}
               onClick={() => {
@@ -185,13 +195,19 @@ const Setting = ({
                 setShowChangeRole(false);
               }}
             >
-              Save and close
+              Save
             </button>
+            <CloseIcon
+              className="modal-description-close-icon-setting"
+              onClick={() => {
+                setShowChangeRole(false);
+              }}
+            />
           </div>
           <div>
             <h1>
-              Delete task, press with an allocated to restore the task it is
-              impossible:
+              Deleting a task, it will be impossible to restore the data.Think
+              again before deleting the task.
             </h1>
             <button
               className="delete-task"

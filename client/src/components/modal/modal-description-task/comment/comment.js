@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from "react";
 import CloseIcon from "@material-ui/icons/Close";
 import { connect } from "react-redux";
-import { recentActivity } from "../../../action/action-save-date";
+import { recentActivity } from "../../../../action/action-save-date";
 import dateFormat from "dateformat";
+import "./comment.scss"
 
 const Comment = ({
   email,
@@ -110,7 +111,7 @@ const Comment = ({
               setCommentState(true);
             }}
           >
-            <p>Write a comment ...</p>
+            <p>Write a comment...</p>
           </div>
           <div
             className={!commentState ? "hidden" : "modal-decription-active-add"}
