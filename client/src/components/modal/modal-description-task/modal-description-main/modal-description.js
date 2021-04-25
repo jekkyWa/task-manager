@@ -3,7 +3,7 @@ import { Modal } from "react-bootstrap";
 // files
 import "./modal-description.scss";
 import DescriptionBlock from "../description/description";
-import { availCheck } from "../../../hooks/availability-check.hook";
+import { availCheck } from "../../../utils/availability-check";
 import CardOfTaker from "../card-of-taker/card-of-taker";
 import Comment from "../comment/comment";
 import CheckList from "../check-list/check-list";

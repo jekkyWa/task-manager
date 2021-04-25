@@ -25,7 +25,7 @@ export const MainPage = ({ token }) => {
           </div>
           <h1>Taskood</h1>
         </div>
-        {/* Кнопки меняются взависимости от статуса авторизации */}
+        {/*Buttons change depending on the status of authorization */}
         <ButtonVariation aut={authentication} />
       </div>
       <div className="main-page-body container">

@@ -1,15 +1,16 @@
-import React, { useEffect, useState } from "react";
-import { connect } from "react-redux";
+import React, { useEffect } from "react";
+import { withRouter } from "react-router-dom";
+import io from "socket.io-client";
+// files
 import { useAuth } from "../hooks/auth.hook";
+import "./app.css";
+import useRoutes from "../routes";
+import { useHttp } from "../hooks/http.hook";
+// redux
+import { connect } from "react-redux";
 import { fetchLogin } from "../../action/action-login";
 import { saveDataIdentification } from "../../action/action-identfication-data";
 import { saveSocket, saveNotifications } from "../../action/action-save-date";
-import "./app.css";
-import useRoutes from "../routes/routes";
-import { BrowserRouter as Router, withRouter } from "react-router-dom";
-import io from "socket.io-client";
-import { useHttp } from "../hooks/http.hook";
-import Loading from "../loading/loading";
 
 const App = ({
   fetchLogin,
@@ -20,7 +21,6 @@ const App = ({
   saveDataIdentification,
   notifications,
 }) => {
-  // const [loading, setLoading] = useState(true);
   const { login, logout, token, userId } = useAuth();
   const isAuthenticated = !!token;
   useEffect(() => {
@@ -28,14 +28,18 @@ const App = ({
   }, [token, login]);
   const { request } = useHttp();
 
+  // For dough on phone
   const phone = "192.168.43.127:5000";
+  // For basic test
   const local = "http://localhost:5000";
 
   useEffect(async () => {
     let url = window.location.href;
+    // Check URL
     const condition = (word) => {
       return url.slice(url.length - word.length) !== word;
     };
+    // Connect to sockets does not occur at these addresses
     if (
       isAuthenticated &&
       condition("main_page") &&
@@ -46,11 +50,10 @@ const App = ({
         Authorization: `Bearer ${token}`,
       });
       saveDataIdentification(data.email, data.name, data.rooms);
-      // setLoading(false);
     }
   }, [isAuthenticated]);
 
-  // готово
+  // Main connecting sockets
   useEffect(() => {
     if (isAuthenticated && email !== "email") {
       const newSocket = io(local, {
@@ -72,9 +75,6 @@ const App = ({
     }
   }, [isAuthenticated, email]);
 
-  // перенести в header
-  // Обновление при получение notification
-
   useEffect(() => {
     if (socket) {
       socket.on("getNotification", (value) => {
@@ -88,14 +88,6 @@ const App = ({
   }, [socket, notifications]);
 
   const routes = useRoutes(isAuthenticated);
-
-  // if (loading) {
-  //   return (
-  //     <div className="loading">
-  //       <Loading />
-  //     </div>
-  //   );
-  // }
 
   return routes;
 };

@@ -78,12 +78,6 @@ const Header = ({
               <Link to="/boards">Boards page</Link>
             </h2>
           </div>
-          <div className="header-input">
-            <input
-              placeholder="Search and filter projects"
-              className="search-input"
-            />
-          </div>
         </div>
         <div className="header-logo">
           <div>

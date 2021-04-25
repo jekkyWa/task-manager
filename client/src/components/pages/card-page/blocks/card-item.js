@@ -1,20 +1,24 @@
 import React, { useState } from "react";
+import { useParams } from "react-router-dom";
+import shortid from "shortid";
+import dateFormat from "dateformat";
+// files
+import "../card-page.scss";
+// redux
 import { modalShow, modalRoleShow } from "../../../../action/action-modal";
 import {
   saveDataToModal,
   roleForNewTask,
 } from "../../../../action/action-save-date";
-import { useParams } from "react-router-dom";
-import MoreHorizIcon from "@material-ui/icons/MoreHoriz";
 import { connect } from "react-redux";
-import shortid from "shortid";
-import dateFormat from "dateformat";
+
+// material
+import MoreHorizIcon from "@material-ui/icons/MoreHoriz";
 import CloseIcon from "@material-ui/icons/Close";
 import AddIcon from "@material-ui/icons/Add";
 import ChatBubbleOutlineOutlinedIcon from "@material-ui/icons/ChatBubbleOutlineOutlined";
 import CheckCircleOutlineOutlinedIcon from "@material-ui/icons/CheckCircleOutlineOutlined";
 import DescriptionOutlinedIcon from "@material-ui/icons/DescriptionOutlined";
-import "../card-page.scss";
 
 const CardItem = ({
   socket,

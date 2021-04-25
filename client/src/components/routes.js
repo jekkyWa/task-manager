@@ -1,14 +1,14 @@
 import React from "react";
 import { Redirect, Route, Switch } from "react-router-dom";
-import Register from "../authentication/register/register-page.js";
-import Login from "../authentication/login/login-page";
-import Page from "../pages/main/main-page";
-import BeginningOfWorkPage from "../pages/begin/beginning-of-work-page";
-import BoardPage from "../pages/board-in-command/boards-in-command";
-import CardPage from "../pages/card-page/card-page";
-import Participants from "../pages/participants/participants";
-import ImportantEvents from "../pages/important-events/important-events";
-import BoardsMainPage from "../pages/boards/boards-main-page";
+import Register from "./authentication/register/register-page.js";
+import Login from "./authentication/login/login-page";
+import Page from "./pages/main/main-page";
+import BeginningOfWorkPage from "./pages/begin/beginning-of-work-page";
+import BoardPage from "./pages/board-in-command/boards-in-command";
+import CardPage from "./pages/card-page/card-page";
+import Participants from "./pages/participants/participants";
+import ImportantEvents from "./pages/important-events/important-events";
+import BoardsMainPage from "./pages/boards/boards-main-page";
 
 const useRoutes = (isAuthenticated) => {
   if (isAuthenticated) {

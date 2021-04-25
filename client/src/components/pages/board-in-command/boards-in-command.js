@@ -5,7 +5,7 @@ import Header from "../../header";
 import ModalAddBoard from "../../modal/modal-add-board/modal-add-board";
 import SideBar from "../../sideBar/side-bar";
 import "../boards-blocks/boards-main-page.scss";
-import Loading from "../../loading/loading";
+import Loading from "../../loading/loading-main/loading";
 import BoardMarkItem from "../boards-blocks/board-marks-item";
 import BoardInCommandItem from "./blocks/board-in-command-item";
 // redux

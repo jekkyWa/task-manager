@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 // files
 import Header from "../../header";
 import SideBar from "../../sideBar/side-bar";
-import Loading from "../../loading/loading";
+import Loading from "../../loading/loading-main/loading";
 import "../boards-blocks/boards-main-page.scss";
 import BoardMarksItem from "../boards-blocks/board-marks-item";
 import BoardItem from "./blocks/board-item";

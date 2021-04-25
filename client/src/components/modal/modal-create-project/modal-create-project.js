@@ -7,7 +7,7 @@ import { useHttp } from "../../hooks/http.hook";
 import { useCreateBoard } from "./utils/create-board.hook";
 import image_2 from "../../../images/modal-create-project.svg";
 import AddedUsers from "./blocks/added-users";
-import LoadingBtn from "../../loading/loading-btn";
+import LoadingBtn from "../../loading/loading-btn/loading-btn";
 // redux
 import { saveDataIdentification } from "../../../action/action-identfication-data";
 import { connect } from "react-redux";

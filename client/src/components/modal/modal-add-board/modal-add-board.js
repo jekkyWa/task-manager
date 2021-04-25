@@ -5,7 +5,7 @@ import shortid from "shortid";
 // files
 import "./modal-add-board.scss";
 import { BoxColor } from "./blocks/box-color";
-import LoadingBtn from "../../loading/loading-btn";
+import LoadingBtn from "../../loading/loading-btn/loading-btn";
 // redux
 import { saveDataCards } from "../../../action/action-save-date";
 import { connect } from "react-redux";

@@ -6,7 +6,7 @@ import Header from "../../header";
 import SideBar from "../../sideBar/side-bar";
 import "./participants.scss";
 import ModalConfirmation from "../../modal/modal-confirmation/modal-confirmation";
-import Loading from "../../loading/loading";
+import Loading from "../../loading/loading-main/loading";
 // redux
 import {
   saveDataCards,
@@ -117,7 +117,7 @@ const Participants = ({ socket, saveActiveBoard, email, boardActive }) => {
     }
   }, [id, socket]);
 
-  // Обновление всех элементов при удалении пользователя
+  // Update all items when deleting a user
   useEffect(() => {
     if (socket) {
       socket.on("getDataAfterDeleteUser", (value) => {

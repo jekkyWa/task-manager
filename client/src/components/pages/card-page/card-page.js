@@ -1,6 +1,18 @@
 import React, { useEffect, useState } from "react";
-import Header from "../../header";
 import { useParams } from "react-router-dom";
+import shortid from "shortid";
+import dateFormat from "dateformat";
+import { useHistory } from "react-router-dom";
+// files
+import Header from "../../header";
+import Loading from "../../loading/loading-main/loading";
+import ModalDescription from "../../modal/modal-description-task/modal-description-main/modal-description";
+import Menu from "../../menu/menu/menu";
+import { availCheck } from "../../utils/availability-check";
+import CardItem from "./blocks/card-item";
+import ModalAddRole from "../../modal/modal-add-role/modal-add-role";
+import "./card-page.scss";
+// redux
 import {
   displaySelection,
   recentActivity,
@@ -12,19 +24,10 @@ import {
   saveFullCard,
 } from "../../../action/action-save-date";
 import { connect } from "react-redux";
-import Loading from "../../loading/loading";
+// material
 import AddIcon from "@material-ui/icons/Add";
 import CloseIcon from "@material-ui/icons/Close";
-import shortid from "shortid";
 import MenuIcon from "@material-ui/icons/Menu";
-import ModalDescription from "../../modal/modal-description-task/modal-description-main/modal-description";
-import Menu from "../../menu/menu/menu";
-import { availCheck } from "../../hooks/availability-check.hook";
-import dateFormat from "dateformat";
-import CardItem from "./blocks/card-item";
-import ModalAddRole from "../../modal/modal-add-role/modal-add-role";
-import { useHistory } from "react-router-dom";
-import "./card-page.scss";
 
 const CardPage = ({
   saveActivityCard,
@@ -78,7 +81,6 @@ const CardPage = ({
   useEffect(() => {
     if (socket) {
       socket.on("getChangeRole", (value) => {
-        console.log(value);
         if (dataToModal) {
           const item = value.cards.filter(
             (e) => e.card_item_id == dataToModal.card_id
@@ -217,7 +219,7 @@ const CardPage = ({
     }
   }, [socket, activData]);
 
-  // обновление всех элементов при удалении пользователя
+  // Update all items when deleting a user
   useEffect(() => {
     if (socket) {
       socket.on("getDataAfterDeleteUser", (value) => {
@@ -243,7 +245,6 @@ const CardPage = ({
 
   const { name_Board, color } = valueDisplay.valueDisp;
 
-  // main
   return (
     <div className={`${color} card-page`}>
       <ModalDescription show={show} />
@@ -278,6 +279,7 @@ const CardPage = ({
           </div>
 
           <div className="name-command-card-page">
+            {/* Show only accessible tasks */}
             <h1
               className={
                 valueDisplay.stateFilter ? "text-display-state" : "hidden"
@@ -285,6 +287,7 @@ const CardPage = ({
             >
               Visibility: <span className="selected-text">Available</span>
             </h1>
+            {/* Show all tasks */}
             <h1
               className={
                 !valueDisplay.stateFilter ? "text-display-state" : "hidden"

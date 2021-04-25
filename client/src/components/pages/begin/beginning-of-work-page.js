@@ -1,8 +1,10 @@
 import React from "react";
+// files
 import Header from "../../header";
 import SideBar from "../../sideBar/side-bar";
-import CheckBoxOutlinedIcon from "@material-ui/icons/CheckBoxOutlined";
 import "./beginning-of-work-page.scss";
+// material
+import CheckBoxOutlinedIcon from "@material-ui/icons/CheckBoxOutlined";
 
 const BeginningOfWorkPage = () => {
   return (
