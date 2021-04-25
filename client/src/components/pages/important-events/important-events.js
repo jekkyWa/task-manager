@@ -6,7 +6,6 @@ import { saveImportantEvents } from "../../../action/action-save-date";
 import { connect } from "react-redux";
 import "./important-events.scss";
 import Loading from "../../loading/loading";
-import { useHistory } from "react-router-dom";
 import DeveloperBoardIcon from "@material-ui/icons/DeveloperBoard";
 import ViewAgendaTwoToneIcon from "@material-ui/icons/ViewAgendaTwoTone";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
@@ -83,11 +82,11 @@ const ImportantEvents = ({ socket, saveImportantEvents, importantEvents }) => {
   return (
     <div>
       <Header />
-      <div className="container participants-page">
+      <div className="container important-events">
         <div>
           <SideBar />
         </div>
-        <div className="participants">
+        <div className="important-events-body">
           <div className="submeni-important-events">
             <div className="card-name-important-events">
               <div className="left-text-important-events">

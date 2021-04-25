@@ -14,6 +14,7 @@ import AddIcon from "@material-ui/icons/Add";
 import ChatBubbleOutlineOutlinedIcon from "@material-ui/icons/ChatBubbleOutlineOutlined";
 import CheckCircleOutlineOutlinedIcon from "@material-ui/icons/CheckCircleOutlineOutlined";
 import DescriptionOutlinedIcon from "@material-ui/icons/DescriptionOutlined";
+import "../card-page.scss";
 
 const CardItem = ({
   socket,
@@ -154,14 +155,27 @@ const CardItem = ({
             <p>Role: {label}</p>
             <div className="item-block-icon-state">
               <div className={!element.nameOfTaker ? "hidden" : ""}>
-                <CheckCircleOutlineOutlinedIcon fontSize="small" />
+                <CheckCircleOutlineOutlinedIcon
+                  className="icon-card-item-material"
+                  fontSize="small"
+                />
               </div>
               <div className={element.description ? "" : "hidden"}>
-                <DescriptionOutlinedIcon fontSize="small" />
+                <DescriptionOutlinedIcon
+                  className="icon-card-item-material"
+                  fontSize="small"
+                />
               </div>
-              <div className={element.comment.length > 0 ? "" : "hidden"}>
-                <ChatBubbleOutlineOutlinedIcon fontSize="small" />{" "}
-                <span>{element.comment.length}</span>
+              <div
+                className={
+                  element.comment.length > 0 ? "chat-bubble-outline" : "hidden"
+                }
+              >
+                <ChatBubbleOutlineOutlinedIcon
+                  className="icon-card-item-material"
+                  fontSize="small"
+                />{" "}
+                <span className="comment-count">{element.comment.length}</span>
               </div>
             </div>
           </div>

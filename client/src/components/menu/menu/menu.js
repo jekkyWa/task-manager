@@ -8,19 +8,19 @@ import AssignmentTurnedInOutlinedIcon from "@material-ui/icons/AssignmentTurnedI
 import FormatListBulletedIcon from "@material-ui/icons/FormatListBulleted";
 import AssignmentIndOutlinedIcon from "@material-ui/icons/AssignmentIndOutlined";
 import ArrowBackIcon from "@material-ui/icons/ArrowBack";
-import MyTask from "./my-task";
-import CreatedTasks from "./created-tasks";
-import { displaySelection } from "../../action/action-save-date";
-import RecentActivity from "./recent-activity";
+import MyTask from "../my-task/my-task";
+import CreatedTasks from "../created-task/created-tasks";
+import { displaySelection } from "../../../action/action-save-date";
+import RecentActivity from "../recent-activity/recent-activity";
 import DoneOutlineIcon from "@material-ui/icons/DoneOutline";
-import CompletedTasks from "./completed-tasks";
+import CompletedTasks from "../competed-tasks/completed-tasks";
 
 const Menu = ({ onHide, card, cardFull, displaySelection, activData }) => {
   const [selectState, setSelectState] = useState("Menu");
   return (
     <div className="menu">
       <div className="menu-logo">
-        <div className={selectState == "Menu" ? "hidden" : ""}>
+        <div className={selectState == "Menu" ? "hidden" : "arrow-icon-menu"}>
           <div>
             <ArrowBackIcon
               fontSize="small"
@@ -37,7 +37,7 @@ const Menu = ({ onHide, card, cardFull, displaySelection, activData }) => {
           </div>
         </div>
       </div>
-      <div className={selectState == "Menu" ? "" : "hidden"}>
+      <div className={selectState == "Menu" ? "menu-body-block" : "hidden"}>
         <div
           className="menu-item"
           onClick={() => {
@@ -45,7 +45,7 @@ const Menu = ({ onHide, card, cardFull, displaySelection, activData }) => {
           }}
         >
           <div>
-            <DoneOutlineIcon />
+            <DoneOutlineIcon fontSize="small" />
           </div>
           <h1>Completed tasks</h1>
         </div>
@@ -56,7 +56,7 @@ const Menu = ({ onHide, card, cardFull, displaySelection, activData }) => {
           }}
         >
           <div>
-            <AssignmentLateOutlinedIcon />
+            <AssignmentLateOutlinedIcon fontSize="small" />
           </div>
           <h1> Show only accessible tasks</h1>
         </div>
@@ -67,7 +67,7 @@ const Menu = ({ onHide, card, cardFull, displaySelection, activData }) => {
           }}
         >
           <div>
-            <AssignmentOutlinedIcon />
+            <AssignmentOutlinedIcon fontSize="small" />
           </div>
           <h1>Show all tasks</h1>
         </div>
@@ -78,7 +78,7 @@ const Menu = ({ onHide, card, cardFull, displaySelection, activData }) => {
           }}
         >
           <div>
-            <AssignmentTurnedInOutlinedIcon />
+            <AssignmentTurnedInOutlinedIcon fontSize="small" />
           </div>
           <h1> Created tasks </h1>
         </div>
@@ -89,18 +89,18 @@ const Menu = ({ onHide, card, cardFull, displaySelection, activData }) => {
           }}
         >
           <div>
-            <AssignmentIndOutlinedIcon />
+            <AssignmentIndOutlinedIcon fontSize="small" />
           </div>
           <h1>My tasks</h1>
         </div>
         <hr />
         <div className="menu-recent-activity">
           <div>
-            <FormatListBulletedIcon />
+            <FormatListBulletedIcon fontSize="small" />
           </div>
           <h1> Recent Actions</h1>
         </div>
-        <RecentActivity />
+        <RecentActivity fontSize="small" />
       </div>
       <div className={selectState == "About board" ? "" : "hidden"}>
         {/* <MenuAboutBoard />{" "} */}
@@ -111,7 +111,7 @@ const Menu = ({ onHide, card, cardFull, displaySelection, activData }) => {
       <div className={selectState == "My task" ? "" : "hidden"}>
         <MyTask />
       </div>
-      <div className={selectState == "Created tasks" ? "" : "hidden"}>
+      <div className={selectState == "Created tasks" ? "created-tasks-menu" : "hidden"}>
         <CreatedTasks />
       </div>
     </div>

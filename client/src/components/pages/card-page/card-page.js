@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect, useState } from "react";
 import Header from "../../header";
 import { useParams } from "react-router-dom";
 import {
@@ -18,12 +18,13 @@ import CloseIcon from "@material-ui/icons/Close";
 import shortid from "shortid";
 import MenuIcon from "@material-ui/icons/Menu";
 import ModalDescription from "../../modal/modal-description-task/modal-description";
-import Menu from "../../menu/menu";
+import Menu from "../../menu/menu/menu";
 import { availCheck } from "../../hooks/availability-check.hook";
 import dateFormat from "dateformat";
 import CardItem from "./blocks/card-item";
 import ModalAddRole from "../../modal/modal-add-role/modal-add-role";
 import { useHistory } from "react-router-dom";
+import "./card-page.scss";
 
 const CardPage = ({
   saveActivityCard,

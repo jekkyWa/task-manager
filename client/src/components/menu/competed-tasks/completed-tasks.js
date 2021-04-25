@@ -1,8 +1,16 @@
 import React, { useState } from "react";
 import { connect } from "react-redux";
-import { modalShow } from "../../action/action-modal";
-import { saveDataToModal } from "../../action/action-save-date";
+import { modalShow } from "../../../action/action-modal";
+import { saveDataToModal } from "../../../action/action-save-date";
 import { useParams } from "react-router-dom";
+import "./completed-tasks.scss";
+import CodeIcon from "@material-ui/icons/Code";
+import DeveloperModeIcon from "@material-ui/icons/DeveloperMode";
+import PersonalVideoIcon from "@material-ui/icons/PersonalVideo";
+import BusinessIcon from "@material-ui/icons/Business";
+import ColorLensIcon from "@material-ui/icons/ColorLens";
+import MonetizationOnIcon from "@material-ui/icons/MonetizationOn";
+import SupervisedUserCircleIcon from "@material-ui/icons/SupervisedUserCircle";
 
 const CompletedTasks = ({ cardFull, modalShow, saveDataToModal }) => {
   let { name } = useParams();
@@ -35,54 +43,76 @@ const CompletedTasks = ({ cardFull, modalShow, saveDataToModal }) => {
           roleForComplite == "Select" ? "completed-tasks-list" : "hidden"
         }
       >
+        <h1>Choose a role that you want to see the tasks</h1>
         <li
           onClick={() => {
             findCompletedTask("Back-end developer");
           }}
         >
-          Back-end developer
+          <div>
+            <CodeIcon />
+          </div>
+          <h1>Back-end developer</h1>
         </li>
         <li
           onClick={() => {
             findCompletedTask("Front-end developer");
           }}
         >
-          Front-end developer
+          <div>
+            <DeveloperModeIcon />
+          </div>
+          <h1>Front-end developer</h1>
         </li>
         <li
           onClick={() => {
             findCompletedTask("QA");
           }}
         >
-          QA
+          <div>
+            <PersonalVideoIcon />
+          </div>
+          <h1>QA</h1>
         </li>
         <li
           onClick={() => {
             findCompletedTask("Business Analyst");
           }}
         >
-          Business Analyst
+          <div>
+            <BusinessIcon />
+          </div>
+          <h1>Business Analyst</h1>
         </li>
         <li
           onClick={() => {
             findCompletedTask("UX/UI designer");
           }}
         >
-          UX/UI designer
+          <div>
+            <ColorLensIcon />
+          </div>
+          <h1>UX/UI designer</h1>
         </li>
         <li
           onClick={() => {
             findCompletedTask("Marketing specialist");
           }}
         >
-          Marketing specialist
+          <div>
+            <MonetizationOnIcon />
+          </div>
+          <h1>Marketing specialist</h1>
         </li>
         <li
           onClick={() => {
             findCompletedTask("Product manager");
           }}
         >
-          Product manager
+          <div>
+            <SupervisedUserCircleIcon />
+          </div>
+          <h1>Product manager</h1>
         </li>
       </ul>
       <div className={roleForComplite !== "Select" ? "" : "hidden"}>
@@ -92,8 +122,9 @@ const CompletedTasks = ({ cardFull, modalShow, saveDataToModal }) => {
             setRoleForComplite("Select");
           }}
         >
-          Вернуться к выбору ролей
+          Return to the choice of roles
         </p>
+        <h1 className="role-active">{roleForComplite}</h1>
         {dataCompliteTask.map((e, i) => {
           return (
             <div
@@ -109,10 +140,14 @@ const CompletedTasks = ({ cardFull, modalShow, saveDataToModal }) => {
                   name_add: e.name_add,
                 });
                 modalShow(true);
+                console.log(e);
               }}
-              className="task-item"
+              className="task-item-complite"
             >
-              <p className="my-task-item-title">{e.title}</p>
+              <p className="task-item-complite-title">{e.title}</p>
+              <p className="task-item-complite-performed">
+                Performed: {e.nameOfTaker}
+              </p>
             </div>
           );
         })}

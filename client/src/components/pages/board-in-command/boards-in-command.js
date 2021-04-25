@@ -4,7 +4,6 @@ import { useParams, useHistory } from "react-router-dom";
 import Header from "../../header";
 import ModalAddBoard from "../../modal/modal-add-board/modal-add-board";
 import SideBar from "../../sideBar/side-bar";
-import "../pages.scss";
 import "../boards-blocks/boards-main-page.scss";
 import Loading from "../../loading/loading";
 import BoardMarkItem from "../boards-blocks/board-marks-item";

@@ -1,9 +1,10 @@
 import React from "react";
 import { connect } from "react-redux";
+import "./recent-activity.scss";
 
 const RecentActivity = ({ activData }) => {
   return (
-    <p>
+    <div className="recent-activity-body-main">
       {activData.map((e, i) => {
         return (
           <div
@@ -18,11 +19,12 @@ const RecentActivity = ({ activData }) => {
             </div>
             <div className="сommentators-info">
               <p>{e.message}</p>
+              <p className="date-сommentators-info">{e.date}</p>
             </div>
           </div>
         );
       })}
-    </p>
+    </div>
   );
 };
 

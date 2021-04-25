@@ -1,16 +1,17 @@
 import React from "react";
 import { connect } from "react-redux";
-import { Link, useParams } from "react-router-dom";
-import { modalShow } from "../../action/action-modal";
-import { saveDataToModal } from "../../action/action-save-date";
+import { modalShow } from "../../../action/action-modal";
+import { saveDataToModal } from "../../../action/action-save-date";
+import "./my-task.scss";
+import { useParams } from "react-router-dom";
 
-const CreatedTasks = ({ cardFull, email, modalShow, saveDataToModal }) => {
+const MyTask = ({ cardFull, email, modalShow, saveDataToModal }) => {
   let { name } = useParams();
 
   const filterItem = cardFull.cards
     .map((e) => (e = e.card_body))
     .flat()
-    .filter((e) => e.name_add == email);
+    .filter((e) => e.nameOfTaker == email);
 
   const findOtherData = (id) => {
     const findItem = cardFull.cards.filter(
@@ -20,12 +21,9 @@ const CreatedTasks = ({ cardFull, email, modalShow, saveDataToModal }) => {
   };
 
   const label = filterItem.map((e, i) => {
-    const arrRole = e.role.map((element, index) => {
-      return <span key={index}>{element.role + " " + element.level}</span>;
-    });
     return (
       <div
-        className="task-item"
+        className="task-item-my-task"
         key={i}
         onClick={() => {
           findOtherData(e.id_task);
@@ -41,30 +39,31 @@ const CreatedTasks = ({ cardFull, email, modalShow, saveDataToModal }) => {
         }}
       >
         <h2 className="my-task-item-title">{e.title}</h2>
-        <p className="my-task-item-name-add">Role: {arrRole}</p>
+        <p className="my-task-item-name-add">
+          Creator: <span>{e.name_add}</span>
+        </p>
       </div>
     );
   });
-
   if (label.length == 0) {
     return (
       <div className="my-task">
-        <h1>You have not created a single task</h1>
+        <h1>You have not yet taken any tasks</h1>
       </div>
     );
   }
 
   return (
     <div className="my-task">
-      <h1>Created tasks on this board</h1>
+      <h1>Top assignments in this board</h1>
       {label}
     </div>
   );
 };
 
 const mapStateToProps = ({
-  reducerDataIdentification: { email },
   reducerSaveData: { card, cardFull, socket, roleProfileInBoard },
+  reducerDataIdentification: { email },
   loginReducer: { token },
 }) => {
   return { token, card, cardFull, socket, roleProfileInBoard, email };
@@ -81,4 +80,4 @@ const mapDispatchToProps = (dispatch) => {
   };
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(CreatedTasks);
+export default connect(mapStateToProps, mapDispatchToProps)(MyTask);

@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-// Проверка надежности пароля методом Password Strength Meter:
+// Password Reliability Check by Password Strength Meter:
 
 export const useComplexity = () => {
   const [warningMessageReg, setWarningMessageReg] = useState("");
