@@ -1,26 +1,27 @@
 import React, { useState, useEffect } from "react";
 import { Modal } from "react-bootstrap";
-import { modalRoleChange, modalShow } from "../../../../action/action-modal";
+// files
+import "./modal-description.scss";
+import DescriptionBlock from "../description/description";
+import { availCheck } from "../../../hooks/availability-check.hook";
+import CardOfTaker from "../card-of-taker/card-of-taker";
+import Comment from "../comment/comment";
+import CheckList from "../check-list/check-list";
+import Setting from "../setting/setting";
+// redux
+import { modalShow } from "../../../../action/action-modal";
 import {
   saveActivityCard,
   saveFullCard,
   displaySelection,
 } from "../../../../action/action-save-date";
 import { connect } from "react-redux";
+import { recentActivity } from "../../../../action/action-save-date";
+// materail
 import ReorderIcon from "@material-ui/icons/Reorder";
 import FormatListBulletedIcon from "@material-ui/icons/FormatListBulleted";
 import CheckBoxOutlinedIcon from "@material-ui/icons/CheckBoxOutlined";
-import "./modal-description.scss";
-import DescriptionBlock from "../description/description";
-import { availCheck } from "../../../hooks/availability-check.hook";
-import CardOfTaker from "../card-of-taker/card-of-taker";
-import Comment from "../comment/comment";
-import Setting from "../setting/setting";
-import CheckList from "../check-list/check-list";
 import HeaderModalDescription from "../header-modal-desription/header-modal-description";
-import { recentActivity } from "../../../../action/action-save-date";
-
-// -----------------------------------------------------
 
 const ModalDescription = ({
   activData,
