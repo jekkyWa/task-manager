@@ -17,7 +17,7 @@ import AddIcon from "@material-ui/icons/Add";
 import CloseIcon from "@material-ui/icons/Close";
 import shortid from "shortid";
 import MenuIcon from "@material-ui/icons/Menu";
-import ModalDescription from "../../modal/modal-description-task/modal-description";
+import ModalDescription from "../../modal/modal-description-task/modal-description-main/modal-description";
 import Menu from "../../menu/menu/menu";
 import { availCheck } from "../../hooks/availability-check.hook";
 import dateFormat from "dateformat";

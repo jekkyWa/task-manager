@@ -49,6 +49,7 @@ const Comment = ({
         date: dateFormat(now, "dd-mm-yyyy, hh:MM:ss "),
       },
     });
+    setComment("");
   };
 
   useEffect(() => {
@@ -99,6 +100,7 @@ const Comment = ({
             <input
               placeholder="Write a comment ..."
               onChange={onHandlerComment}
+              value={comment}
             />
             <div className="modal-decription-active-add-btn">
               <button onClick={addComment}>Send</button>
@@ -107,6 +109,7 @@ const Comment = ({
                   className="modal-description-close-icon"
                   onClick={() => {
                     setCommentState(false);
+                    setComment("");
                   }}
                 />
               </div>
