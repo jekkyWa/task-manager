@@ -121,6 +121,7 @@ const CardItem = ({
                   card_id: e.card_item_id,
                   board_id: name,
                   name_add: element.name_add,
+                  name_take: element.nameOfTaker,
                   role: element.role
                     .map((elemMap) => {
                       return elemMap.role + "-" + elemMap.level;
@@ -146,6 +147,7 @@ const CardItem = ({
                 card_id: e.card_item_id,
                 board_id: name,
                 name_add: element.name_add,
+                name_take: element.nameOfTaker,
                 role: element.role,
               });
               modalShow(true);

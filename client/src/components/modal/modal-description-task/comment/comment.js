@@ -1,24 +1,24 @@
-import React, { useState, useEffect } from "react";
-import CloseIcon from "@material-ui/icons/Close";
-import { connect } from "react-redux";
-import { recentActivity } from "../../../../action/action-save-date";
+import React, { useState, useEffect, Fragment } from "react";
 import dateFormat from "dateformat";
+// files
+import CommentItem from "./blocks/comment-item";
 import "./comment.scss";
+// material
+import CloseIcon from "@material-ui/icons/Close";
 
 const Comment = ({
   email,
   socket,
   dataToModal,
   roleProfileInBoard,
-  valueDisplay,
   cardFull,
   recentActivity,
   activData,
 }) => {
   const [commentState, setCommentState] = useState(false);
-
   const [comment, setComment] = useState("");
 
+  // Filer Data
   const item = cardFull.cards.filter(
     (e) => e.card_item_id == dataToModal.card_id
   )[0];
@@ -61,46 +61,24 @@ const Comment = ({
     }
   }, [socket, activData]);
 
-  const label = commentToPage.comment.map((e, i) => {
-    return (
-      <div
-        onClick={() => {
-          console.log(item);
-        }}
-        key={i}
-        className="comment-item"
-      >
-        <div className="icon-profile-comment">
-          <p> {e.сommentatorsEmail[0]}</p>
-        </div>
-        <div className="сommentators-info">
-          <div className="сommentators-info-item">
-            <p>{e.сommentatorsEmail}</p>
-          </div>
-          <div className="comment-text">
-            <p>{e.text_comment}</p>
-          </div>
-          <div className="date-comment">
-            <p>{e.date}</p>
-          </div>
-        </div>
-      </div>
-    );
-  });
-
+  // Role check for interaction with comments
   const statusProfile = (status) => {
     return status == "Senior" ? 3 : status == "Middle" ? 2 : 1;
   };
+
+  // If checking is passed, it is possible to post a comment
   if (
+    // We are mapping the required roles and user roles.
     (commentToPage.role.findIndex((e) => e.role !== roleProfileInBoard.role) ==
       -1 &&
+      // Checking Level
       commentToPage.role.findIndex(
         (e) => statusProfile(e.level) <= statusProfile(roleProfileInBoard.level)
       ) !== -1) ||
     roleProfileInBoard.role == "Product manager"
   ) {
     return (
-      <React.Fragment>
+      <Fragment>
         <div className="modal-description-comment">
           <div className="icon-profile-comment">
             <p>{email[0].toUpperCase()}</p>
@@ -135,32 +113,21 @@ const Comment = ({
             </div>
           </div>
         </div>
-        <div className="comment-main-block">{label}</div>
-      </React.Fragment>
+        <div className="comment-main-block">
+          <CommentItem commentToPage={commentToPage} />
+        </div>
+      </Fragment>
     );
   }
   return (
-    <React.Fragment>
+    <Fragment>
       <div className="modal-description-comment">
         <h1>You can not leave comments</h1>
       </div>
-      <div className="comment-main-block">{label}</div>
-    </React.Fragment>
+      <CommentItem commentToPage={commentToPage} />
+      <div className="comment-main-block"></div>
+    </Fragment>
   );
 };
-const mapStateToProps = ({
-  loginReducer: { token },
-  reducerSaveData: { roleProfileInBoard, valueDisplay, activData, cardFull },
-}) => {
-  return { token, roleProfileInBoard, valueDisplay, activData, cardFull };
-};
 
-const mapDispatchToProps = (dispatch) => {
-  return {
-    recentActivity: (activData) => {
-      dispatch(recentActivity(activData));
-    },
-  };
-};
-
-export default connect(mapStateToProps, mapDispatchToProps)(Comment);
+export default Comment;

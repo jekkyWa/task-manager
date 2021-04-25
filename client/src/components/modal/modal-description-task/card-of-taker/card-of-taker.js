@@ -1,7 +1,6 @@
 import React, { useEffect } from "react";
-import { connect } from "react-redux";
 import dateFormat from "dateformat";
-import { recentActivity } from "../../../../action/action-save-date";
+// files
 import "./card-of-taker.scss";
 
 const CardOfTaker = ({
@@ -19,7 +18,6 @@ const CardOfTaker = ({
   const name = item.card_body.filter((e) => dataToModal.id == e.id_task)[0];
 
   // Scroll to the user for the user and data transfer for activity
-
   const addNameOfTaker = () => {
     let now = new Date();
     socket.emit("addUserToDo", {
@@ -58,29 +56,19 @@ const CardOfTaker = ({
   useEffect(() => {
     if (socket) {
       socket.on("taskTake", (value) => {
-        console.log(value);
         recentActivity(value);
       });
       return () => socket.off("taskTake");
     }
   }, [socket, activData]);
 
+  // Check status for further display
   const statusProfile = (status) => {
     return status == "Senior" ? 3 : status == "Middle" ? 2 : 1;
   };
-  if (name.name_add == email) {
-    return (
-      <div className="panel-of-control-task">
-        <h1>You have added this task.</h1>
-      </div>
-    );
-  } else if (name.state && name.nameOfTaker == email) {
-    return (
-      <div className="panel-of-control-task">
-        <h1>You have completed the task.</h1>
-      </div>
-    );
-  } else if (name.state && name.nameOfTaker !== email) {
+
+  // If another user took the task and fulfilled it
+  if (name.state && name.nameOfTaker !== email) {
     return (
       <div className="panel-of-control-task">
         <h1>
@@ -88,7 +76,25 @@ const CardOfTaker = ({
         </h1>
       </div>
     );
-  } else if (name.nameOfTaker == email) {
+  }
+  // If the user added this task
+  if (name.name_add == email) {
+    return (
+      <div className="panel-of-control-task">
+        <h1>You have added this task.</h1>
+      </div>
+    );
+  }
+  // If the user took this task and executed it
+  if (name.state && name.nameOfTaker == email) {
+    return (
+      <div className="panel-of-control-task">
+        <h1>You have completed the task.</h1>
+      </div>
+    );
+  }
+  // If the user just took the task
+  if (name.nameOfTaker == email) {
     return (
       <div className="panel-of-control-task">
         <h1>
@@ -115,7 +121,9 @@ const CardOfTaker = ({
         </div>
       </div>
     );
-  } else if (name.nameOfTaker.length > 0) {
+  }
+  // If someone just took the task
+  if (name.nameOfTaker.length > 0) {
     return (
       <div className="panel-of-control-task">
         <h1>
@@ -123,7 +131,9 @@ const CardOfTaker = ({
         </h1>
       </div>
     );
-  } else if (
+  }
+  // Checking the ability to take a task
+  if (
     !(
       name.role.findIndex((e) => e.role !== roleProfileInBoard.role) == -1 &&
       name.role.findIndex(
@@ -137,29 +147,13 @@ const CardOfTaker = ({
         <h1>You do not have the right to take this task.</h1>
       </div>
     );
-  } else {
-    return (
-      <div className="take-task-btn">
-        <h1>As soon as you click the button, you will take this task.</h1>
-        <button onClick={addNameOfTaker}>Take up execution</button>
-      </div>
-    );
   }
+  return (
+    <div className="take-task-btn">
+      <h1>As soon as you click the button, you will take this task.</h1>
+      <button onClick={addNameOfTaker}>Take up execution</button>
+    </div>
+  );
 };
 
-const mapStateToProps = ({
-  loginReducer: { token },
-  reducerSaveData: { roleProfileInBoard, cardFull, activData },
-}) => {
-  return { token, roleProfileInBoard, cardFull, activData };
-};
-
-const mapDispatchToProps = (dispatch) => {
-  return {
-    recentActivity: (activData) => {
-      dispatch(recentActivity(activData));
-    },
-  };
-};
-
-export default connect(mapStateToProps, mapDispatchToProps)(CardOfTaker);
+export default CardOfTaker;

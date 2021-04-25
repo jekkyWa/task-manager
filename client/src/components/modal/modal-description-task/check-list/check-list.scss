@@ -70,6 +70,15 @@
   @extend %btnModalDescription;
 }
 
+.radio-block-watch {
+  h3 {
+    cursor: default !important;
+  }
+  .radio-item-list {
+    cursor: default !important;
+  }
+}
+
 .modal-description-btn-save-check-list {
   @extend %styleBtnSave;
   width: 200px;

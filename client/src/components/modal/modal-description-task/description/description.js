@@ -1,15 +1,14 @@
 import React, { useState, useEffect } from "react";
-import { connect } from "react-redux";
-import CloseIcon from "@material-ui/icons/Close";
 import dateFormat from "dateformat";
-import { recentActivity } from "../../../../action/action-save-date";
+// files
 import "./description.scss";
+// material
+import CloseIcon from "@material-ui/icons/Close";
 
 const DescriptionBlock = ({
   dataToModal,
   email,
   socket,
-  valueDisplay,
   recentActivity,
   activData,
   cardFull,
@@ -17,6 +16,7 @@ const DescriptionBlock = ({
   const [descriptionTask, setDescriptionTask] = useState("");
   const [descriptionState, setDescriptionState] = useState(false);
 
+  // Filter required data
   const item = cardFull.cards.filter(
     (e) => e.card_item_id == dataToModal.card_id
   )[0];
@@ -43,9 +43,6 @@ const DescriptionBlock = ({
         date: dateFormat(now, "dd-mm-yyyy, hh:MM:ss "),
       },
     });
-    setTimeout(() => {
-      setDescriptionState(false);
-    }, 100);
   };
 
   useEffect(() => {
@@ -53,15 +50,15 @@ const DescriptionBlock = ({
     if (socket) {
       socket.on("descriptionTaskActivity", (value) => {
         recentActivity(value);
+        setDescriptionState(false);
       });
       // After the data come to stop further sending
       return () => socket.off("descriptionTaskActivity");
     }
   }, [socket, activData]);
 
-  // We find the desired description
-
-  if (description.description && dataToModal.name_add == email) {
+  // If the user has created a task
+  if (dataToModal.name_add == email) {
     return (
       <div>
         <React.Fragment>
@@ -71,14 +68,24 @@ const DescriptionBlock = ({
             }
             onClick={() => {
               setDescriptionState(true);
+              setDescriptionTask(description.description);
             }}
           >
-            <p>{description.description}</p>
+            {/* If the description disables the default value */}
+            <p>
+              {description.description
+                ? description.description
+                : "Add a more detailed description ..."}
+            </p>
           </div>
+          {/* Display form to enter a description  */}
           <div
             className={descriptionState ? "modal-description-input" : "hidden"}
           >
-            <textarea onChange={onChangeDescriptionTask} />
+            <textarea
+              value={descriptionTask}
+              onChange={onChangeDescriptionTask}
+            />
             <button
               className="modal-description-btn-save"
               onClick={addDescriptionToTask}
@@ -89,75 +96,28 @@ const DescriptionBlock = ({
               className="modal-description-close-icon"
               onClick={() => {
                 setDescriptionState(false);
+                setDescriptionTask(description.description);
               }}
             />
           </div>
         </React.Fragment>
       </div>
     );
-  } else if (description.description) {
+  }
+  // If the user is not a job creator, but the description exists
+  if (description.description) {
     return (
       <p className="text-description-for-another-users">
         {description.description}
       </p>
     );
-  } else if (dataToModal.name_add == email) {
-    return (
-      <React.Fragment>
-        <div
-          className={
-            !descriptionState ? "modal-description-select-input" : "hidden"
-          }
-          onClick={() => {
-            setDescriptionState(true);
-          }}
-        >
-          <p>Add a more detailed description ...</p>
-        </div>
-        <div
-          className={descriptionState ? "modal-description-input" : "hidden"}
-        >
-          <textarea
-            placeholder="Add a more detailed description ..."
-            onChange={onChangeDescriptionTask}
-          />
-          <button
-            className="modal-description-btn-save"
-            onClick={addDescriptionToTask}
-          >
-            Save
-          </button>
-          <CloseIcon
-            className="modal-description-close-icon"
-            onClick={() => {
-              setDescriptionState(false);
-            }}
-          />
-        </div>
-      </React.Fragment>
-    );
-  } else {
-    return (
-      <p className="text-description-for-another-users">
-        The creator of the task has not added any description.
-      </p>
-    );
   }
+  // Default value
+  return (
+    <p className="text-description-for-another-users">
+      The creator of the task has not added any description.
+    </p>
+  );
 };
 
-const mapStateToProps = ({
-  loginReducer: { token },
-  reducerSaveData: { card, valueDisplay, activData, cardFull },
-}) => {
-  return { token, card, valueDisplay, activData, cardFull };
-};
-
-const mapDispatchToProps = (dispatch) => {
-  return {
-    recentActivity: (activData) => {
-      dispatch(recentActivity(activData));
-    },
-  };
-};
-
-export default connect(mapStateToProps, mapDispatchToProps)(DescriptionBlock);
+export default DescriptionBlock;

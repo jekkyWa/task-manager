@@ -1,8 +1,6 @@
 import React from "react";
 // files
 import "./header-modal-description.scss";
-// redux
-import { connect } from "react-redux";
 // material
 import ListAltIcon from "@material-ui/icons/ListAlt";
 
@@ -51,11 +49,4 @@ const HeaderModalDescription = ({ dataToModal, cardFull }) => {
   );
 };
 
-const mapStateToProps = ({
-  loginReducer: { token },
-  reducerSaveData: { roleProfileInBoard, cardFull, activData },
-}) => {
-  return { token, roleProfileInBoard, cardFull, activData };
-};
-
-export default connect(mapStateToProps, null)(HeaderModalDescription);
+export default HeaderModalDescription;

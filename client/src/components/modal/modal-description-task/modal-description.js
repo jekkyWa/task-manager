@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Modal } from "react-bootstrap";
-import { modalShow } from "../../../action/action-modal";
+import { modalRoleChange, modalShow } from "../../../action/action-modal";
 import {
   saveActivityCard,
   saveFullCard,
@@ -18,10 +18,12 @@ import Comment from "./comment/comment";
 import Setting from "./setting/setting";
 import CheckList from "./check-list/check-list";
 import HeaderModalDescription from "./header-modal-desription/header-modal-description";
+import { recentActivity } from "../../../action/action-save-date";
 
 // -----------------------------------------------------
 
 const ModalDescription = ({
+  activData,
   show,
   dataToModal,
   email,
@@ -34,6 +36,7 @@ const ModalDescription = ({
   valueDisplay,
   displaySelection,
   modalShow,
+  recentActivity,
 }) => {
   const [idDel, setIdDel] = useState("");
 
@@ -524,8 +527,7 @@ const ModalDescription = ({
           <div className="modal-description-body">
             <HeaderModalDescription
               dataToModal={dataToModal}
-              email={email}
-              socket={socket}
+              cardFull={cardFull}
             />
             <div className="modal-description-add-description">
               <div>
@@ -537,11 +539,15 @@ const ModalDescription = ({
               dataToModal={dataToModal}
               email={email}
               socket={socket}
+              recentActivity={recentActivity}
+              activData={activData}
+              cardFull={cardFull}
             />
             <CheckList
               dataToModal={dataToModal}
-              email={email}
               socket={socket}
+              cardFull={cardFull}
+              email={email}
             />
             <div>
               <div className="take-task">
@@ -554,6 +560,10 @@ const ModalDescription = ({
                 dataToModal={dataToModal}
                 email={email}
                 socket={socket}
+                roleProfileInBoard={roleProfileInBoard}
+                cardFull={cardFull}
+                recentActivity={recentActivity}
+                activData={activData}
               />
             </div>
             {/* Setting block */}
@@ -562,6 +572,9 @@ const ModalDescription = ({
                 dataToModal={dataToModal}
                 email={email}
                 socket={socket}
+                modalShow={modalShow}
+                cardFull={cardFull}
+                roleProfileInBoard={roleProfileInBoard}
               />
             </div>
             <div className="modal-description-actions-block">
@@ -571,7 +584,15 @@ const ModalDescription = ({
 
               <h2>Comments</h2>
             </div>
-            <Comment dataToModal={dataToModal} email={email} socket={socket} />
+            <Comment
+              dataToModal={dataToModal}
+              email={email}
+              socket={socket}
+              roleProfileInBoard={roleProfileInBoard}
+              cardFull={cardFull}
+              recentActivity={recentActivity}
+              activData={activData}
+            />
             <div></div>
           </div>
         </Modal.Body>
@@ -591,6 +612,7 @@ const mapStateToProps = ({
     roleProfileInBoard,
     valueDisplay,
     dataToModal,
+    activData,
   },
 }) => {
   return {
@@ -603,6 +625,7 @@ const mapStateToProps = ({
     roleProfileInBoard,
     cardFull,
     valueDisplay,
+    activData,
     dataToModal,
   };
 };
@@ -620,6 +643,9 @@ const mapDispatchToProps = (dispatch) => {
     },
     saveActivityCard: (card) => {
       dispatch(saveActivityCard(card));
+    },
+    recentActivity: (activData) => {
+      dispatch(recentActivity(activData));
     },
   };
 };
