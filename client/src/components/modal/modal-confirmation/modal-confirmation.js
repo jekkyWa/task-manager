@@ -1,6 +1,8 @@
-import React, { useState } from "react";
+import React from "react";
 import { Modal } from "react-bootstrap";
+// files
 import "./modal-confirmation.scss";
+// redux
 import { connect } from "react-redux";
 
 const ModalConfirmation = ({ show, onHide, dataForDelete, socket }) => {
@@ -10,7 +12,7 @@ const ModalConfirmation = ({ show, onHide, dataForDelete, socket }) => {
       email: dataForDelete.email,
     });
     // Close a window
-    onHide()
+    onHide();
   };
 
   return (
@@ -38,9 +40,5 @@ const ModalConfirmation = ({ show, onHide, dataForDelete, socket }) => {
 const mapStateToProps = ({ reducerSaveData: { socket } }) => {
   return { socket };
 };
-
-// const mapDispatchToProps = (dispatch) => {
-
-// };
 
 export default connect(mapStateToProps, null)(ModalConfirmation);

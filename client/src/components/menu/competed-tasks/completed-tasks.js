@@ -1,9 +1,8 @@
 import React, { useState } from "react";
-import { connect } from "react-redux";
-import { modalShow } from "../../../action/action-modal";
-import { saveDataToModal } from "../../../action/action-save-date";
 import { useParams } from "react-router-dom";
+// files
 import "./completed-tasks.scss";
+// material
 import CodeIcon from "@material-ui/icons/Code";
 import DeveloperModeIcon from "@material-ui/icons/DeveloperMode";
 import PersonalVideoIcon from "@material-ui/icons/PersonalVideo";
@@ -11,6 +10,8 @@ import BusinessIcon from "@material-ui/icons/Business";
 import ColorLensIcon from "@material-ui/icons/ColorLens";
 import MonetizationOnIcon from "@material-ui/icons/MonetizationOn";
 import SupervisedUserCircleIcon from "@material-ui/icons/SupervisedUserCircle";
+import CompletedTasksMenuItem from "./blocks/completed-tasks-menu-item";
+import CompletedTasksItem from "./blocks/completed-tasks-item";
 
 const CompletedTasks = ({ cardFull, modalShow, saveDataToModal }) => {
   let { name } = useParams();
@@ -44,76 +45,41 @@ const CompletedTasks = ({ cardFull, modalShow, saveDataToModal }) => {
         }
       >
         <h1>Choose a role that you want to see the tasks</h1>
-        <li
-          onClick={() => {
-            findCompletedTask("Back-end developer");
-          }}
-        >
-          <div>
-            <CodeIcon />
-          </div>
-          <h1>Back-end developer</h1>
-        </li>
-        <li
-          onClick={() => {
-            findCompletedTask("Front-end developer");
-          }}
-        >
-          <div>
-            <DeveloperModeIcon />
-          </div>
-          <h1>Front-end developer</h1>
-        </li>
-        <li
-          onClick={() => {
-            findCompletedTask("QA");
-          }}
-        >
-          <div>
-            <PersonalVideoIcon />
-          </div>
-          <h1>QA</h1>
-        </li>
-        <li
-          onClick={() => {
-            findCompletedTask("Business Analyst");
-          }}
-        >
-          <div>
-            <BusinessIcon />
-          </div>
-          <h1>Business Analyst</h1>
-        </li>
-        <li
-          onClick={() => {
-            findCompletedTask("UX/UI designer");
-          }}
-        >
-          <div>
-            <ColorLensIcon />
-          </div>
-          <h1>UX/UI designer</h1>
-        </li>
-        <li
-          onClick={() => {
-            findCompletedTask("Marketing specialist");
-          }}
-        >
-          <div>
-            <MonetizationOnIcon />
-          </div>
-          <h1>Marketing specialist</h1>
-        </li>
-        <li
-          onClick={() => {
-            findCompletedTask("Product manager");
-          }}
-        >
-          <div>
-            <SupervisedUserCircleIcon />
-          </div>
-          <h1>Product manager</h1>
-        </li>
+        <CompletedTasksMenuItem
+          value="Back-end developer"
+          component={<CodeIcon />}
+          findCompletedTask={findCompletedTask}
+        />
+        <CompletedTasksMenuItem
+          value="Front-end developer"
+          component={<DeveloperModeIcon />}
+          findCompletedTask={findCompletedTask}
+        />
+        <CompletedTasksMenuItem
+          value="QA"
+          component={<PersonalVideoIcon />}
+          findCompletedTask={findCompletedTask}
+        />
+        <CompletedTasksMenuItem
+          value="Business Analyst"
+          component={<BusinessIcon />}
+          findCompletedTask={findCompletedTask}
+        />
+        <CompletedTasksMenuItem
+          value="UX/UI designer"
+          component={<ColorLensIcon />}
+          findCompletedTask={findCompletedTask}
+        />
+        <CompletedTasksMenuItem
+          value="Marketing specialist"
+          component={<MonetizationOnIcon />}
+          findCompletedTask={findCompletedTask}
+        />
+        <CompletedTasksMenuItem
+          value="Product manager"
+          component={<SupervisedUserCircleIcon />}
+          findCompletedTask={findCompletedTask}
+        />
       </ul>
       <div className={roleForComplite !== "Select" ? "" : "hidden"}>
         <p
@@ -125,52 +91,16 @@ const CompletedTasks = ({ cardFull, modalShow, saveDataToModal }) => {
           Return to the choice of roles
         </p>
         <h1 className="role-active">{roleForComplite}</h1>
-        {dataCompliteTask.map((e, i) => {
-          return (
-            <div
-              key={i}
-              onClick={() => {
-                findOtherData(e.id_task);
-                saveDataToModal({
-                  name: e.title,
-                  column: findOtherData(e.id_task)[0].card_name,
-                  id: e.id_task,
-                  card_id: findOtherData(e.id_task)[0].card_item_id,
-                  board_id: name,
-                  name_add: e.name_add,
-                });
-                modalShow(true);
-                console.log(e);
-              }}
-              className="task-item-complite"
-            >
-              <p className="task-item-complite-title">{e.title}</p>
-              <p className="task-item-complite-performed">
-                Performed: {e.nameOfTaker}
-              </p>
-            </div>
-          );
-        })}
+        <CompletedTasksItem
+          dataCompliteTask={dataCompliteTask}
+          findOtherData={findOtherData}
+          saveDataToModal={saveDataToModal}
+          modalShow={modalShow}
+          name={name}
+        />
       </div>
     </div>
   );
 };
 
-const mapStateToProps = ({ reducerSaveData: { cardFull } }) => {
-  return {
-    cardFull,
-  };
-};
-
-const mapDispatchToProps = (dispatch) => {
-  return {
-    saveDataToModal: (dataToModal) => {
-      dispatch(saveDataToModal(dataToModal));
-    },
-    modalShow: (show) => {
-      dispatch(modalShow(show));
-    },
-  };
-};
-
-export default connect(mapStateToProps, mapDispatchToProps)(CompletedTasks);
+export default CompletedTasks;

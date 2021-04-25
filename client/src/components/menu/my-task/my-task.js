@@ -1,18 +1,18 @@
 import React from "react";
-import { connect } from "react-redux";
-import { modalShow } from "../../../action/action-modal";
-import { saveDataToModal } from "../../../action/action-save-date";
-import "./my-task.scss";
 import { useParams } from "react-router-dom";
+// files
+import "./my-task.scss";
 
 const MyTask = ({ cardFull, email, modalShow, saveDataToModal }) => {
   let { name } = useParams();
 
+  // Data filter required for display
   const filterItem = cardFull.cards
     .map((e) => (e = e.card_body))
     .flat()
     .filter((e) => e.nameOfTaker == email);
 
+  // Search for data required for saving
   const findOtherData = (id) => {
     const findItem = cardFull.cards.filter(
       (e) => e.card_body.findIndex((element) => element.id_task == id) !== -1
@@ -61,23 +61,4 @@ const MyTask = ({ cardFull, email, modalShow, saveDataToModal }) => {
   );
 };
 
-const mapStateToProps = ({
-  reducerSaveData: { card, cardFull, socket, roleProfileInBoard },
-  reducerDataIdentification: { email },
-  loginReducer: { token },
-}) => {
-  return { token, card, cardFull, socket, roleProfileInBoard, email };
-};
-
-const mapDispatchToProps = (dispatch) => {
-  return {
-    saveDataToModal: (dataToModal) => {
-      dispatch(saveDataToModal(dataToModal));
-    },
-    modalShow: (show) => {
-      dispatch(modalShow(show));
-    },
-  };
-};
-
-export default connect(mapStateToProps, mapDispatchToProps)(MyTask);
+export default MyTask;

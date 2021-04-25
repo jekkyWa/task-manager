@@ -1,18 +1,18 @@
 import React from "react";
-import { connect } from "react-redux";
-import { Link, useParams } from "react-router-dom";
-import { modalShow } from "../../../action/action-modal";
-import { saveDataToModal } from "../../../action/action-save-date";
-import "./created-tasks.scss"
+import { useParams } from "react-router-dom";
+// files
+import "./created-tasks.scss";
 
 const CreatedTasks = ({ cardFull, email, modalShow, saveDataToModal }) => {
   let { name } = useParams();
 
+  // Data filter required for display
   const filterItem = cardFull.cards
     .map((e) => (e = e.card_body))
     .flat()
     .filter((e) => e.name_add == email);
 
+  // Search for data required for saving
   const findOtherData = (id) => {
     const findItem = cardFull.cards.filter(
       (e) => e.card_body.findIndex((element) => element.id_task == id) !== -1
@@ -29,7 +29,6 @@ const CreatedTasks = ({ cardFull, email, modalShow, saveDataToModal }) => {
         className="task-item-created-menu"
         key={i}
         onClick={() => {
-          findOtherData(e.id_task);
           saveDataToModal({
             name: e.title,
             column: findOtherData(e.id_task)[0].card_name,
@@ -63,23 +62,4 @@ const CreatedTasks = ({ cardFull, email, modalShow, saveDataToModal }) => {
   );
 };
 
-const mapStateToProps = ({
-  reducerDataIdentification: { email },
-  reducerSaveData: { card, cardFull, socket, roleProfileInBoard },
-  loginReducer: { token },
-}) => {
-  return { token, card, cardFull, socket, roleProfileInBoard, email };
-};
-
-const mapDispatchToProps = (dispatch) => {
-  return {
-    saveDataToModal: (dataToModal) => {
-      dispatch(saveDataToModal(dataToModal));
-    },
-    modalShow: (show) => {
-      dispatch(modalShow(show));
-    },
-  };
-};
-
-export default connect(mapStateToProps, mapDispatchToProps)(CreatedTasks);
+export default CreatedTasks;

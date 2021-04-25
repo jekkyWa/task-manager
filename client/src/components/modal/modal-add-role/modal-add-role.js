@@ -85,6 +85,7 @@ const ModalAddRole = ({
           <h1>List participants in role-level format separated by commas</h1>
           <input
             placeholder="Enter the data in the Role-Level, Role-Level format or select the right roles below."
+            // We remove the extra space at the beginning
             value={roleHandler.replace(/^ +/gm, "")}
             onChange={inputRoleHandler}
           />
