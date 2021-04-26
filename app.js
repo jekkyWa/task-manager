@@ -3,46 +3,56 @@ const config = require("config");
 const mongoose = require("mongoose");
 const cors = require("cors");
 // join
-const joinNotification = require("./socket/join/join-notifications");
-const joinMainPageBoard = require("./socket/join/join-main-page-board");
-const joinBoardsRoom = require("./socket/join/join-boards-room");
-const joinParticipants = require("./socket/join/join-participants");
-const joinImportantEvents = require("./socket/join/join-important-events");
-const joinCard = require("./socket/join/join-card");
+const {
+  joinNotification,
+  joinMainPageBoard,
+  joinBoardsRoom,
+  joinParticipants,
+  joinImportantEvents,
+  joinCard,
+} = require("./socket/join");
 // leave
-const leaveImportantEvents = require("./socket/leave/leave-important-events");
-const leaveBoard = require("./socket/leave/leave-board");
-const leaveCard = require("./socket/leave/leave-card");
-const leaveParticipants = require("./socket/leave/leave-participants");
+const {
+  leaveImportantEvents,
+  leaveBoard,
+  leaveCard,
+  leaveParticipants,
+} = require("./socket/leave");
 // command
-const exitCommand = require("./socket/command/exit-command");
-const deleteCommand = require("./socket/command/delete-command");
+const { exitCommand, deleteCommand } = require("./socket/command");
 // participiants
-const addAdditionalUser = require("./socket/participants/add-additional-user");
-const deleteUser = require("./socket/participants/delete-user");
-const updateLevelInCommand = require("./socket/participants/update-level-in-command");
-const updateRoleInCommand = require("./socket/participants/update-role-in-command");
+const {
+  addAdditionalUser,
+  deleteUser,
+  updateLevelInCommand,
+  updateRoleInCommand,
+} = require("./socket/participants");
 // cards
-const deleteCheckListItem = require("./socket/cards/delete-check-list-item");
-const changeStatusListItem = require("./socket/cards/change-status-list-item");
-const addCheckListItem = require("./socket/cards/add-check-list-item");
-const addCheckList = require("./socket/cards/add-check-list");
-const changeRole = require("./socket/cards/change-role");
-const rename = require("./socket/cards/rename");
-const deleteTask = require("./socket/cards/delete-task");
-const completedTask = require("./socket/cards/completed-task");
-const refuseAssignment = require("./socket/cards/refuse-assignment");
-const addComment = require("./socket/cards/add-comment");
-const addUserToDo = require("./socket/cards/add-user-to-do");
-const addDescriptionToTask = require("./socket/cards/add-description-to-task");
-const addTask = require("./socket/cards/add-task");
-const addCard = require("./socket/cards/add-card");
+const {
+  deleteCheckListItem,
+  changeStatusListItem,
+  addCheckListItem,
+  addCheckList,
+  changeRole,
+  rename,
+  deleteTask,
+  completedTask,
+  refuseAssignment,
+  addComment,
+  addUserToDo,
+  addDescriptionToTask,
+  addTask,
+  addCard,
+} = require("./socket/cards");
 // board
-const board = require("./socket/board/board");
+const { board } = require("./socket/board");
 // notifications
-const acceptOffer = require("./socket/notifications/accept-offer");
-const refuseOffer = require("./socket/notifications/refuse-offer");
-const sendNotification = require("./socket/notifications/send-notifications");
+const {
+  acceptOffer,
+  refuseOffer,
+  sendNotification,
+} = require("./socket/notifications");
+
 // Key-meaning (email - socket)
 let _users = {};
 
