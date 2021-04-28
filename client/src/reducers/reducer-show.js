@@ -2,8 +2,8 @@ const showReducer = (state, action) => {
   if (state === undefined) {
     return {
       showUser: false,
-      showSearch: false,
       showNotification: false,
+      showMenu: false,
     };
   }
   switch (action.type) {
@@ -19,10 +19,10 @@ const showReducer = (state, action) => {
         showUser: action.showUser,
       };
     }
-    case "SHOW_SEARCH_BLOCK": {
+    case "SHOW_MENU_FUNC": {
       return {
         ...state.showReducer,
-        showSearch: action.showSearch,
+        showMenu: action.showMenu,
       };
     }
     default:

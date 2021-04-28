@@ -4,6 +4,7 @@ const reducerModal = (state, action) => {
       show: false,
       roleShow: false,
       changeRole: false,
+      modalRoleData: [],
     };
   }
   switch (action.type) {
@@ -21,6 +22,11 @@ const reducerModal = (state, action) => {
       return {
         ...state.reducerModal,
         changeRole: action.changeRole,
+      };
+    case "ROLE_HANDLER":
+      return {
+        ...state.reducerModal,
+        modalRoleData: action.modalRoleData,
       };
     default:
       return state.reducerModal;

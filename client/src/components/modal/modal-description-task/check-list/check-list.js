@@ -66,7 +66,11 @@ const CheckList = ({ cardFull, dataToModal, socket, email }) => {
             </div>
             <h2>Check letter</h2>
           </div>
-          <div className={name_take == email ? "check-list-two" : "hidden"}>
+          <div
+            className={
+              checkList.nameOfTaker == email ? "check-list-two" : "hidden"
+            }
+          >
             <button
               onClick={() => {
                 deleteList(false);
@@ -107,7 +111,6 @@ const CheckList = ({ cardFull, dataToModal, socket, email }) => {
         </div>
         <RadioItem
           checkList={checkList}
-          name_take={name_take}
           email={email}
           id_board={id_board}
           id_card={id_card}
@@ -119,7 +122,7 @@ const CheckList = ({ cardFull, dataToModal, socket, email }) => {
             setAddItemCheckListState(true);
           }}
           className={
-            !addItemCheckListState && name_take == email
+            !addItemCheckListState && checkList.nameOfTaker == email
               ? "add-check-list-item-btn"
               : "hidden"
           }

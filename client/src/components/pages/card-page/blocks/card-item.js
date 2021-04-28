@@ -4,14 +4,18 @@ import shortid from "shortid";
 import dateFormat from "dateformat";
 // files
 import "../card-page.scss";
+import WarningTooltipCustom from "./warningTooltipCustom";
 // redux
-import { modalShow, modalRoleShow } from "../../../../action/action-modal";
+import {
+  modalShow,
+  modalRoleShow,
+  roleHandler,
+} from "../../../../action/action-modal";
 import {
   saveDataToModal,
   roleForNewTask,
 } from "../../../../action/action-save-date";
 import { connect } from "react-redux";
-
 // material
 import MoreHorizIcon from "@material-ui/icons/MoreHoriz";
 import CloseIcon from "@material-ui/icons/Close";
@@ -19,6 +23,7 @@ import AddIcon from "@material-ui/icons/Add";
 import ChatBubbleOutlineOutlinedIcon from "@material-ui/icons/ChatBubbleOutlineOutlined";
 import CheckCircleOutlineOutlinedIcon from "@material-ui/icons/CheckCircleOutlineOutlined";
 import DescriptionOutlinedIcon from "@material-ui/icons/DescriptionOutlined";
+import ListAltIcon from "@material-ui/icons/ListAlt";
 
 const CardItem = ({
   socket,
@@ -30,12 +35,26 @@ const CardItem = ({
   saveDataToModal,
   roleForNewTask,
   modalRoleShow,
+  showMenuFunc,
+  showNotifications,
+  showUserBlock,
+  setStateList,
+  setArrInput,
+  arrInput,
+  roleHandler,
 }) => {
   let { name } = useParams();
-  const [arrInput, setArrInput] = useState("");
   const [handlerTitleCard, setHandlerTitleCard] = useState("");
 
   const { cards } = valueDisplay.valueDisp;
+
+  // Close all unnecessary activity on the page
+  const closeAllWindows = () => {
+    setStateList(false);
+    showNotifications(false);
+    showUserBlock(false);
+    showMenuFunc(false);
+  };
 
   const label = cards.map((e) => {
     const card_body_id = shortid.generate();
@@ -45,6 +64,8 @@ const CardItem = ({
       if (handlerTitleCard.length == 0) {
         return null;
       }
+      roleHandler([]);
+      setHandlerTitleCard("");
       let now = new Date();
       let active = {
         card_item_id: e.card_item_id,
@@ -64,7 +85,7 @@ const CardItem = ({
       socket.emit("addTask", {
         data: active,
         dataActiv: {
-          message: `User ${email} added a task "${value.title}" in a card "${e.card_name}"`,
+          message: `User ${email} added a task "${value}" in a card "${e.card_name}"`,
           email,
           date: dateFormat(now, "dd-mm-yyyy, hh:MM:ss "),
         },
@@ -99,6 +120,11 @@ const CardItem = ({
       const statusProfile = (status) => {
         return status == "Senior" ? 3 : status == "Middle" ? 2 : 1;
       };
+      // Finished leaf subds
+      const compliteListItem = element.check_letter.list.filter((e) => e.status)
+        .length;
+      // All created subtasks
+      const fullCountListItem = element.check_letter.list.length;
       if (!element.state) {
         if (
           !(
@@ -109,14 +135,15 @@ const CardItem = ({
                 statusProfile(e.level) <=
                 statusProfile(roleProfileInBoard.level)
             ) !== -1
-          ) ||
-          roleProfileInBoard.role == "Product manager"
+          ) &&
+          roleProfileInBoard.role !== "Product manager"
         ) {
           return (
             <div
               className="task-item task-item-for-all"
               key={i}
               onClick={() => {
+                closeAllWindows();
                 modalShow(true);
                 saveDataToModal({
                   name: element.title,
@@ -155,6 +182,7 @@ const CardItem = ({
                 role: element.role,
               });
               modalShow(true);
+              closeAllWindows();
             }}
           >
             <p>Title: {element.title}</p>
@@ -168,6 +196,19 @@ const CardItem = ({
               </div>
               <div className={element.description ? "" : "hidden"}>
                 <DescriptionOutlinedIcon
+                  className="icon-card-item-material"
+                  fontSize="small"
+                />
+              </div>
+              <div
+                className={
+                  element.check_letter.availability ? "status-list" : "hidden"
+                }
+              >
+                <span className="comment-count">
+                  {compliteListItem}/{fullCountListItem}
+                </span>
+                <ListAltIcon
                   className="icon-card-item-material"
                   fontSize="small"
                 />
@@ -188,53 +229,87 @@ const CardItem = ({
         );
       }
     });
-
+    const roleInf = saveRole
+      .filter((e) => e.role && e.level)
+      .map((e) => (e = `${e.role}-${e.level} `))
+      .join(", ");
     return (
       <div key={e.card_item_id} className="card-item">
         <p>{e.card_name}</p>
         <div className="arr-task">{arrTask}</div>
-        <textarea
-          className={arrInput !== e.card_item_id ? "hidden" : ""}
-          placeholder="Enter a title for this card"
-          onChange={onChangeTitleTaskHandler}
-          name={e.card_item_id}
-          value={handlerTitleCard}
-        />
-        <p
-          className={`add-card-text ${
-            arrInput == e.card_item_id ? "hidden" : ""
-          }`}
-          onClick={() => {
-            addCardBlock();
-            setHandlerTitleCard("");
-            roleForNewTask([]);
-          }}
-        >
-          <AddIcon fontSize="small" />{" "}
-          <span className="menu-txt">Add card</span>
-        </p>
         <div
           className={
-            arrInput !== e.card_item_id ? "hidden" : "add-card-btn-block"
+            roleProfileInBoard.level == "Junior" &&
+            roleProfileInBoard.role !== "Product manager"
+              ? "hidden"
+              : ""
           }
         >
-          <div>
-            <button
-              onClick={() => {
-                addTask(handlerTitleCard);
-                roleForNewTask([]);
-              }}
-            >
-              Add card
-            </button>
-            <CloseIcon className="close-icon" onClick={closeBtn} />
-          </div>
-          <MoreHorizIcon
-            className="more-icon"
-            onClick={() => {
-              modalRoleShow(true);
-            }}
+          <textarea
+            className={arrInput !== e.card_item_id ? "hidden" : ""}
+            placeholder="Enter a title for this card"
+            onChange={onChangeTitleTaskHandler}
+            name={e.card_item_id}
+            value={handlerTitleCard}
           />
+          <p
+            className={`add-card-text ${
+              arrInput == e.card_item_id ? "hidden" : ""
+            }`}
+            onClick={() => {
+              setStateList(false);
+              addCardBlock();
+              setHandlerTitleCard("");
+              roleForNewTask([]);
+            }}
+          >
+            <AddIcon fontSize="small" />{" "}
+            <span className="menu-txt">Add card</span>
+          </p>
+
+          <div
+            className={
+              arrInput !== e.card_item_id ? "hidden" : "add-card-btn-block"
+            }
+          >
+            <div>
+              <button
+                className={
+                  roleInf.length > 0 && handlerTitleCard.length > 0
+                    ? "enable-btn-add-task"
+                    : "disable-btn-add-task"
+                }
+                onClick={() => {
+                  addTask(handlerTitleCard);
+                  roleForNewTask([]);
+                }}
+                disabled={roleInf.length > 0 ? false : true}
+              >
+                Add card
+              </button>
+              <CloseIcon className="close-icon" onClick={closeBtn} />
+              <WarningTooltipCustom value={roleInf} />
+            </div>
+            <MoreHorizIcon
+              className="more-icon"
+              onClick={() => {
+                modalRoleShow(true);
+              }}
+            />
+          </div>
+        </div>
+        <div
+          className={
+            roleProfileInBoard.level == "Junior" &&
+            roleProfileInBoard.role !== "Product manager"
+              ? "text-error-card-item"
+              : "hidden"
+          }
+        >
+          <h1>
+            You can not add new tasks, add a task starting with the level
+            "middle"
+          </h1>
         </div>
       </div>
     );
@@ -259,6 +334,9 @@ const mapStateToProps = ({
 
 const mapDispatchToProps = (dispatch) => {
   return {
+    roleHandler: (modalRoleData) => {
+      dispatch(roleHandler(modalRoleData));
+    },
     modalRoleShow: (roleShow) => {
       dispatch(modalRoleShow(roleShow));
     },

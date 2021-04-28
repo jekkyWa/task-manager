@@ -5,7 +5,7 @@ const AddList = ({addList}) => {
     <div>
       <h1>
         Add a check list for more convenient task management. Slide one task for
-        a few small!
+        a few small! When pressing the page is repeated re-create.
       </h1>
       <button
         onClick={() => {

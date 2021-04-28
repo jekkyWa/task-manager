@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { Link, Redirect, useHistory } from "react-router-dom";
 import { connect } from "react-redux";
 // files
 import "../authentication.scss";
@@ -8,7 +8,8 @@ import InputLogin from "./input-login";
 // material
 import DashboardRoundedIcon from "@material-ui/icons/DashboardRounded";
 
-const Login = ({ login }) => {
+const Login = ({ login, logout }) => {
+  const { history } = useHistory();
   const { error, request, clearError } = useHttp();
   const [formLog, setFormLog] = useState({ email: "", password: "" });
   const [validMessageLog, setValidMessageLog] = useState({
@@ -21,6 +22,7 @@ const Login = ({ login }) => {
     try {
       const data = await request("/api/auth/login", "POST", { ...formLog });
       login(data.token, data.userId);
+      history.push("/begin");
     } catch (e) {}
   };
 
@@ -112,8 +114,8 @@ const Login = ({ login }) => {
   );
 };
 
-const mapStateToProps = ({ loginReducer: { login } }) => {
-  return { login };
+const mapStateToProps = ({ loginReducer: { login, logout, token } }) => {
+  return { login, logout, token };
 };
 
 export default connect(mapStateToProps, null)(Login);

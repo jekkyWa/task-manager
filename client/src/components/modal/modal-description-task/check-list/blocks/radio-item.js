@@ -38,13 +38,13 @@ const RadioItem = ({
     return (
       <div
         className={`radio-block ${
-          name_take == email ? "" : "radio-block-watch"
+          checkList.nameOfTaker == email ? "" : "radio-block-watch"
         }`}
       >
         <div
           onClick={() => {
             const status = !e.status;
-            if (name_take == email)
+            if (checkList.nameOfTaker == email)
               changeStatusCheckListItem(e.id_check_list_item, status);
           }}
           className="radio-item-list"
@@ -67,7 +67,9 @@ const RadioItem = ({
               deleteCheckListItem(e.id_check_list_item);
             }}
           >
-            <CloseIcon className={name_take == email ? "" : "hidden"} />
+            <CloseIcon
+              className={checkList.nameOfTaker == email ? "" : "hidden"}
+            />
           </h2>
         </div>
       </div>

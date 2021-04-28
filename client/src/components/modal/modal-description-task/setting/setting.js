@@ -99,7 +99,6 @@ const Setting = ({
           <h2>Settings</h2>
         </div>
         <div className="buttons-settings">
-          <AddList addList={addList} />
           <Rename
             renameHandler={renameHandler}
             renameFunc={renameFunc}
@@ -120,7 +119,7 @@ const Setting = ({
     );
   }
   // Check, is the user, those who took the task
-  if (dataToModal.name_take == email) {
+  if (setting.nameOfTaker == email) {
     return (
       <Fragment>
         <div className="modal-description-setting">

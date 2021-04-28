@@ -3,16 +3,11 @@ import { Link } from "react-router-dom";
 //files
 import "./header.scss";
 import NotificationsBlock from "../notifications-block/notifications-block";
-import SearchBlock from "../search";
 import UserBlock from "../user-block/user";
 //redux
 import { connect } from "react-redux";
 import { saveNotifications } from "../../../action/action-save-date";
-import {
-  showNotifications,
-  showUserBlock,
-  showSearchBlock,
-} from "../../../action/action-show";
+import { showNotifications, showUserBlock } from "../../../action/action-show";
 //material
 import HomeOutlinedIcon from "@material-ui/icons/HomeOutlined";
 import DashboardIcon from "@material-ui/icons/Dashboard";
@@ -25,7 +20,6 @@ const Header = ({
   showNotifications,
   showNotification,
   showUser,
-  showSearch,
   showUserBlock,
   socket,
   saveNotifications,
@@ -117,9 +111,6 @@ const Header = ({
       <div className={showNotification ? "" : "hidden"}>
         <NotificationsBlock />
       </div>
-      <div className={showSearch ? "" : "hidden"}>
-        <SearchBlock />
-      </div>
       <div className={showUser ? "" : "hidden"}>
         <UserBlock />
       </div>
@@ -130,7 +121,7 @@ const Header = ({
 const mapStateToProps = ({
   reducerSaveData: { notifications, socket },
   reducerDataIdentification: { email, name },
-  showReducer: { showNotification, showUser, showSearch },
+  showReducer: { showNotification, showUser },
   loginReducer: { logout },
 }) => {
   return {
@@ -140,7 +131,6 @@ const mapStateToProps = ({
     notifications,
     showNotification,
     showUser,
-    showSearch,
     socket,
   };
 };
@@ -152,9 +142,6 @@ const mapDispatchToProps = (dispatch) => {
     },
     showUserBlock: (showUser) => {
       dispatch(showUserBlock(showUser));
-    },
-    showSearchBlock: (showSearch) => {
-      dispatch(showSearchBlock(showSearch));
     },
     saveNotifications: (notifications) => {
       dispatch(saveNotifications(notifications));

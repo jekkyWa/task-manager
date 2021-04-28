@@ -19,4 +19,11 @@ const modalRoleChange = (changeRole) => {
   };
 };
 
-export { modalShow, modalRoleShow, modalRoleChange };
+const roleHandler = (modalRoleData) => {
+  return {
+    type: "ROLE_HANDLER",
+    modalRoleData,
+  };
+};
+
+export { modalShow, modalRoleShow, modalRoleChange, roleHandler };

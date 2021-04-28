@@ -1,5 +1,13 @@
 @import "../../../../templates.scss";
 
+.delete-task-text {
+  text-align: center;
+  padding: 5px;
+  font-size: 18px;
+  font-weight: 700;
+  color: rgb(38, 56, 88);
+}
+
 .modal-60w {
   min-width: 70% !important;
   .modal-body {

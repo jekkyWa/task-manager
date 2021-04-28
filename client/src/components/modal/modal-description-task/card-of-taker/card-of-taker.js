@@ -44,8 +44,8 @@ const CardOfTaker = ({
   };
 
   // Reset task
-  const refuseAssignment = () => {
-    socket.emit("refuseAssignment", {
+  const refuseAssignment = async () => {
+    await socket.emit("refuseAssignment", {
       id_board: dataToModal.board_id,
       id_card: dataToModal.card_id,
       id_task: dataToModal.id,
@@ -66,7 +66,6 @@ const CardOfTaker = ({
   const statusProfile = (status) => {
     return status == "Senior" ? 3 : status == "Middle" ? 2 : 1;
   };
-
   // If another user took the task and fulfilled it
   if (name.state && name.nameOfTaker !== email) {
     return (
@@ -74,14 +73,6 @@ const CardOfTaker = ({
         <h1>
           The task is completed by the user: <span>{name.nameOfTaker}</span>.
         </h1>
-      </div>
-    );
-  }
-  // If the user added this task
-  if (name.name_add == email) {
-    return (
-      <div className="panel-of-control-task">
-        <h1>You have added this task.</h1>
       </div>
     );
   }
@@ -129,6 +120,14 @@ const CardOfTaker = ({
         <h1>
           The task is assigned to the user: <span>{name.nameOfTaker}</span>.
         </h1>
+      </div>
+    );
+  }
+  // If the user added this task
+  if (name.name_add == email) {
+    return (
+      <div className="panel-of-control-task">
+        <h1>You have added this task.</h1>
       </div>
     );
   }

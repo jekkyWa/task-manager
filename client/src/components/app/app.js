@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { withRouter } from "react-router-dom";
 import io from "socket.io-client";
 // files
@@ -11,6 +11,7 @@ import { connect } from "react-redux";
 import { fetchLogin } from "../../action/action-login";
 import { saveDataIdentification } from "../../action/action-identfication-data";
 import { saveSocket, saveNotifications } from "../../action/action-save-date";
+import Loading from "../loading/loading-main/loading";
 
 const App = ({
   fetchLogin,
@@ -22,6 +23,7 @@ const App = ({
   notifications,
 }) => {
   const { login, logout, token, userId } = useAuth();
+  const [loading, setLoading] = useState(false);
   const isAuthenticated = !!token;
   useEffect(() => {
     fetchLogin(token, userId, login, logout, isAuthenticated);
@@ -46,10 +48,12 @@ const App = ({
       condition("signup") &&
       condition("login")
     ) {
+      setLoading(true);
       const data = await request("/api/getData/test", "GET", null, {
         Authorization: `Bearer ${token}`,
       });
       saveDataIdentification(data.email, data.name, data.rooms);
+      setLoading(false);
     }
   }, [isAuthenticated]);
 
@@ -88,6 +92,14 @@ const App = ({
   }, [socket, notifications]);
 
   const routes = useRoutes(isAuthenticated);
+
+  if (loading) {
+    return (
+      <div className="loading">
+        <Loading />
+      </div>
+    );
+  }
 
   return routes;
 };

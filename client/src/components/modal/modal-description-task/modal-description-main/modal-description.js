@@ -239,7 +239,12 @@ const ModalDescription = ({
           modalShow(false);
         }}
       >
-        <Modal.Body>User deleted this task</Modal.Body>
+        <Modal.Body>
+          <div className="delete-task-text">Sorry :(</div>
+          <div className="delete-task-text">
+            The user who added this task deleted it.
+          </div>
+        </Modal.Body>
       </Modal>
     );
   } else {

@@ -35,7 +35,13 @@ const useRoutes = (isAuthenticated) => {
         <Route path="/boards/:id/:name" exact>
           <CardPage />
         </Route>
-        <Redirect to="/begin" exact />
+        <Route path="/signup" exact>
+          <Register />
+        </Route>
+        <Route path="/login" exact>
+          <Login />
+        </Route>
+        <Redirect to="/begin" />
       </Switch>
     );
   } else {

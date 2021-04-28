@@ -13,16 +13,20 @@ import CardItem from "./blocks/card-item";
 import ModalAddRole from "../../modal/modal-add-role/modal-add-role";
 import "./card-page.scss";
 // redux
-import {
-  displaySelection,
-  recentActivity,
-} from "../../../action/action-save-date";
 import { modalShow } from "../../../action/action-modal";
 import {
   saveActivityCard,
   saveDataToModal,
   saveFullCard,
+  displaySelection,
+  recentActivity,
+  saveRole,
 } from "../../../action/action-save-date";
+import {
+  showMenuFunc,
+  showNotifications,
+  showUserBlock,
+} from "../../../action/action-show";
 import { connect } from "react-redux";
 // material
 import AddIcon from "@material-ui/icons/Add";
@@ -43,12 +47,18 @@ const CardPage = ({
   activData,
   cardFull,
   card,
+  showMenuFunc,
+  showMenu,
+  showNotifications,
+  showUserBlock,
+  rooms,
+  saveRole,
 }) => {
   let { name, id } = useParams();
   const [loading, setLoading] = useState(true);
   const [inputAddCard, setInputAddCard] = useState("");
   const [stateList, setStateList] = useState(false);
-  const [stateMenu, setStateMenu] = useState(false);
+  const [arrInput, setArrInput] = useState("");
   const history = useHistory();
 
   // Processing the form data for adding a new card
@@ -77,6 +87,24 @@ const CardPage = ({
       levelBack: roleProfileInBoard.level,
     });
   };
+
+  useEffect(() => {
+    const index = rooms.passive.findIndex((e) => {
+      return e.board_id == id.slice(id.length - 10);
+    });
+    if (index !== -1) {
+      const profileIndex = rooms.passive[index].addedUsers.findIndex(
+        (e) => e.email == email
+      );
+      const role = {
+        role: rooms.passive[index].addedUsers[profileIndex].role,
+        level: rooms.passive[index].addedUsers[profileIndex].level,
+      };
+      saveRole(role);
+    } else {
+      saveRole({ role: "Product manager", level: "god" });
+    }
+  }, [id]);
 
   useEffect(() => {
     if (socket) {
@@ -297,13 +325,13 @@ const CardPage = ({
             </h1>
           </div>
         </div>
-        <div className={stateMenu ? "menu-emergence" : "vis-hidden"}>
-          <Menu onHide={() => setStateMenu(false)} />
+        <div className={showMenu ? "menu-emergence" : "vis-hidden"}>
+          <Menu onHide={() => showMenuFunc(false)} />
         </div>
         <div
           className="header-card-page-block-two"
           onClick={() => {
-            setStateMenu((prev) => !prev);
+            showMenuFunc((prev) => !prev);
           }}
         >
           <p>
@@ -313,7 +341,14 @@ const CardPage = ({
         </div>
       </div>
       <div className="card-body">
-        <CardItem />
+        <CardItem
+          showMenuFunc={showMenuFunc}
+          showNotifications={showNotifications}
+          showUserBlock={showUserBlock}
+          setStateList={setStateList}
+          setArrInput={setArrInput}
+          arrInput={arrInput}
+        />
         <div
           className={`${
             roleProfileInBoard.level == "Senior" ||
@@ -326,6 +361,7 @@ const CardPage = ({
             className={`card-add ${stateList ? "none-card-add" : ""}`}
             onClick={() => {
               setStateList(true);
+              setArrInput("");
             }}
           >
             <p>
@@ -367,8 +403,9 @@ const mapStateToProps = ({
     roleProfileInBoard,
     dataToModal,
   },
-  reducerDataIdentification: { email },
+  reducerDataIdentification: { email, rooms },
   reducerModal: { show },
+  showReducer: { showMenu },
 }) => {
   return {
     card,
@@ -379,12 +416,26 @@ const mapStateToProps = ({
     show,
     valueDisplay,
     cardFull,
+    showMenu,
     activData,
+    rooms,
   };
 };
 
 const mapDispatchToProps = (dispatch) => {
   return {
+    saveRole: (roleProfileInBoard) => {
+      dispatch(saveRole(roleProfileInBoard));
+    },
+    showNotifications: (showNotification) => {
+      dispatch(showNotifications(showNotification));
+    },
+    showUserBlock: (showUser) => {
+      dispatch(showUserBlock(showUser));
+    },
+    showMenuFunc: (showMenu) => {
+      dispatch(showMenuFunc(showMenu));
+    },
     recentActivity: (activData) => {
       dispatch(recentActivity(activData));
     },

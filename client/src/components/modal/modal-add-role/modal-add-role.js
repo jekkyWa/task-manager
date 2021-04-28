@@ -1,11 +1,11 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Modal } from "react-bootstrap";
 // files
 import { roleDependencies } from "../../role";
 import "./modal-add-role.scss";
 // redux
 import { connect } from "react-redux";
-import { modalRoleShow } from "../../../action/action-modal";
+import { modalRoleShow, roleHandler } from "../../../action/action-modal";
 import { roleForNewTask } from "../../../action/action-save-date";
 // material
 import CloseIcon from "@material-ui/icons/Close";
@@ -15,27 +15,39 @@ const ModalAddRole = ({
   roleForNewTask,
   modalRoleShow,
   roleShow,
+  roleHandler,
+  modalRoleData,
 }) => {
-  const [roleHandler, setRoleHandler] = useState("");
   const [dataRole, setDataRole] = useState({
     role: "Back-end developer",
     level: "Junior",
   });
+  const [error, setError] = useState([]);
 
   // Adding a role in the form
   const addRole = () => {
-    // If "value" is empty, then add a change without a comma
-    setRoleHandler(
-      (prev) =>
-        `${prev.length !== 0 ? prev + ", " : prev} ${dataRole.role}-${
-          dataRole.level
-        }`
+    // Checking there is exactly the same value in the added roles.
+    const validRole = modalRoleData.filter(
+      (e) => e.role == dataRole.role && e.level == dataRole.level
     );
-  };
-
-  // Processing form data, block for adding roles and levels
-  const inputRoleHandler = (e) => {
-    setRoleHandler(e.target.value);
+    // Check whether there is the same role in the added roles
+    const indexLevel = modalRoleData.findIndex((e) => e.role == dataRole.role);
+    if (validRole.length >= 1) {
+      return setError([
+        "You can not add two identical roles: ",
+        `${dataRole.role}-${dataRole.level}`,
+      ]);
+    }
+    if (indexLevel !== -1) {
+      setError("");
+      return roleHandler([
+        ...modalRoleData.slice(0, indexLevel),
+        ...modalRoleData.slice(indexLevel + 1),
+        dataRole,
+      ]);
+    }
+    setError("");
+    roleHandler([...modalRoleData, dataRole]);
   };
 
   // Processing role data and levels
@@ -45,27 +57,33 @@ const ModalAddRole = ({
 
   // Saving all added roles for the task
   const addRolesToSend = () => {
-    // We divide the entered data on an array
-    const arrRole = roleHandler.split(", ");
-    // We convert all the values of the array in the type of type {Role: Value, Level: Value},
-    // where 2 elements are divided by the principle of Role, Level
-    const newItem = arrRole.map((e, i) => {
-      const id = e.lastIndexOf("-");
-      return (e = {
-        role: e.slice(0, id).trim(),
-        level: e.slice(id + 1).trim(),
-      });
-    });
-    roleForNewTask(newItem);
+    roleForNewTask(modalRoleData);
     modalRoleShow(false);
   };
+
+  const label = modalRoleData.map((e, i) => {
+    return (
+      <div className="role-block" key={i}>
+        <h1>{`${e.role}-${e.level}`}</h1>
+        <CloseIcon
+          onClick={() => {
+            setError([]);
+            roleHandler([
+              ...modalRoleData.slice(0, i),
+              ...modalRoleData.slice(i + 1),
+            ]);
+          }}
+          className="delete-role"
+        />
+      </div>
+    );
+  });
 
   return (
     <Modal
       show={roleShow}
       onHide={() => {
         modalRoleShow(false);
-        setRoleHandler("");
       }}
       dialogClassName="modal-50w"
     >
@@ -82,13 +100,17 @@ const ModalAddRole = ({
               />
             </div>
           </div>
-          <h1>List participants in role-level format separated by commas</h1>
-          <input
-            placeholder="Enter the data in the Role-Level, Role-Level format or select the right roles below."
-            // We remove the extra space at the beginning
-            value={roleHandler.replace(/^ +/gm, "")}
-            onChange={inputRoleHandler}
-          />
+          <h1>
+            Please select the necessary roles for the task, you can select only
+            one of three levels (Junior, Middle or Senior).
+          </h1>
+          <h1
+            className={error.length !== 0 ? "error-modal-add-role" : "hidden"}
+          >
+            {error[0]}
+            <span>{error[1]}</span>
+          </h1>
+          <div className="role-container">{label}</div>
           <div className="select-modal-role-change">
             {/* Display "select" depending on the roles */}
             {roleDependencies(roleProfileInBoard, roleAndLvlHandler)}
@@ -112,16 +134,22 @@ const ModalAddRole = ({
 
 const mapStateToProps = ({
   reducerSaveData: { roleProfileInBoard },
-  reducerModal: { roleShow },
+  reducerModal: { roleShow, modalRoleData },
+  reducerState: { clearRoleState },
 }) => {
   return {
     roleProfileInBoard,
     roleShow,
+    clearRoleState,
+    modalRoleData,
   };
 };
 
 const mapDispatchToProps = (dispatch) => {
   return {
+    roleHandler: (modalRoleData) => {
+      dispatch(roleHandler(modalRoleData));
+    },
     modalRoleShow: (roleShow) => {
       dispatch(modalRoleShow(roleShow));
     },

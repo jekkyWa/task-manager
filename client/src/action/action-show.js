@@ -19,4 +19,11 @@ const showNotifications = (showNotification) => {
   };
 };
 
-export { showUserBlock, showSearchBlock, showNotifications };
+const showMenuFunc = (showMenu) => {
+  return {
+    type: "SHOW_MENU_FUNC",
+    showMenu,
+  };
+};
+
+export { showUserBlock, showSearchBlock, showNotifications, showMenuFunc };

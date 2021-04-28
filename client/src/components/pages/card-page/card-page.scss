@@ -102,6 +102,7 @@
         margin-bottom: 4px;
       }
       > p {
+        margin-bottom: 10px;
         padding: 0px 5px 0px;
         color: rgb(38, 56, 88);
         font-size: 14px;
@@ -116,7 +117,7 @@
           padding: 5px;
         }
       }
-      > textarea {
+      textarea {
         height: 70px;
         resize: none;
         width: 100%;
@@ -269,6 +270,16 @@
   }
 }
 
+.status-list {
+  span {
+    margin-left: 0px;
+    margin-right: 4px;
+    color: rgb(109, 121, 142);
+    font-size: 14px;
+    font-weight: 350;
+  }
+}
+
 .item-block-icon-state {
   display: flex;
   margin-top: -5px;
@@ -310,4 +321,26 @@
 
 .menu-txt {
   vertical-align: -1px;
+}
+
+.selected-roles-help-icon {
+  margin-bottom: 4px;
+  font-size: 20px !important;
+  cursor: pointer;
+  color: #6d6d6d;
+}
+.disable-btn-add-task {
+  cursor: default !important;
+  background-color: #6d6d6d !important;
+}
+
+.text-error-card-item {
+  > h1 {
+    padding: 0px 5px 0px;
+    font-weight: 500;
+    margin-top: 0px;
+    color: #6d6d6d;
+    font-size: 12px;
+    margin-bottom: 15px;
+  }
 }
