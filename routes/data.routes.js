@@ -20,7 +20,11 @@ router.get("/test", auth, async (req, res) => {
     res.json({
       email: value[0].email,
       name: value[0].name,
-      rooms: { active: filterRoomsActive, passive: filterRoomsPassive },
+      rooms: {
+        active: filterRoomsActive,
+        passive: filterRoomsPassive,
+        update: true,
+      },
     });
   } catch (e) {
     res.status(500).json({ message: "Что-то пошло не так, попробуйте снова" });
