@@ -11,11 +11,11 @@ const config = require("config");
 router.post(
   "/register",
   [
-    check("email", "Некорректный email").isEmail(),
-    check("password", "Минимальная длина пароля 7 символов").isLength({
+    check("email", "Incorrect email").isEmail(),
+    check("password", "Minimum password length 7 characters").isLength({
       min: 7,
     }),
-    check("name", "Необходимо заполнить поле с именем").isLength({ min: 1 }),
+    check("name", "You must fill in the field named").isLength({ min: 1 }),
   ],
   async (req, res) => {
     try {
@@ -33,7 +33,7 @@ router.post(
       if (candidate) {
         return res
           .status(400)
-          .json({ message: "Такой пользователь уже существует" });
+          .json({ message: "Such a user already exists" });
       }
 
       const hashedPassword = await bcrypt.hash(password, 12);
@@ -51,7 +51,7 @@ router.post(
     } catch (e) {
       res
         .status(500)
-        .json({ message: "Что-то пошло не так, попробуйте снова" });
+        .json({ message: "Something went wrong, try again" });
     }
   }
 );
@@ -61,8 +61,8 @@ router.post(
 router.post(
   "/login",
   [
-    check("email", "Введите корректный email").isEmail(),
-    check("password", "Введите пароль").exists(),
+    check("email", "Enter correct email").isEmail(),
+    check("password", "Enter password").exists(),
   ],
   async (req, res) => {
     try {
@@ -71,7 +71,7 @@ router.post(
       if (!errors.isEmpty()) {
         return res.status(400).json({
           errors: errors.array(),
-          message: "Некорректные данные при входе в систему",
+          message: "Incorrect data when entering the system",
         });
       }
       const { email, password } = req.body;
@@ -79,7 +79,7 @@ router.post(
       const user = await User.findOne({ email });
 
       if (!user) {
-        return res.status(400).json({ message: "Пользователь не найден" });
+        return res.status(400).json({ message: "User is not found" });
       }
 
       const isMatch = await bcrypt.compare(password, user.password);
@@ -87,7 +87,7 @@ router.post(
       if (!isMatch) {
         return res
           .status(400)
-          .json({ message: "Неверный пароль, попробуйте снова" });
+          .json({ message: "Invalid password, try again" });
       }
 
       const token = jwt.sign({ userId: user.id }, config.get("jwtSecret"), {
@@ -97,7 +97,7 @@ router.post(
     } catch (e) {
       res
         .status(500)
-        .json({ message: "Что-то пошло не так, попробуйте снова" });
+        .json({ message: "Something went wrong, try again" });
     }
   }
 );
