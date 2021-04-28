@@ -69,14 +69,14 @@ const Comment = ({
 
   // If checking is passed, it is possible to post a comment
   if (
-    // We are mapping the required roles and user roles.
-    (commentToPage.role.findIndex((e) => e.role !== roleProfileInBoard.role) ==
-      -1 &&
-      // Checking Level
+    !(
+      commentToPage.role.findIndex((e) => e.role == roleProfileInBoard.role) ==
+        -1 &&
       commentToPage.role.findIndex(
         (e) => statusProfile(e.level) <= statusProfile(roleProfileInBoard.level)
-      ) !== -1) ||
-    roleProfileInBoard.role == "Product manager"
+      ) !== -1
+    ) &&
+    roleProfileInBoard.role !== "Product manager"
   ) {
     return (
       <Fragment>

@@ -39,25 +39,29 @@ const BoardPage = ({
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const index = rooms.passive.findIndex((e) => {
-      return e.board_id == id.slice(id.length - 10);
-    });
-    if (index !== -1) {
-      const profileIndex = rooms.passive[index].addedUsers.findIndex(
-        (e) => e.email == email
-      );
-      const role = {
-        role: rooms.passive[index].addedUsers[profileIndex].role,
-        level: rooms.passive[index].addedUsers[profileIndex].level,
-      };
-      saveRole(role);
-    } else {
-      saveRole({ role: "Product manager", level: "god" });
+    if (rooms.update) {
+      console.log(rooms);
+      const index = rooms.passive.findIndex((e) => {
+        return e.board_id == id.slice(id.length - 10);
+      });
+      if (index !== -1) {
+        const profileIndex = rooms.passive[index].addedUsers.findIndex(
+          (e) => e.email == email
+        );
+        const role = {
+          role: rooms.passive[index].addedUsers[profileIndex].role,
+          level: rooms.passive[index].addedUsers[profileIndex].level,
+        };
+        saveRole(role);
+      } else {
+        saveRole({ role: "Product manager", level: "god" });
+      }
     }
   }, [id]);
 
   useEffect(() => {
     if (socket) {
+      console.log(roleProfileInBoard);
       socket.emit("joinroom", { id: id.slice(id.length - 10), email });
       return () => socket.emit("leaveRoom", { id: id.slice(id.length - 10) });
     }
@@ -68,7 +72,6 @@ const BoardPage = ({
       socket.on("getBoard", (value) => {
         saveDataCards(value.filterCards);
         markBoard(value.marksCards);
-        console.log(value.marksCards);
         setLoading(false);
       });
     }

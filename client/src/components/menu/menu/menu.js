@@ -70,6 +70,7 @@ const Menu = ({
         <div
           className="menu-item"
           onClick={() => {
+            console.log(card);
             displaySelection({ valueDisp: card, stateFilter: true });
           }}
         >
@@ -82,6 +83,7 @@ const Menu = ({
         <div
           className="menu-item"
           onClick={() => {
+            console.log(cardFull);
             displaySelection({ valueDisp: cardFull, stateFilter: false });
           }}
         >

@@ -56,7 +56,7 @@ const CardItem = ({
     showMenuFunc(false);
   };
 
-  const label = cards.map((e) => {
+  const label = cards.map((e, index) => {
     const card_body_id = shortid.generate();
 
     // Sending data to the server
@@ -101,7 +101,6 @@ const CardItem = ({
     const closeBtn = () => {
       setHandlerTitleCard("");
       setArrInput();
-      setHandlerTitleCard("");
     };
 
     // Data Processing for New Card
@@ -127,15 +126,12 @@ const CardItem = ({
       const fullCountListItem = element.check_letter.list.length;
       if (!element.state) {
         if (
-          !(
-            element.role.findIndex((e) => e.role !== roleProfileInBoard.role) ==
-              -1 &&
-            element.role.findIndex(
-              (e) =>
-                statusProfile(e.level) <=
-                statusProfile(roleProfileInBoard.level)
-            ) !== -1
-          ) &&
+          element.role.findIndex((e) => e.role == roleProfileInBoard.role) ==
+            -1 &&
+          element.role.findIndex(
+            (e) =>
+              statusProfile(e.level) <= statusProfile(roleProfileInBoard.level)
+          ) !== -1 &&
           roleProfileInBoard.role !== "Product manager"
         ) {
           return (
@@ -143,6 +139,20 @@ const CardItem = ({
               className="task-item task-item-for-all"
               key={i}
               onClick={() => {
+                console.log(
+                  "elem",
+                  !(
+                    element.role.findIndex(
+                      (e) => e.role !== roleProfileInBoard.role
+                    ) == -1 &&
+                    element.role.findIndex(
+                      (e) =>
+                        statusProfile(e.level) <=
+                        statusProfile(roleProfileInBoard.level)
+                    ) !== -1
+                  )
+                );
+                console.log(roleProfileInBoard);
                 closeAllWindows();
                 modalShow(true);
                 saveDataToModal({
@@ -163,6 +173,7 @@ const CardItem = ({
             >
               <p>Title: {element.title}</p>
               <p>Role: {label}</p>
+              <p>11231223</p>
             </div>
           );
         }
@@ -261,6 +272,7 @@ const CardItem = ({
               addCardBlock();
               setHandlerTitleCard("");
               roleForNewTask([]);
+              roleHandler([]);
             }}
           >
             <AddIcon fontSize="small" />{" "}
@@ -287,12 +299,16 @@ const CardItem = ({
               >
                 Add card
               </button>
+              <WarningTooltipCustom
+                handlerTitleCard={handlerTitleCard}
+                value={roleInf}
+              />
               <CloseIcon className="close-icon" onClick={closeBtn} />
-              <WarningTooltipCustom value={roleInf} />
             </div>
             <MoreHorizIcon
               className="more-icon"
               onClick={() => {
+                closeAllWindows();
                 modalRoleShow(true);
               }}
             />
@@ -318,14 +334,13 @@ const CardItem = ({
 };
 
 const mapStateToProps = ({
-  reducerSaveData: { socket, roleProfileInBoard, valueDisplay, saveRole },
+  reducerSaveData: { socket, valueDisplay, saveRole },
   reducerDataIdentification: { email },
   loginReducer: { token },
 }) => {
   return {
     token,
     socket,
-    roleProfileInBoard,
     email,
     valueDisplay,
     saveRole,

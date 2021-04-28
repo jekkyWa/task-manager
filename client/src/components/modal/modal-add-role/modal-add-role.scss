@@ -76,9 +76,16 @@
 }
 
 .error-modal-add-role {
-  font-size: 16px !important;
-  > span {
-    text-decoration: underline;
+  display: flex;
+  > h1 {
+    margin-top: 4px;
+    font-size: 16px !important;
+    > span {
+      text-decoration: underline;
+    }
+  }
+  > div {
+    margin-right: 5px;
   }
 }
 
@@ -105,4 +112,8 @@
       cursor: pointer;
     }
   }
+}
+
+.hidden-option-role {
+  color: white !important;
 }

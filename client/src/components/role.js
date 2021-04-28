@@ -7,12 +7,18 @@ export const roleDependencies = (value, roleAndLvlHandler) => {
     return (
       <React.Fragment>
         <select name="role" onChange={roleAndLvlHandler}>
+          <option disabled selected hidden>
+            Choose the necessary role
+          </option>
           <option>Back-end developer</option>
           <option>Front-end developer</option>
           <option>QA</option>
           <option>Business Analyst</option>
         </select>
         <select name="level" onChange={roleAndLvlHandler}>
+          <option disabled selected hidden>
+            Choose the necessary level
+          </option>
           <option>Junior</option>
           <option>Middle</option>
           <option>Senior</option>
@@ -23,12 +29,18 @@ export const roleDependencies = (value, roleAndLvlHandler) => {
     return (
       <React.Fragment>
         <select name="role" onChange={roleAndLvlHandler}>
+          <option disabled selected hidden>
+            Choose the necessary role
+          </option>
           <option>Back-end developer</option>
           <option>Front-end developer</option>
           <option>QA</option>
           <option>Business Analyst</option>
         </select>
         <select name="level" onChange={roleAndLvlHandler}>
+          <option disabled selected hidden>
+            Choose the necessary level
+          </option>
           <option>Junior</option>
           <option>Middle</option>
         </select>
@@ -38,6 +50,9 @@ export const roleDependencies = (value, roleAndLvlHandler) => {
     return (
       <React.Fragment>
         <select name="role" onChange={roleAndLvlHandler}>
+          <option disabled selected hidden>
+            Choose the necessary role
+          </option>
           <option>Back-end developer</option>
           <option>Front-end developer</option>
           <option>QA</option>
@@ -45,6 +60,9 @@ export const roleDependencies = (value, roleAndLvlHandler) => {
           <option>UX/UI designer</option>
         </select>
         <select name="level" onChange={roleAndLvlHandler}>
+          <option disabled selected hidden>
+            Choose the necessary level
+          </option>
           <option>Junior</option>
           <option>Middle</option>
           <option>Senior</option>
@@ -55,6 +73,9 @@ export const roleDependencies = (value, roleAndLvlHandler) => {
     return (
       <React.Fragment>
         <select name="role" onChange={roleAndLvlHandler}>
+          <option disabled selected hidden>
+            Choose the necessary role
+          </option>
           <option>Back-end developer</option>
           <option>Front-end developer</option>
           <option>QA</option>
@@ -62,6 +83,9 @@ export const roleDependencies = (value, roleAndLvlHandler) => {
           <option>UX/UI designer</option>
         </select>
         <select name="level" onChange={roleAndLvlHandler}>
+          <option disabled selected hidden>
+            Choose the necessary level
+          </option>
           <option>Junior</option>
           <option>Middle</option>
         </select>
@@ -71,12 +95,18 @@ export const roleDependencies = (value, roleAndLvlHandler) => {
     return (
       <React.Fragment>
         <select name="role" onChange={roleAndLvlHandler}>
+          <option disabled selected hidden>
+            Choose the necessary role
+          </option>
           <option>Back-end developer</option>
           <option>Front-end developer</option>
           <option>QA</option>
           <option>Business Analyst</option>
         </select>
         <select name="level" onChange={roleAndLvlHandler}>
+          <option disabled selected hidden>
+            Choose the necessary level
+          </option>
           <option>Junior</option>
           <option>Middle</option>
           <option>Senior</option>
@@ -87,15 +117,20 @@ export const roleDependencies = (value, roleAndLvlHandler) => {
     return (
       <React.Fragment>
         <select name="role" onChange={roleAndLvlHandler}>
+          <option disabled selected hidden className="hidden-option-role">
+            Choose the necessary role
+          </option>
           <option>Back-end developer</option>
           <option>Front-end developer</option>
           <option>QA</option>
           <option>Business Analyst</option>
         </select>
         <select name="level" onChange={roleAndLvlHandler}>
+          <option disabled selected hidden>
+            Choose the necessary level
+          </option>
           <option>Junior</option>
           <option>Middle</option>
-          <option>Senior</option>
         </select>
       </React.Fragment>
     );
@@ -103,6 +138,9 @@ export const roleDependencies = (value, roleAndLvlHandler) => {
     return (
       <React.Fragment>
         <select name="role" onChange={roleAndLvlHandler}>
+          <option disabled selected hidden>
+            Choose the necessary role
+          </option>
           <option>Back-end developer</option>
           <option>Front-end developer</option>
           <option>QA</option>
@@ -110,6 +148,9 @@ export const roleDependencies = (value, roleAndLvlHandler) => {
           <option>UX/UI designer</option>
         </select>
         <select name="level" onChange={roleAndLvlHandler}>
+          <option disabled selected hidden>
+            Choose the necessary level
+          </option>
           <option>Junior</option>
           <option>Middle</option>
           <option>Senior</option>
@@ -120,6 +161,9 @@ export const roleDependencies = (value, roleAndLvlHandler) => {
     return (
       <React.Fragment>
         <select name="role" onChange={roleAndLvlHandler}>
+          <option disabled selected hidden>
+            Choose the necessary role
+          </option>
           <option>Back-end developer</option>
           <option>Front-end developer</option>
           <option>QA</option>
@@ -127,6 +171,9 @@ export const roleDependencies = (value, roleAndLvlHandler) => {
           <option>UX/UI designer</option>
         </select>
         <select name="level" onChange={roleAndLvlHandler}>
+          <option disabled selected hidden>
+            Choose the necessary level
+          </option>
           <option>Junior</option>
           <option>Middle</option>
         </select>
@@ -136,11 +183,17 @@ export const roleDependencies = (value, roleAndLvlHandler) => {
     return (
       <React.Fragment>
         <select name="role" onChange={roleAndLvlHandler}>
+          <option disabled selected hidden>
+            Choose the necessary role
+          </option>
           <option>Front-end developer</option>
           <option>Business Analyst</option>
           <option>UX/UI designer</option>
         </select>
         <select name="level" onChange={roleAndLvlHandler}>
+          <option disabled selected hidden>
+            Choose the necessary level
+          </option>
           <option>Junior</option>
           <option>Middle</option>
           <option>Senior</option>
@@ -151,11 +204,17 @@ export const roleDependencies = (value, roleAndLvlHandler) => {
     return (
       <React.Fragment>
         <select name="role" onChange={roleAndLvlHandler}>
+          <option disabled selected hidden>
+            Choose the necessary role
+          </option>
           <option>Front-end developer</option>
           <option>Business Analyst</option>
           <option>UX/UI designer</option>
         </select>
         <select name="level" onChange={roleAndLvlHandler}>
+          <option disabled selected hidden>
+            Choose the necessary level
+          </option>
           <option>Junior</option>
           <option>Middle</option>
           <option>Senior</option>
@@ -166,10 +225,16 @@ export const roleDependencies = (value, roleAndLvlHandler) => {
     return (
       <React.Fragment>
         <select name="role" onChange={roleAndLvlHandler}>
+          <option disabled selected hidden>
+            Choose the necessary role
+          </option>
           <option>Business Analyst</option>
           <option>UX/UI designer</option>
         </select>
         <select name="level" onChange={roleAndLvlHandler}>
+          <option disabled selected hidden>
+            Choose the necessary level
+          </option>
           <option>Junior</option>
           <option>Middle</option>
           <option>Senior</option>
@@ -180,10 +245,16 @@ export const roleDependencies = (value, roleAndLvlHandler) => {
     return (
       <React.Fragment>
         <select name="role" onChange={roleAndLvlHandler}>
+          <option disabled selected hidden>
+            Choose the necessary role
+          </option>
           <option>Business Analyst</option>
           <option>UX/UI designer</option>
         </select>
         <select name="level" onChange={roleAndLvlHandler}>
+          <option disabled selected hidden>
+            Choose the necessary level
+          </option>
           <option>Junior</option>
           <option>Middle</option>
         </select>
@@ -193,6 +264,9 @@ export const roleDependencies = (value, roleAndLvlHandler) => {
     return (
       <React.Fragment>
         <select name="role" onChange={roleAndLvlHandler}>
+          <option disabled selected hidden>
+            Choose the necessary role
+          </option>
           <option>Back-end developer</option>
           <option>Front-end developer</option>
           <option>QA</option>
@@ -202,6 +276,9 @@ export const roleDependencies = (value, roleAndLvlHandler) => {
           <option>Product manager</option>
         </select>
         <select name="level" onChange={roleAndLvlHandler}>
+          <option disabled selected hidden>
+            Choose the necessary level
+          </option>
           <option>Junior</option>
           <option>Middle</option>
           <option>Senior</option>

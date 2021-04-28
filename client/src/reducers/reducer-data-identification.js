@@ -3,7 +3,7 @@ const reducerDataIdentification = (state, action) => {
     return {
       email: "email",
       name: "name",
-      rooms: { active: [], passive: [] },
+      rooms: { active: [], passive: [], update: false },
     };
   }
   switch (action.type) {

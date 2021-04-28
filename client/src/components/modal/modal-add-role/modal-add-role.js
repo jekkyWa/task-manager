@@ -9,6 +9,7 @@ import { modalRoleShow, roleHandler } from "../../../action/action-modal";
 import { roleForNewTask } from "../../../action/action-save-date";
 // material
 import CloseIcon from "@material-ui/icons/Close";
+import ErrorOutlineOutlinedIcon from "@material-ui/icons/ErrorOutlineOutlined";
 
 const ModalAddRole = ({
   roleProfileInBoard,
@@ -19,13 +20,16 @@ const ModalAddRole = ({
   modalRoleData,
 }) => {
   const [dataRole, setDataRole] = useState({
-    role: "Back-end developer",
-    level: "Junior",
+    role: "",
+    level: "",
   });
   const [error, setError] = useState([]);
 
   // Adding a role in the form
   const addRole = () => {
+    if (!dataRole.role || !dataRole.level) {
+      return setError(["Fill in all data to add a role."]);
+    }
     // Checking there is exactly the same value in the added roles.
     const validRole = modalRoleData.filter(
       (e) => e.role == dataRole.role && e.level == dataRole.level
@@ -46,12 +50,13 @@ const ModalAddRole = ({
         dataRole,
       ]);
     }
-    setError("");
+    setError([]);
     roleHandler([...modalRoleData, dataRole]);
   };
 
   // Processing role data and levels
   const roleAndLvlHandler = (e) => {
+    setError([]);
     setDataRole({ ...dataRole, [e.target.name]: e.target.value });
   };
 
@@ -84,6 +89,12 @@ const ModalAddRole = ({
       show={roleShow}
       onHide={() => {
         modalRoleShow(false);
+        addRolesToSend();
+        setError([]);
+        setDataRole({
+          role: "",
+          level: "",
+        });
       }}
       dialogClassName="modal-50w"
     >
@@ -96,6 +107,12 @@ const ModalAddRole = ({
                 className="close-icon-modal-add-role"
                 onClick={() => {
                   modalRoleShow(false);
+                  addRolesToSend();
+                  setError([]);
+                  setDataRole({
+                    role: "",
+                    level: "",
+                  });
                 }}
               />
             </div>
@@ -104,12 +121,17 @@ const ModalAddRole = ({
             Please select the necessary roles for the task, you can select only
             one of three levels (Junior, Middle or Senior).
           </h1>
-          <h1
+          <div
             className={error.length !== 0 ? "error-modal-add-role" : "hidden"}
           >
-            {error[0]}
-            <span>{error[1]}</span>
-          </h1>
+            <div>
+              <ErrorOutlineOutlinedIcon fontSize="small" />
+            </div>
+            <h1>
+              {error[0]}
+              <span>{error[1]}</span>
+            </h1>
+          </div>
           <div className="role-container">{label}</div>
           <div className="select-modal-role-change">
             {/* Display "select" depending on the roles */}
@@ -123,7 +145,7 @@ const ModalAddRole = ({
               className="modal-role-change-btn save-btn-modal-add-role"
               onClick={addRolesToSend}
             >
-              Save and close
+              Close
             </button>
           </div>
         </div>

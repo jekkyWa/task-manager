@@ -123,7 +123,7 @@
         width: 100%;
         border-radius: 3px;
         font-size: 14px;
-        font-weight: 500;
+        font-weight: 400;
         background-color: white;
         border-radius: 2px;
         box-shadow: 0 1px 0 rgb(9 30 66 / 25%);
@@ -148,7 +148,6 @@
         display: flex;
         justify-content: space-between;
         .close-icon {
-          margin-left: 5px;
           margin-bottom: 4px;
           cursor: pointer;
           color: rgb(109, 109, 109);
@@ -323,15 +322,25 @@
   vertical-align: -1px;
 }
 
-.selected-roles-help-icon {
+.selected-roles-help-icon-disabled {
+  margin-left: 5px;
   margin-bottom: 4px;
   font-size: 20px !important;
   cursor: pointer;
-  color: #6d6d6d;
+  color: rgb(185, 185, 185);
 }
+
+.selected-roles-help-icon-enabled {
+  margin-left: 5px;
+  margin-bottom: 4px;
+  font-size: 20px !important;
+  cursor: pointer;
+  color: rgb(90, 172, 68);
+}
+
 .disable-btn-add-task {
   cursor: default !important;
-  background-color: #6d6d6d !important;
+  background-color: #b9b9b9 !important;
 }
 
 .text-error-card-item {

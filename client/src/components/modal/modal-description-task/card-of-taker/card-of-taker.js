@@ -84,8 +84,34 @@ const CardOfTaker = ({
       </div>
     );
   }
-  // If the user just took the task
+  if (
+    name.nameOfTaker == email &&
+    name.role.findIndex((e) => e.role == roleProfileInBoard.role) == -1 &&
+    name.role.findIndex(
+      (e) => statusProfile(e.level) <= statusProfile(roleProfileInBoard.level)
+    ) !== -1
+  ) {
+    return (
+      <div className="panel-of-control-task">
+        <h1>
+          The creator of the task has changed the role to perform this task. The
+          creator of the task has changed the role to perform this task.
+        </h1>
+        <div>
+          <button
+            className="refuse-panel-of-control-task"
+            onClick={() => {
+              refuseAssignment();
+            }}
+          >
+            Refuse to task
+          </button>
+        </div>
+      </div>
+    );
+  }
   if (name.nameOfTaker == email) {
+    // If the user just took the task
     return (
       <div className="panel-of-control-task">
         <h1>
@@ -133,12 +159,10 @@ const CardOfTaker = ({
   }
   // Checking the ability to take a task
   if (
-    !(
-      name.role.findIndex((e) => e.role !== roleProfileInBoard.role) == -1 &&
+    (name.role.findIndex((e) => e.role == roleProfileInBoard.role) == -1 &&
       name.role.findIndex(
         (e) => statusProfile(e.level) <= statusProfile(roleProfileInBoard.level)
-      ) !== -1
-    ) ||
+      ) !== -1) ||
     roleProfileInBoard.role == "Product manager"
   ) {
     return (

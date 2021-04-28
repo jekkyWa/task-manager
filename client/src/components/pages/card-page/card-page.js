@@ -89,22 +89,24 @@ const CardPage = ({
   };
 
   useEffect(() => {
-    const index = rooms.passive.findIndex((e) => {
-      return e.board_id == id.slice(id.length - 10);
-    });
-    if (index !== -1) {
-      const profileIndex = rooms.passive[index].addedUsers.findIndex(
-        (e) => e.email == email
-      );
-      const role = {
-        role: rooms.passive[index].addedUsers[profileIndex].role,
-        level: rooms.passive[index].addedUsers[profileIndex].level,
-      };
-      saveRole(role);
-    } else {
-      saveRole({ role: "Product manager", level: "god" });
+    if (rooms.update) {
+      const index = rooms.passive.findIndex((e) => {
+        return e.board_id == id.slice(id.length - 10);
+      });
+      if (index !== -1) {
+        const profileIndex = rooms.passive[index].addedUsers.findIndex(
+          (e) => e.email == email
+        );
+        const role = {
+          role: rooms.passive[index].addedUsers[profileIndex].role,
+          level: rooms.passive[index].addedUsers[profileIndex].level,
+        };
+        saveRole(role);
+      } else {
+        saveRole({ role: "Product manager", level: "god" });
+      }
     }
-  }, [id]);
+  }, [id, rooms]);
 
   useEffect(() => {
     if (socket) {
@@ -148,13 +150,15 @@ const CardPage = ({
 
   // Getting data when the page is first loaded
   useEffect(() => {
-    if (socket) {
+    if (socket && roleProfileInBoard.role) {
+      console.log(roleProfileInBoard);
       socket.emit("joinCard", {
         id: name,
         roleBack: roleProfileInBoard.role,
         levelBack: roleProfileInBoard.level,
       });
       socket.on("getCard", (value) => {
+        console.log(value);
         saveActivityCard(value.filterCards[0]);
         saveFullCard(value.original[0]);
         displaySelection({
@@ -167,7 +171,7 @@ const CardPage = ({
       });
       return () => socket.emit("leaveRoomCard", { id: name });
     }
-  }, [name, socket]);
+  }, [socket, roleProfileInBoard]);
 
   // Add new Task through socket
   useEffect(() => {
@@ -348,6 +352,7 @@ const CardPage = ({
           setStateList={setStateList}
           setArrInput={setArrInput}
           arrInput={arrInput}
+          roleProfileInBoard={roleProfileInBoard}
         />
         <div
           className={`${
