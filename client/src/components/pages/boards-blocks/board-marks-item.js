@@ -3,7 +3,6 @@ import { Link } from "react-router-dom";
 import { useParams } from "react-router-dom";
 // files
 import "./boards-main-page.scss";
-import { mark } from "../utils/mark";
 import { useHttp } from "../../hooks/http.hook";
 // material
 import StarRoundedIcon from "@material-ui/icons/StarRounded";
@@ -15,6 +14,7 @@ const BoardMarkItem = ({
   dataMarksForBoardsPage,
   saveDataForBoardsPage,
   url,
+  mark,
 }) => {
   const { request } = useHttp();
   let { id } = useParams();

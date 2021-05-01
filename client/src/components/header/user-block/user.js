@@ -41,8 +41,7 @@ const UserBlock = ({ logout, name, email, showUserBlock }) => {
       </div>
       <div className="menu-user-block">
         <h1>Change password</h1>
-        <h1>Delete Account</h1>
-        <h1 onClick={logoutHandler}>Выйти</h1>
+        <h1 onClick={logoutHandler}>Go out</h1>
       </div>
     </div>
   );

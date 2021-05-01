@@ -1,7 +1,6 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Link, useParams } from "react-router-dom";
 // files
-import { mark } from "../../utils/mark";
 import { useHttp } from "../../../hooks/http.hook";
 // material
 import StarRoundedIcon from "@material-ui/icons/StarRounded";
@@ -14,11 +13,11 @@ const BoardInCommandItem = ({
   allDataForBoardsPageMarks,
   saveDataForBoardsPage,
   url,
+  mark,
 }) => {
   const { request } = useHttp();
   // Router
   let { id } = useParams();
-
   const label = allDataForBoardsPageBoards.map((element) => {
     // Check the existence of an element with an array in the database
     return (

@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import { useParams, useHistory } from "react-router-dom";
-import shortid from "shortid";
 // files
 import Header from "../../header";
 import SideBar from "../../sideBar/side-bar";
@@ -23,46 +22,18 @@ const Participants = ({ socket, saveActiveBoard, email, boardActive }) => {
   const { id } = useParams();
   const [loading, setLoading] = useState(true);
   const [showInputAdd, setShowInputAdd] = useState(false);
-  const [emailState, setEmailState] = useState("");
-  const [roleState, setRoleState] = useState({
-    role: "Back-end developer",
-    level: "Junior",
-  });
+  const [valid, setValid] = useState(false);
   const [dataForDelete, setDataForDelete] = useState({ id: "", email: "" });
   const [modalShow, setModalShow] = useState(false);
-
-  // Saving data about email new user
-  const onEmailHandler = (e) => {
-    setEmailState(e.target.value);
-  };
-
-  // Roles for adding a new user
-  const onRoleHandler = (e) => {
-    setRoleState({ ...roleState, [e.target.name]: e.target.value });
-  };
-
-  // Additional new user
-  const addNewUserToBoard = () => {
-    const id_notification = shortid.generate();
-    socket.emit("addAdditionalUser", {
-      board_id: id.slice(id.length - 10),
-      data: { email: emailState, ...roleState, memberStatus: false, marks: [] },
-      message: {
-        title: `User ${email} invites you to the team ${id.slice(
-          0,
-          id.length - id.length - 10
-        )}`,
-        type: "AddingToCommand",
-        from: email,
-        id_notification,
-        id_board: id.slice(id.length - 10),
-      },
-    });
-  };
+  const [error, setError] = useState("");
 
   useEffect(() => {
     if (socket) {
       socket.on("getNewUsers", (value) => {
+        if (value.error) {
+          return setError(value.error);
+        }
+        setValid(true);
         saveActiveBoard(value);
         // After the data come to stop further sending
         return () => socket.off("getNewUsers");
@@ -188,11 +159,14 @@ const Participants = ({ socket, saveActiveBoard, email, boardActive }) => {
             </button>
           </div>
           <AddUserBlock
+            id={id}
+            email={email}
+            socket={socket}
+            error={error}
             showInputAdd={showInputAdd}
             setShowInputAdd={setShowInputAdd}
-            onEmailHandler={onEmailHandler}
-            onRoleHandler={onRoleHandler}
-            addNewUserToBoard={addNewUserToBoard}
+            setError={setError}
+            valid={valid}
           />
         </div>
         <div className="activity-boards-participants">

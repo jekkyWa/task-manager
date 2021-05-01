@@ -81,6 +81,17 @@ export const useCreateBoard = () => {
         id_board,
         creator: email,
       };
+      // Sending notifications about the team of users
+      await socket.emit("sendNotification", {
+        data: cleanAddedUsers,
+        message: {
+          title: `User "${email}" invites you to the team "${formCreateProject.nameProject}"`,
+          type: "AddingToCommand",
+          from: email,
+          id_notification,
+          id_board,
+        },
+      });
       // The main request for the server to create a new board
       await request("/api/createBoard", "POST", objForSend, {
         Authorization: `Bearer ${token}`,
@@ -95,18 +106,6 @@ export const useCreateBoard = () => {
       setAddedUsers([]);
       setFormCreateProject({ nameProject: "", description: "", date: "" });
       onHide();
-
-      // Sending notifications about the team of users
-      await socket.emit("sendNotification", {
-        data: cleanAddedUsers,
-        message: {
-          title: `User "${email}" invites you to the team "${formCreateProject.nameProject}"`,
-          type: "AddingToCommand",
-          from: email,
-          id_notification,
-          id_board,
-        },
-      });
     } catch (e) {
       setError(e.message);
       setLoading(false);

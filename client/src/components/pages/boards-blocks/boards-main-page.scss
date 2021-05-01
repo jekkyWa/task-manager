@@ -8,6 +8,21 @@
   }
 }
 
+.load-mark {
+  padding: 15px;
+  margin-left: 30px;
+  max-width: 794px;
+  display: flex;
+  justify-content: center;
+  > h1 {
+    font-size: 16px;
+    margin-left: 10px;
+    font-weight: 500;
+    margin-top: -1px;
+    color: #172b4d;
+  }
+}
+
 .boards-main-page-header {
   margin-left: 11px;
   display: flex;
@@ -172,7 +187,6 @@
         font-size: 16px;
         font-weight: 300;
         color: black;
-  
       }
     }
   }

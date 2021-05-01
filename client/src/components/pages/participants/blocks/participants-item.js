@@ -5,6 +5,7 @@ import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import SettingsIcon from "@material-ui/icons/Settings";
 import DoneIcon from "@material-ui/icons/Done";
 import CloseIcon from "@material-ui/icons/Close";
+import shortid from "shortid";
 
 const ParticipantsItem = ({
   boardActive,
@@ -43,21 +44,51 @@ const ParticipantsItem = ({
       setSelectRoleState(e.email);
     };
     const updateUserRole = async () => {
+      const id_notification = shortid.generate();
+      console.log(dataSelectUpdateRole);
       socket.emit("updateRoleInCommand", {
         id: id.slice(id.length - 10),
         email: e.email,
         data: dataSelectUpdateRole,
+        message: {
+          title: `The project creator has changed your role. Now your role "${dataSelectUpdateRole}"`,
+          type: "RoleInfo",
+          from: email,
+          id_notification,
+          id_board: id.slice(id.length - 10),
+        },
       });
     };
     const updateUserLevel = async (value) => {
       const levelArr = ["Junior", "Middle", "Senior"];
       const index = levelArr.indexOf(e.level);
-      socket.emit("updateLevelInCommand", {
-        id: id.slice(id.length - 10),
-        email: e.email,
-        movement: value,
-        currentState: index,
-      });
+      const id_notification = shortid.generate();
+      const messageNotifications =
+        value == "up"
+          ? `You have been raised, now your level "${
+              levelArr[index + 1]
+            }" in a team "${id.slice(0, id.length - 10)}"`
+          : `You have been lowered, now your level "${
+              levelArr[index - 1]
+            }" in a team "${id.slice(0, id.length - 10)}"`;
+      if (
+        !(value == "up" && e.level == "Senior") ||
+        !(value == "down" && e.level == "Junior")
+      ) {
+        socket.emit("updateLevelInCommand", {
+          id: id.slice(id.length - 10),
+          email: e.email,
+          movement: value,
+          currentState: index,
+          message: {
+            title: messageNotifications,
+            type: "RoleInfo",
+            from: email,
+            id_notification,
+            id_board: id.slice(id.length - 10),
+          },
+        });
+      }
     };
     const style = role == "Product manager";
     return (
@@ -71,7 +102,11 @@ const ParticipantsItem = ({
             <p className={selectRoleState !== e.email ? "" : "hidden"}>
               Role:{e.role}{" "}
               <SettingsIcon
-                className={style ? "setting-icon-partic" : "hidden"}
+                className={
+                  style && e.role !== "Product manager"
+                    ? "setting-icon-partic"
+                    : "hidden"
+                }
                 onClick={() => {
                   addSelectForm();
                 }}
@@ -111,14 +146,22 @@ const ParticipantsItem = ({
             <p>
               Level: {e.level}
               <ExpandLessIcon
-                className={style ? "setting-icon-partic" : "hidden"}
+                className={
+                  style && e.role !== "Product manager"
+                    ? "setting-icon-partic"
+                    : "hidden"
+                }
                 fontSize="small"
                 onClick={() => {
                   updateUserLevel("up");
                 }}
               />
               <ExpandMoreIcon
-                className={style ? "setting-icon-partic" : "hidden"}
+                className={
+                  style && e.role !== "Product manager"
+                    ? "setting-icon-partic"
+                    : "hidden"
+                }
                 fontSize="small"
                 onClick={() => {
                   updateUserLevel("down");
@@ -133,7 +176,9 @@ const ParticipantsItem = ({
         </div>
         <div
           className={
-            email == boardActive.creator ? "actions-with-users" : "hidden"
+            email == boardActive.creator && e.role !== "Product manager"
+              ? "actions-with-users"
+              : "hidden"
           }
         >
           <button

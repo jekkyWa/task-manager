@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { withRouter } from "react-router-dom";
+import { useHistory, useParams, withRouter } from "react-router-dom";
 import io from "socket.io-client";
 // files
 import { useAuth } from "../hooks/auth.hook";
@@ -10,7 +10,11 @@ import { useHttp } from "../hooks/http.hook";
 import { connect } from "react-redux";
 import { fetchLogin } from "../../action/action-login";
 import { saveDataIdentification } from "../../action/action-identfication-data";
-import { saveSocket, saveNotifications } from "../../action/action-save-date";
+import {
+  saveSocket,
+  saveNotifications,
+  saveActiveBoard,
+} from "../../action/action-save-date";
 import Loading from "../loading/loading-main/loading";
 
 const App = ({
@@ -21,7 +25,13 @@ const App = ({
   saveNotifications,
   saveDataIdentification,
   notifications,
+  saveActiveBoard,
+  boardActive,
+  name,
+  rooms,
 }) => {
+  const { id } = useParams();
+  const history = useHistory();
   const { login, logout, token, userId } = useAuth();
   const [loading, setLoading] = useState(false);
   const isAuthenticated = !!token;
@@ -57,6 +67,37 @@ const App = ({
     }
   }, [isAuthenticated]);
 
+  // Update all items when deleting a user
+  useEffect(() => {
+    if (socket) {
+      socket.on("getDataAfterDeleteUser", (value) => {
+        const idCheck = id ? id.slice(id.length - 10) : "";
+        if (
+          value.board.addedUsers.findIndex((e) => e.email == email) == -1 &&
+          email !== value.board.creator &&
+          idCheck == value.board.board_id
+        ) {
+          saveDataIdentification(email, name, {
+            active: value.active,
+            passive: value.passive,
+            update: true,
+          });
+        } else if (
+          value.board.addedUsers.findIndex((e) => e.email == email) == -1
+        ) {
+          saveDataIdentification(email, name, {
+            active: value.active,
+            passive: value.passive,
+            update: true,
+          });
+        } else {
+          saveActiveBoard(value.board);
+        }
+      });
+      return () => socket.off("getDataAfterDeleteUser");
+    }
+  }, [socket, boardActive]);
+
   // Main connecting sockets
   useEffect(() => {
     if (isAuthenticated && email !== "email") {
@@ -65,7 +106,6 @@ const App = ({
           token,
         },
       });
-
       newSocket.on("disconnect", () => {
         saveSocket(null);
       });
@@ -73,6 +113,9 @@ const App = ({
       newSocket.on("connect", () => {
         newSocket.emit("setUserId", email);
         console.log("succes");
+      });
+      newSocket.on("reconnect", function () {
+        console.log("reconnect fired!");
       });
       saveSocket(newSocket);
       return () => newSocket.disconnect();
@@ -82,9 +125,10 @@ const App = ({
   useEffect(() => {
     if (socket) {
       socket.on("getNotification", (value) => {
+        console.log(value);
         if (value) {
           console.log(value);
-          saveNotifications([...notifications, value[0]]);
+          saveNotifications([...notifications, value]);
         }
       });
       return () => socket.off("getNotification");
@@ -105,10 +149,10 @@ const App = ({
 };
 
 const mapStateToProps = ({
-  reducerDataIdentification: { email },
+  reducerDataIdentification: { email, name, rooms },
   reducerSaveData: { boardActive, socket, notifications },
 }) => {
-  return { boardActive, email, socket, notifications };
+  return { boardActive, email, socket, notifications, name, rooms };
 };
 
 const mapDispatchToProps = (dispatch) => {
@@ -124,6 +168,9 @@ const mapDispatchToProps = (dispatch) => {
     },
     saveDataIdentification: (email, name, rooms) => {
       dispatch(saveDataIdentification(email, name, rooms));
+    },
+    saveActiveBoard: (boardActive) => {
+      dispatch(saveActiveBoard(boardActive));
     },
   };
 };

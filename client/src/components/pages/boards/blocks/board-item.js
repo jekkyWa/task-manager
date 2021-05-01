@@ -1,7 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 // files
-import { mark } from "../../utils/mark";
+import { useMark } from "../../utils/mark";
 import { useHttp } from "../../../hooks/http.hook";
 import "../../boards-blocks/boards-main-page.scss";
 // material
@@ -19,6 +19,7 @@ const BoardItem = ({
   url,
 }) => {
   const { request } = useHttp();
+  const { mark, loading } = useMark();
 
   const label = allDataForBoardsPage.cards.active
     .concat(allDataForBoardsPage.cards.passive)

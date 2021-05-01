@@ -24,6 +24,12 @@ const NotificationItem = ({ email, notifications, socket }) => {
         date: dateFormat(now, "dd-mm-yyyy, hh:MM:ss "),
       });
     };
+    const readedNotififcation = async () => {
+      socket.emit("readedNotification", {
+        id_notification: e.id_notification,
+        email: email,
+      });
+    };
     if (e.type == "AddingToCommand") {
       return (
         <div
@@ -51,6 +57,30 @@ const NotificationItem = ({ email, notifications, socket }) => {
               }}
             >
               Refuse
+            </button>
+          </div>
+        </div>
+      );
+    }
+    if (e.type == "RoleInfo") {
+      return (
+        <div
+          key={i}
+          className={
+            i + 1 == notifications.length
+              ? "notifications-item-body notifications-item-body-end"
+              : "notifications-item-body"
+          }
+        >
+          <h1>{e.title}</h1>
+          <div className="btns-notifications-item-body">
+            <button
+              className="refuse"
+              onClick={() => {
+                readedNotififcation();
+              }}
+            >
+              Delete
             </button>
           </div>
         </div>

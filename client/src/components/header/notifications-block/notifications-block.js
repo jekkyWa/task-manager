@@ -31,6 +31,14 @@ const NotificationsBlock = ({
 
   useEffect(() => {
     if (socket) {
+      socket.on("getAfterReadedNotification", (value) => {
+        saveNotifications(value);
+      });
+    }
+  });
+
+  useEffect(() => {
+    if (socket) {
       socket.on("getAfterAcceptNotification", (value) => {
         saveNotifications(value.user.notifications);
         console.log(value);

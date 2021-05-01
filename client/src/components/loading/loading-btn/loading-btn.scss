@@ -6,6 +6,15 @@
     opacity: 0;
   }
 }
+
+.black-loading {
+  color: black !important;
+  > div {
+    > div {
+      background: black !important;
+    }
+  }
+}
 .ldio-kg4bf1orb3r div {
   left: 48px;
   top: -1px;

@@ -173,7 +173,6 @@ const CardItem = ({
             >
               <p>Title: {element.title}</p>
               <p>Role: {label}</p>
-              <p>11231223</p>
             </div>
           );
         }

@@ -110,6 +110,24 @@ const CardPage = ({
 
   useEffect(() => {
     if (socket) {
+      socket.on("getNewRole", (value) => {
+        saveRole({ ...roleProfileInBoard, role: value.role });
+      });
+      return () => socket.off("getNewRole");
+    }
+  }, [socket, roleProfileInBoard]);
+
+  useEffect(() => {
+    if (socket) {
+      socket.on("getNewLevel", (value) => {
+        saveRole({ ...roleProfileInBoard, level: value.level });
+      });
+      return () => socket.off("getNewLevel");
+    }
+  }, [socket, roleProfileInBoard]);
+
+  useEffect(() => {
+    if (socket) {
       socket.on("getChangeRole", (value) => {
         if (dataToModal) {
           const item = value.cards.filter(

@@ -8,6 +8,7 @@ import "../boards-blocks/boards-main-page.scss";
 import Loading from "../../loading/loading-main/loading";
 import BoardMarkItem from "../boards-blocks/board-marks-item";
 import BoardInCommandItem from "./blocks/board-in-command-item";
+import { useMark } from "../utils/mark";
 // redux
 import { connect } from "react-redux";
 import {
@@ -18,6 +19,7 @@ import {
 // material
 import PersonOutlineOutlinedIcon from "@material-ui/icons/PersonOutlineOutlined";
 import StarOutlineRoundedIcon from "@material-ui/icons/StarOutlineRounded";
+import LoadingBtn from "../../loading/loading-btn/loading-btn";
 
 const BoardPage = ({
   saveDataCards,
@@ -34,6 +36,7 @@ const BoardPage = ({
   // router
   const history = useHistory();
   let { id } = useParams();
+  const { loadingMark, mark } = useMark();
 
   const [modalShow, setModalShow] = useState(false);
   const [loading, setLoading] = useState(true);
@@ -77,7 +80,7 @@ const BoardPage = ({
     }
   }, [id, socket]);
 
-  // обновление всех элементов при удалении пользователя
+  // Update all items when deleting a user
   useEffect(() => {
     if (socket) {
       socket.on("getDataAfterDeleteUser", (value) => {
@@ -114,7 +117,15 @@ const BoardPage = ({
               <StarOutlineRoundedIcon />
               <h1>Marked boards</h1>
             </div>
-            <div className={marksBoard.length == 0 ? "hidden" : "boards-body"}>
+            <div className={loadingMark ? "load-mark" : "hidden"}>
+              <LoadingBtn style={true} />
+              <h1>Action is performed, please wait :)</h1>
+            </div>
+            <div
+              className={
+                marksBoard.length == 0 || loadingMark ? "hidden" : "boards-body"
+              }
+            >
               <BoardMarkItem
                 email={email}
                 token={token}
@@ -122,9 +133,12 @@ const BoardPage = ({
                 allDataForBoardsPage={marksBoard}
                 saveDataForBoardsPage={markBoard}
                 url="addMark"
+                mark={mark}
               />
             </div>
-            <div className={marksBoard.length !== 0 ? "hidden" : ""}>
+            <div
+              className={marksBoard.length !== 0 || loadingMark ? "hidden" : ""}
+            >
               <h1 className="mark-recomendation">
                 You can mark the boards for more convenient work.
               </h1>
@@ -143,6 +157,7 @@ const BoardPage = ({
                 allDataForBoardsPageMarks={marksBoard}
                 saveDataForBoardsPage={markBoard}
                 url="addMark"
+                mark={mark}
               />
               <div
                 className={`${
