@@ -8,13 +8,10 @@ const ObjectId = require("mongodb").ObjectId;
 router.post("/", auth, async (req, res) => {
   try {
     const { board_id, email, newMarkBoard, state } = req.body;
-    console.log(board_id, email, newMarkBoard, state);
     const board = await Board.find({ board_id });
     let boardOriginal = JSON.parse(JSON.stringify(board));
 
     const indexUser = board[0].addedUsers.findIndex((e) => e.email == email);
-
-    console.log(indexUser);
 
     if (state) {
       board[0].addedUsers[indexUser].marks = [
@@ -53,7 +50,9 @@ router.post("/", auth, async (req, res) => {
       marksCards: marksCardsFilter,
     });
   } catch (e) {
-    res.status(500).json({ message: "Что-то пошло не так, попробуйте снова" });
+    res
+      .status(500)
+      .json({ message: "Something went wrong, try reload this page" });
   }
 });
 

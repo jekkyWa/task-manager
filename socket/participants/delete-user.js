@@ -30,7 +30,7 @@ module.exports = function (socket, io) {
 
     await Board.updateOne(boardOriginal[0], board[0]);
     await User.updateOne(userOriginal[0], user[0]);
-
+    console.log(filterRoomsActive, filterRoomsPassive);
     io.emit("getDataAfterDeleteUser", {
       board: board[0],
       user: user[0],

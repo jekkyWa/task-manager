@@ -43,8 +43,6 @@ router.post("/createBoard", auth, async (req, res) => {
       });
     }
 
-    console.log(board);
-
     await board.save();
 
     const value = await User.find({ _id: ObjectId(req.user.userId) });

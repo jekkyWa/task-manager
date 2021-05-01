@@ -1,7 +1,7 @@
 const Board = require("../../models/Board");
 const User = require("../../models/User");
 
-module.exports = function (socket, _users, io) {
+module.exports = function (socket, io) {
   socket.on(
     "acceptOffer",
     async ({ id_notification, id_board, email, message, date }) => {
@@ -47,7 +47,7 @@ module.exports = function (socket, _users, io) {
       });
 
       socket.to(id_board + "partic").emit("getBoardWithNewUser", board[0]);
-      io.in(_users[email]).emit("getAfterAcceptNotification", {
+      io.in(email).emit("getAfterAcceptNotification", {
         user: user[0],
         rooms: {
           active: [...filterRoomsActive],

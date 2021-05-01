@@ -51,10 +51,8 @@ const {
   acceptOffer,
   refuseOffer,
   sendNotification,
+  readedNotification,
 } = require("./socket/notifications");
-
-// Key-meaning (email - socket)
-let _users = {};
 
 mongoose.connect(config.get("mongoUri"), {
   useNewUrlParser: true,
@@ -100,8 +98,8 @@ io.on("connection", (socket) => {
   console.log("Connected: " + socket.id);
 
   socket.on("setUserId", (email) => {
-    _users[email] = socket.id;
-    console.log(_users);
+    console.log("join" + email);
+    socket.join(email);
   });
 
   socket.on("disconnect", () => {
@@ -137,11 +135,13 @@ io.on("connection", (socket) => {
   exitCommand(socket);
 
   // Send notification
-  sendNotification(socket, _users);
+  sendNotification(socket, io);
   // Refusal to participate in the team
-  refuseOffer(socket, _users, io);
+  refuseOffer(socket, io);
   // Agree to participate in the team
-  acceptOffer(socket, _users, io);
+  acceptOffer(socket, io);
+  // Accept notification
+  readedNotification(socket, io);
 
   // Adding a new User to Board
   addAdditionalUser(socket, io);
