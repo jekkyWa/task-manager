@@ -10,6 +10,7 @@ import FavoriteBorderOutlinedIcon from "@material-ui/icons/FavoriteBorderOutline
 import PeopleOutlineOutlinedIcon from "@material-ui/icons/PeopleOutlineOutlined";
 import SupervisorAccountIcon from "@material-ui/icons/SupervisorAccount";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
+import KeyboardArrowUpIcon from "@material-ui/icons/KeyboardArrowUp";
 import DashboardIcon from "@material-ui/icons/Dashboard";
 
 const SideBarItem = ({ rooms, email, socket }) => {
@@ -34,7 +35,12 @@ const SideBarItem = ({ rooms, email, socket }) => {
             <span>{e.creator}</span>: {e.name_Project}
           </h2>
           <div className="proj-icon">
-            <ExpandMoreIcon />
+            <ExpandMoreIcon
+              className={arrId.indexOf(e.board_id) !== -1 ? "hidden" : ""}
+            />
+            <KeyboardArrowUpIcon
+              className={arrId.indexOf(e.board_id) == -1 ? "hidden" : ""}
+            />
           </div>
         </div>
         <div

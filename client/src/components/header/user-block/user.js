@@ -8,7 +8,7 @@ import { connect } from "react-redux";
 // material
 import CloseIcon from "@material-ui/icons/Close";
 
-const UserBlock = ({ logout, name, email, showUserBlock }) => {
+const UserBlock = ({ logout, name, email, showUserBlock, rooms }) => {
   const history = useHistory();
   const logoutHandler = (event) => {
     event.preventDefault();
@@ -31,16 +31,22 @@ const UserBlock = ({ logout, name, email, showUserBlock }) => {
         </div>
       </div>
       <div className="user-profile-block">
-        <div className="user-profile-block-icon">
-          <h1>1</h1>
-        </div>
         <div className="user-profile-block-info">
-          <h1>{email}</h1>
-          <h1>{name}</h1>
+          <h1>
+            Email user: <span>{email}</span>
+          </h1>
+          <h1>
+            Username: <span>{name}</span>
+          </h1>
+          <h1>
+            Number of active rooms: <span>{rooms.active.length}</span>
+          </h1>
+          <h1>
+            Number of passive rooms: <span>{rooms.passive.length}</span>
+          </h1>
         </div>
       </div>
       <div className="menu-user-block">
-        <h1>Change password</h1>
         <h1 onClick={logoutHandler}>Go out</h1>
       </div>
     </div>
@@ -56,13 +62,14 @@ const mapDispatchToProps = (dispatch) => {
 };
 
 const mapStateToProps = ({
-  reducerDataIdentification: { name, email },
+  reducerDataIdentification: { name, email, rooms },
   loginReducer: { logout },
 }) => {
   return {
     logout,
     name,
     email,
+    rooms,
   };
 };
 
