@@ -77,7 +77,7 @@ const AddUserBlock = ({
   }, [valid]);
 
   return (
-    <div className={showInputAdd ? "" : "hidden"}>
+    <div className={showInputAdd ? "add-user-block-body" : "hidden"}>
       <div className="add-user-email-partic">
         <p>Email</p>
         <input

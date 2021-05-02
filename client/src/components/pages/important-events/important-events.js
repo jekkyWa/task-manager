@@ -6,17 +6,18 @@ import SideBar from "../../sideBar/side-bar";
 import "./important-events.scss";
 import Loading from "../../loading/loading-main/loading";
 import LabelMainActivity from "./blocks/label-main-activity";
+import LabelCardActivity from "./blocks/label-card-activity";
 // redux
 import { saveImportantEvents } from "../../../action/action-save-date";
 import { connect } from "react-redux";
 // material
 import DeveloperBoardIcon from "@material-ui/icons/DeveloperBoard";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
-import LabelCardActivity from "./blocks/label-card-activity";
+import KeyboardArrowUpIcon from "@material-ui/icons/KeyboardArrowUp";
 
 const ImportantEvents = ({ socket, saveImportantEvents, importantEvents }) => {
   const { id } = useParams();
-
+  const [showRecentBoards, setShowRecentBoards] = useState(true);
   const [loading, setLoading] = useState(true);
 
   // Get data
@@ -61,11 +62,30 @@ const ImportantEvents = ({ socket, saveImportantEvents, importantEvents }) => {
                 <h1>Recent Board Actions </h1>
               </div>
               <div>
-                <ExpandMoreIcon fontSize="small" />
+                <ExpandMoreIcon
+                  className={
+                    !showRecentBoards ? "expand-more-icon-imp-events" : "hidden"
+                  }
+                  fontSize="small"
+                  onClick={() => {
+                    setShowRecentBoards((prev) => !prev);
+                  }}
+                />
+                <KeyboardArrowUpIcon
+                  className={
+                    showRecentBoards ? "expand-more-icon-imp-events" : "hidden"
+                  }
+                  fontSize="small"
+                  onClick={() => {
+                    setShowRecentBoards((prev) => !prev);
+                  }}
+                />
               </div>
             </div>
           </div>
-          <LabelMainActivity importantEvents={importantEvents} />
+          <div className={showRecentBoards ? "" : "hidden"}>
+            <LabelMainActivity importantEvents={importantEvents} />
+          </div>
           <LabelCardActivity importantEvents={importantEvents} />
         </div>
       </div>

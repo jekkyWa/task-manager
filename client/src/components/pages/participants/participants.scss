@@ -69,11 +69,11 @@
     padding: 7px;
     font-size: 14px;
     font-weight: 400;
-    background-color: rgb(235, 235, 235);
-    margin-bottom: 10px;
+    background-color: rgb(222, 222, 223);
+    margin-bottom: 20px;
     color: #172b4d;
     &:hover {
-      background-color: rgb(226, 226, 226);
+      background-color: rgb(225, 225, 225);
     }
   }
   .add-user-partic-active {
@@ -87,15 +87,15 @@
       padding: 7px;
       font-size: 14px;
       font-weight: 400;
-      background-color: rgb(235, 235, 235);
+      background-color: rgb(222, 222, 223);
       margin-bottom: 10px;
       color: #172b4d;
       &:hover {
-        background-color: rgb(226, 226, 226);
+        background-color: rgb(225, 225, 225);
       }
     }
     .close-icon-partic {
-      margin-top: 8px;
+      margin-top: 12px;
       cursor: pointer;
       &:hover {
         color: black;
@@ -192,7 +192,7 @@
   display: flex;
   padding: 10px;
   width: 300px;
-  >h1{
+  > h1 {
     font-size: 16px;
   }
   .activity-block-icon {
@@ -203,10 +203,17 @@
   }
 }
 
-.error-add-user-block{
+.error-add-user-block {
   margin-top: 5px;
   text-align: center;
   margin-bottom: 0px;
   font-weight: 600;
   font-size: 14px;
+}
+
+.add-user-block-body {
+  background-color: rgb(250, 251, 252);
+  box-shadow: 0px 0px 7px 2px #b9b9b9;
+  padding: 2px 10px 2px 10px;
+  margin-bottom: 20px;
 }
