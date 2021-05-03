@@ -6,7 +6,11 @@ const EmptyHandlerBoard = ({ labelItem }) => {
   }
   return (
     <div className="boards-body">
-      <h1>In this team, exist "Boards"</h1>
+      <h1>
+        In this team, there are no created boards, but if you are Creator, go
+        over the tab and create a new board. Or wait while it will create a team
+        owner.
+      </h1>
     </div>
   );
 };

@@ -3,8 +3,22 @@ import { useParams } from "react-router-dom";
 // files
 import "./created-tasks.scss";
 
-const CreatedTasks = ({ cardFull, email, modalShow, saveDataToModal }) => {
+const CreatedTasks = ({
+  cardFull,
+  email,
+  modalShow,
+  saveDataToModal,
+  showNotifications,
+  showUserBlock,
+  showMenuFunc,
+}) => {
   let { name } = useParams();
+
+  const closeAllWindow = () => {
+    showUserBlock(false);
+    showNotifications(false);
+    showMenuFunc(false);
+  };
 
   // Data filter required for display
   const filterItem = cardFull.cards
@@ -29,6 +43,7 @@ const CreatedTasks = ({ cardFull, email, modalShow, saveDataToModal }) => {
         className="task-item-created-menu"
         key={i}
         onClick={() => {
+          closeAllWindow();
           saveDataToModal({
             name: e.title,
             column: findOtherData(e.id_task)[0].card_name,

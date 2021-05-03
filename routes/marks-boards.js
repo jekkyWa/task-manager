@@ -4,7 +4,6 @@ const auth = require("../middleware/auth.middleware");
 const Board = require("../models/Board");
 const Cards = require("../models/Cards");
 const User = require("../models/User");
-const ObjectId = require("mongodb").ObjectId;
 
 router.post("/", auth, async (req, res) => {
   try {

@@ -10,7 +10,7 @@ const ButtonMenu = ({ name, board_id }) => {
   return (
     <div className="btn-block-boards-main-page">
       <div>
-        <DashboardIcon сlass="btn-icon-block-boards" fontSize="small" />
+        <DashboardIcon сlassName="btn-icon-block-boards" fontSize="small" />
         <span>
           <Link to={`/boards/${name + board_id}`}>Boards</Link>
         </span>
@@ -36,13 +36,6 @@ const ButtonMenu = ({ name, board_id }) => {
             Participants
           </Link>
         </span>
-      </div>
-      <div>
-        <DeleteOutlineOutlinedIcon
-          сlassName="btn-icon-block-boards"
-          fontSize="small"
-        />
-        <span>Delete</span>
       </div>
     </div>
   );

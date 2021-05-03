@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useHistory, useParams, withRouter } from "react-router-dom";
+import { Redirect, useHistory, useParams, withRouter } from "react-router-dom";
 import io from "socket.io-client";
 // files
 import { useAuth } from "../hooks/auth.hook";
@@ -31,8 +31,7 @@ const App = ({
   rooms,
 }) => {
   const { id } = useParams();
-  const history = useHistory();
-  const { login, logout, token, userId } = useAuth();
+  const { login, logout, token, userId, ready } = useAuth();
   const [loading, setLoading] = useState(false);
   const isAuthenticated = !!token;
   useEffect(() => {
@@ -40,10 +39,54 @@ const App = ({
   }, [token, login]);
   const { request } = useHttp();
 
-  // For dough on phone
-  const phone = "192.168.43.127:5000";
   // For basic test
   const local = "http://localhost:5000";
+
+  useEffect(() => {
+    if (socket) {
+      socket.on("getDataAfterExit", (value) => {
+        saveDataIdentification(email, name, value);
+      });
+      return () => socket.off("getDataAfterDeleteUser");
+    }
+  }, [socket, rooms]);
+
+  useEffect(() => {
+    if (socket) {
+      socket.on("getDataAfterDeleteCommand", (value) => {
+        console.log(value);
+        if (value.emailOfCreator == email) {
+          const deleteRoomIndexOfCreator = rooms.active.findIndex(
+            (e) => e.board_id == value.board_id
+          );
+          const deleteItemOfCreator = {
+            active: [
+              ...rooms.active.slice(0, deleteRoomIndexOfCreator),
+              ...rooms.active.slice(deleteRoomIndexOfCreator + 1),
+            ],
+            passive: rooms.passive,
+            update: false,
+          };
+          saveDataIdentification(email, name, deleteItemOfCreator);
+          return (window.location.href = "/begin");
+        }
+        const deleteRoomIndex = rooms.passive.findIndex(
+          (e) => e.board_id == value.board_id
+        );
+        const deleteItem = {
+          active: rooms.active,
+          passive: [
+            ...rooms.passive.slice(0, deleteRoomIndex),
+            ...rooms.passive.slice(deleteRoomIndex + 1),
+          ],
+          update: false,
+        };
+        saveDataIdentification(email, name, deleteItem);
+        return (window.location.href = "/begin");
+      });
+      return () => socket.off("getDataAfterDeleteCommand");
+    }
+  }, [socket, rooms]);
 
   useEffect(async () => {
     let url = window.location.href;
@@ -82,6 +125,7 @@ const App = ({
             passive: value.passive,
             update: true,
           });
+          window.location.href = "/begin";
         } else if (
           value.board.addedUsers.findIndex((e) => e.email == email) == -1
         ) {
@@ -90,6 +134,7 @@ const App = ({
             passive: value.passive,
             update: true,
           });
+          window.location.href = "/begin";
         } else {
           saveActiveBoard(value.board);
         }
@@ -97,6 +142,10 @@ const App = ({
       return () => socket.off("getDataAfterDeleteUser");
     }
   }, [socket, boardActive]);
+
+  useEffect(() => {
+    console.log(isAuthenticated);
+  }, [isAuthenticated]);
 
   // Main connecting sockets
   useEffect(() => {
@@ -137,7 +186,7 @@ const App = ({
 
   const routes = useRoutes(isAuthenticated);
 
-  if (loading) {
+  if (loading || !ready) {
     return (
       <div className="loading">
         <Loading />

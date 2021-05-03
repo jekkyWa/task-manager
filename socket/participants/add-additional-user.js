@@ -20,5 +20,6 @@ module.exports = function (socket, io) {
     await Board.updateOne(boardOriginal[0], value[0]);
 
     io.in(board_id + "partic").emit("getNewUsers", value[0]);
+    socket.to(data.email).emit("getNotification", message);
   });
 };

@@ -19,7 +19,6 @@ module.exports = function (socket, io) {
       ...user[0].passive_rooms.slice(indexUser + 1),
     ];
     const userOriginal = await User.find({ email });
-
     const filterRoomsActive = await Board.find({
       board_id: user[0].active_rooms,
     });
@@ -30,8 +29,8 @@ module.exports = function (socket, io) {
 
     await Board.updateOne(boardOriginal[0], board[0]);
     await User.updateOne(userOriginal[0], user[0]);
-    console.log(filterRoomsActive, filterRoomsPassive);
-    io.emit("getDataAfterDeleteUser", {
+    console.log(user[0].email);
+    io.sockets.emit("getDataAfterDeleteUser", {
       board: board[0],
       user: user[0],
       active: filterRoomsActive,

@@ -32,7 +32,7 @@ module.exports = function (socket, io) {
     // Оригинальный элемент без изменений
     const originalValue = await Cards.find({ card_id: id_board });
 
-    io.emit("getRenameData", value[0]);
+    io.in(id_board).emit("getRenameData", value[0]);
 
     await Cards.updateOne(originalValue[0], value[0]);
   });

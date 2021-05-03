@@ -85,6 +85,15 @@ const ImportantEvents = ({ socket, saveImportantEvents, importantEvents }) => {
           </div>
           <div className={showRecentBoards ? "" : "hidden"}>
             <LabelMainActivity importantEvents={importantEvents} />
+            <h1
+              className={
+                importantEvents.board[0].boards_activity.length == 0
+                  ? "empty-important-events"
+                  : "hidden"
+              }
+            >
+              In this board, nothing interesting happened
+            </h1>
           </div>
           <LabelCardActivity importantEvents={importantEvents} />
         </div>

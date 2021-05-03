@@ -37,7 +37,7 @@ const AddUserBlock = ({
       message: {
         title: `User ${email} invites you to the team ${id.slice(
           0,
-          id.length - id.length - 10
+          id.length - 10
         )}`,
         type: "AddingToCommand",
         from: email,

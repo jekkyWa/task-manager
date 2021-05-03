@@ -20,10 +20,11 @@ const BoardMarkItem = ({
   let { id } = useParams();
 
   const labelMarks = dataMarksForBoardsPage.map((e, i) => {
+    const board_id = e.board_id ? e.board_id : id.slice(id.length - 10);
     return (
       <div className={`board ${e.color}`} key={i}>
         <div>
-          <Link to={`/boards/${id}/${e.card_id}`}>
+          <Link to={`/boards/${id ? id : e.name + e.board_id}/${e.card_id}`}>
             <div className="main-link-boards">
               <h1>{e.name_Board}</h1>
             </div>
@@ -34,7 +35,7 @@ const BoardMarkItem = ({
           onClick={() => {
             // Cancel boot mark for it answers bool
             mark(
-              id.slice(id.length - 10),
+              board_id,
               e.card_id,
               allDataForBoardsPage,
               saveDataForBoardsPage,

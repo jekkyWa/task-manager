@@ -18,6 +18,9 @@ const SideBarItem = ({ rooms, email, socket }) => {
   //Compound of active and passive rooms
   const commonLabel = rooms.active.concat(rooms.passive);
   const label = commonLabel.map((e, i) => {
+    const exit = () => {
+      socket.emit("exitCommand", { board_id: e.board_id, email });
+    };
     return (
       <React.Fragment key={i}>
         <div
@@ -91,7 +94,9 @@ const SideBarItem = ({ rooms, email, socket }) => {
             >
               Delete
             </h1>
-            <h1 className={email !== e.creator ? "" : "hidden"}>Exit</h1>
+            <h1 onClick={exit} className={email !== e.creator ? "" : "hidden"}>
+              Exit
+            </h1>
           </div>
         </div>
       </React.Fragment>

@@ -43,6 +43,15 @@ const Participants = ({ socket, saveActiveBoard, email, boardActive }) => {
 
   useEffect(() => {
     if (socket) {
+      socket.on("getUsersAfterExit", (value) => {
+        saveActiveBoard(value);
+      });
+      return () => socket.off("getUsersAfterExit");
+    }
+  }, [socket, boardActive]);
+
+  useEffect(() => {
+    if (socket) {
       socket.on("getBoardWithNewUser", (value) => {
         saveActiveBoard(value);
         // After the data come to stop further sending
@@ -83,28 +92,14 @@ const Participants = ({ socket, saveActiveBoard, email, boardActive }) => {
     if (socket) {
       socket.on("getRightBoard", (value) => {
         saveActiveBoard(value);
-        setLoading(false);
+        if (value) {
+          setLoading(false);
+        } else {
+          throw new Error("This project was removed");
+        }
       });
     }
   }, [id, socket]);
-
-  // Update all items when deleting a user
-  useEffect(() => {
-    if (socket) {
-      socket.on("getDataAfterDeleteUser", (value) => {
-        if (
-          value.board.addedUsers.findIndex((e) => e.email == email) == -1 &&
-          email !== value.board.creator &&
-          id.slice(id.length - 10) == value.board.board_id
-        ) {
-          history.push("/page");
-        } else {
-          saveActiveBoard(value.board);
-        }
-      });
-      return () => socket.off("getDataAfterDeleteUser");
-    }
-  }, [socket, boardActive]);
 
   if (loading) {
     return (

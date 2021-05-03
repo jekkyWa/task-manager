@@ -44,21 +44,21 @@ const useRoutes = (isAuthenticated) => {
         <Redirect to="/begin" />
       </Switch>
     );
-  } else {
-    return (
-      <Switch>
-        <Route path="/main_page" exact>
-          <Page />
-        </Route>
-        <Route path="/signup" exact>
-          <Register />
-        </Route>
-        <Route path="/login" exact>
-          <Login />
-        </Route>
-      </Switch>
-    );
   }
+  return (
+    <Switch>
+      <Route path="/main_page" exact>
+        <Page />
+      </Route>
+      <Route path="/signup" exact>
+        <Register />
+      </Route>
+      <Route path="/login" exact>
+        <Login />
+      </Route>
+      <Redirect to="/main_page" />
+    </Switch>
+  );
 };
 
 export default useRoutes;

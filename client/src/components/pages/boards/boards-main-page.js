@@ -6,6 +6,7 @@ import Loading from "../../loading/loading-main/loading";
 import "../boards-blocks/boards-main-page.scss";
 import BoardMarksItem from "../boards-blocks/board-marks-item";
 import BoardItem from "./blocks/board-item";
+import { useMark } from "../utils/mark";
 // redux
 import { connect } from "react-redux";
 import {
@@ -14,6 +15,7 @@ import {
 } from "../../../action/action-save-date";
 // material
 import StarOutlineRoundedIcon from "@material-ui/icons/StarOutlineRounded";
+import LoadingBtn from "../../loading/loading-btn/loading-btn";
 
 const BoardsMainPage = ({
   socket,
@@ -23,6 +25,7 @@ const BoardsMainPage = ({
   token,
 }) => {
   const [loading, setLoading] = useState(true);
+  const { loadingMark, mark } = useMark();
 
   // Connect to the room MainPageBoard
   useEffect(() => {
@@ -64,13 +67,29 @@ const BoardsMainPage = ({
               <StarOutlineRoundedIcon />
               <h1>Marked boards</h1>
             </div>
-            <div className="boards-body">
+            <div
+              className={
+                !loadingMark && allDataForBoardsPage.marks.length == 0
+                  ? ""
+                  : "hidden"
+              }
+            >
+              <h1 className="mark-recomendation">
+                You can mark the boards for more convenient work.
+              </h1>
+            </div>
+            <div className={loadingMark ? "load-mark" : "hidden"}>
+              <LoadingBtn style={true} />
+              <h1>Action is performed, please wait :)</h1>
+            </div>
+            <div className={loadingMark ? "hidden" : "boards-body"}>
               <BoardMarksItem
                 email={email}
                 token={token}
                 dataMarksForBoardsPage={allDataForBoardsPage.marks}
                 allDataForBoardsPage={allDataForBoardsPage}
                 saveDataForBoardsPage={saveDataForBoardsPage}
+                mark={mark}
                 url="addMarkMainBoards"
               />
             </div>
@@ -82,6 +101,7 @@ const BoardsMainPage = ({
               allDataForBoardsPage={allDataForBoardsPage}
               saveDataForBoardsPage={saveDataForBoardsPage}
               url="addMarkMainBoards"
+              mark={mark}
             />
           </div>
         </div>

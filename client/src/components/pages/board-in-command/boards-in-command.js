@@ -145,11 +145,21 @@ const BoardPage = ({
             </div>
           </div>
           <div className="boards-page-body main-body-boards">
-            <div className="boards-page-header">
+            <div className="boards-page-header boards-body-header">
               <PersonOutlineOutlinedIcon />
               <h1>Your workspace boards</h1>
             </div>
             <div className="boards-body">
+              <div
+                className={
+                  roleProfileInBoard.role !== "Product manager" &&
+                  boards.length == 0
+                    ? ""
+                    : "hidden"
+                }
+              >
+                <h3>Product Manager has not created any other board</h3>
+              </div>
               <BoardInCommandItem
                 email={email}
                 token={token}

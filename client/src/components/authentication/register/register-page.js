@@ -48,7 +48,7 @@ export const Register = ({ login }) => {
           password: formReg.password,
         });
         login(loginData.token, loginData.userId);
-        history.push("/begin");
+        window.location.href = "/begin";
       } catch (e) {}
       return;
     }

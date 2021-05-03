@@ -1,6 +1,6 @@
 import React from "react";
 // files
-import "../completed-tasks.scss"
+import "../completed-tasks.scss";
 
 const CompletedTasksItem = ({
   dataCompliteTask,
@@ -8,12 +8,21 @@ const CompletedTasksItem = ({
   saveDataToModal,
   modalShow,
   name,
+  showNotifications,
+  showUserBlock,
+  showMenuFunc,
 }) => {
+  const closeAllWindow = () => {
+    showUserBlock(false);
+    showNotifications(false);
+    showMenuFunc(false);
+  };
   const label = dataCompliteTask.map((e, i) => {
     return (
       <div
         key={i}
         onClick={() => {
+          closeAllWindow();
           findOtherData(e.id_task);
           saveDataToModal({
             name: e.title,
@@ -37,7 +46,11 @@ const CompletedTasksItem = ({
   if (label.length !== 0) {
     return label;
   }
-  return <h1 className="none-complited-task">Your team did not fulfill any task of this role.</h1>
+  return (
+    <h1 className="none-complited-task">
+      Your team did not fulfill any task of this role.
+    </h1>
+  );
 };
 
 export default CompletedTasksItem;

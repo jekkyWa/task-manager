@@ -5,10 +5,8 @@ const User = require("../../models/User");
 module.exports = function (socket) {
   socket.on("joinMainPageBoard", async ({ email }) => {
     console.log("joinMainPageBoard");
-    // Нужно вернуть id_board
     const value = await User.find({ email: email });
     const command = value[0].active_rooms.concat(value[0].passive_rooms);
-
     const boards = await Board.find({ board_id: command });
     const marksId = boards
       .map((e, i) => {

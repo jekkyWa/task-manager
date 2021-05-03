@@ -130,9 +130,9 @@ io.on("connection", (socket) => {
   leaveParticipants(socket);
 
   // Deleting a team
-  deleteCommand(socket);
+  deleteCommand(socket, io);
   // Coming from the team
-  exitCommand(socket);
+  exitCommand(socket, io);
 
   // Send notification
   sendNotification(socket, io);

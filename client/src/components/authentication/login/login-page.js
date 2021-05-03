@@ -22,7 +22,7 @@ const Login = ({ login, logout }) => {
     try {
       const data = await request("/api/auth/login", "POST", { ...formLog });
       login(data.token, data.userId);
-      history.push("/begin");
+      window.location.href = '/begin';
     } catch (e) {}
   };
 

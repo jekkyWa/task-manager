@@ -17,27 +17,21 @@ const SideBar = () => {
     <div className="projects">
       <nav className="main-page-left-sidebar">
         <div className="sidebar-block-one">
-          <div className="sidebar-block-one-item">
+          <Link to="/boards" className="sidebar-block-one-item">
             <DashboardIcon className="main-icon-side-bar" fontSize="small" />
-            <h1>
-              <Link to="/boards"> Boards</Link>
-            </h1>
-          </div>
-          <div className="sidebar-block-one-item">
+            <h1>Boards</h1>
+          </Link>
+          <Link to="/main_page" className="sidebar-block-one-item">
             <TimelineIcon className="main-icon-side-bar" fontSize="small" />
-            <h1>
-              <Link to="/main_page"> Home page</Link>
-            </h1>
-          </div>
-          <div className="sidebar-block-one-item">
+            <h1>Home page</h1>
+          </Link>
+          <Link to="/begin" className="sidebar-block-one-item">
             <CheckBoxOutlinedIcon
               className="main-icon-side-bar"
               fontSize="small"
             />
-            <h1>
-              <Link to="/begin"> Beginning of work</Link>
-            </h1>
-          </div>
+            <h1>Beginning of work</h1>
+          </Link>
         </div>
         <div className="sidebar-block-two">
           <div className="sidebar-block-two-item-comand">

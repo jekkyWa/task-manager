@@ -9,6 +9,12 @@ import CompletedTasks from "../competed-tasks/completed-tasks";
 import { connect } from "react-redux";
 import { displaySelection } from "../../../action/action-save-date";
 import { modalShow } from "../../../action/action-modal";
+import {
+  showNotifications,
+  showUserBlock,
+  showMenuFunc,
+} from "../../../action/action-show";
+
 import { saveDataToModal } from "../../../action/action-save-date";
 // material
 import CloseIcon from "@material-ui/icons/Close";
@@ -29,6 +35,9 @@ const Menu = ({
   modalShow,
   email,
   activData,
+  showNotifications,
+  showUserBlock,
+  showMenuFunc,
 }) => {
   // Switching between menu items occurs with the value of the state
   const [selectState, setSelectState] = useState("Menu");
@@ -132,6 +141,9 @@ const Menu = ({
           saveDataToModal={saveDataToModal}
           modalShow={modalShow}
           cardFull={cardFull}
+          showNotifications={showNotifications}
+          showUserBlock={showUserBlock}
+          showMenuFunc={showMenuFunc}
         />
       </div>
       {/* Displays taken assignments */}
@@ -141,6 +153,9 @@ const Menu = ({
           email={email}
           modalShow={modalShow}
           saveDataToModal={saveDataToModal}
+          showNotifications={showNotifications}
+          showUserBlock={showUserBlock}
+          showMenuFunc={showMenuFunc}
         />
       </div>
       {/* Display created tasks */}
@@ -154,6 +169,9 @@ const Menu = ({
           email={email}
           modalShow={modalShow}
           saveDataToModal={saveDataToModal}
+          showNotifications={showNotifications}
+          showUserBlock={showUserBlock}
+          showMenuFunc={showMenuFunc}
         />
       </div>
     </div>
@@ -182,6 +200,15 @@ const mapDispatchToProps = (dispatch) => {
     },
     modalShow: (show) => {
       dispatch(modalShow(show));
+    },
+    showNotifications: (showNotification) => {
+      dispatch(showNotifications(showNotification));
+    },
+    showUserBlock: (showUser) => {
+      dispatch(showUserBlock(showUser));
+    },
+    showMenuFunc: (showMenu) => {
+      dispatch(showMenuFunc(showMenu));
     },
   };
 };

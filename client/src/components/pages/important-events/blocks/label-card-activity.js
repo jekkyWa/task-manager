@@ -56,6 +56,13 @@ const LabelCardActivity = ({ importantEvents }) => {
           </div>
         </div>
         <div className={arr.indexOf(i) !== -1 ? "hidden" : ""}>
+          <h1
+            className={
+              e.recentActivity.length == 0 ? "empty-important-events" : "hidden"
+            }
+          >
+            In this card, nothing interesting happened
+          </h1>
           {cardActivity}
         </div>
       </div>

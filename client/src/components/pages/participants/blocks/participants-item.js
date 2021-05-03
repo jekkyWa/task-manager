@@ -182,7 +182,7 @@ const ParticipantsItem = ({
           }
         >
           <button
-            className="delete-user-partic"
+            className={!e.memberStatus ? "hidden" : "delete-user-partic"}
             onClick={() => {
               setModalShow(true);
               setDataForDelete({
@@ -192,6 +192,9 @@ const ParticipantsItem = ({
             }}
           >
             Delete the user
+          </button>
+          <button disabled className={e.memberStatus ? "hidden" : "expect"}>
+            Expect confirmation
           </button>
         </div>
       </div>

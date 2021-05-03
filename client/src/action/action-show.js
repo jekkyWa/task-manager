@@ -5,13 +5,6 @@ const showUserBlock = (showUser) => {
   };
 };
 
-const showSearchBlock = (showSearch) => {
-  return {
-    type: "SHOW_SEARCH_BLOCK",
-    showSearch,
-  };
-};
-
 const showNotifications = (showNotification) => {
   return {
     type: "SHOW_NOTIFICATIONS",
@@ -26,4 +19,4 @@ const showMenuFunc = (showMenu) => {
   };
 };
 
-export { showUserBlock, showSearchBlock, showNotifications, showMenuFunc };
+export { showUserBlock, showNotifications, showMenuFunc };
