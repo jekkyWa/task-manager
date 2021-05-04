@@ -1,1 +1,0 @@
-Для запуска приложения без докера в pakage.json, нужно изменить "proxy": "http://server:5000", на "proxy": "http://server:5000"

@@ -61,7 +61,7 @@
     ]
   },
   
-  "proxy": "http://localhost:5000",
+  "proxy": "http://server:5000",
   "browserslist": {
     "production": [
       ">0.2%",
