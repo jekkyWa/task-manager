@@ -22,7 +22,7 @@ module.exports = function (socket, io) {
         await Board.updateOne(boardOriginal[0], board[0]);
         await User.updateOne({ email }, { $push: { notifications: message } });
         io.emit("getUpdateLevelInCommand", { board: board[0] });
-        socket.to(email).emit("getNotification", [message]);
+        socket.to(email).emit("getNotification", message);
         socket.to(email).emit("getNewLevel", { level: activeLevel });
       }
     }

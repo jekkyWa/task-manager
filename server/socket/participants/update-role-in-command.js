@@ -11,7 +11,7 @@ module.exports = function (socket, io) {
     await User.updateOne({ email }, { $push: { notifications: message } });
 
     io.emit("getUpdateRoleInCommand", { board: board[0] });
-    socket.to(email).emit("getNotification", [message]);
+    socket.to(email).emit("getNotification", message);
     socket.to(email).emit("getNewRole", { role: data });
   });
 };
